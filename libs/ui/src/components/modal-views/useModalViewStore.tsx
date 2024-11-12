@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from 'zustand';
-import { storage } from '@/lib/local-storage';
+import { storage } from '../../libs';
 
 export type MODAL_VIEW =
   | 'SEARCH_VIEW'

@@ -12,7 +12,8 @@ import { IMenuItem } from '../../types';
 
 export function renderDrawerContent(
   view: DRAWER_VIEW | string,
-  defaultMenuItems: IMenuItem[] = []
+  defaultMenuItems: IMenuItem[],
+  routePaths: Record<string, string>
 ) {
   switch (view) {
     case 'DEFAULT_SIDEBAR':
@@ -22,7 +23,12 @@ export function renderDrawerContent(
     case 'CLASSIC_SIDEBAR':
       return <DrawerMenu menuItems={defaultMenuItems} />;
     case 'EXPANDABLE_MENU':
-      return <SidebarExpandable />;
+      return (
+        <SidebarExpandable
+          menuItems={defaultMenuItems}
+          routePaths={routePaths}
+        />
+      );
     case 'DRAWER_SEARCH':
       return <DrawerFilters />;
     default:
@@ -48,7 +54,13 @@ export function renderDrawerContentByLayout(
   }
 }
 
-export default function DrawersContainer() {
+export default function DrawersContainer({
+  menuItems,
+  routePaths,
+}: {
+  menuItems: IMenuItem[];
+  routePaths: Record<string, string>;
+}) {
   const { view, isOpen, closeDrawer } = useDrawerViewStore();
 
   return (
@@ -82,7 +94,7 @@ export default function DrawersContainer() {
           leaveTo="-translate-x-full"
         >
           <div className="fixed inset-y-0 left-0 flex w-full max-w-full xs:w-auto">
-            {view && renderDrawerContent(view)}
+            {view && renderDrawerContent(view, menuItems, routePaths)}
           </div>
         </TransitionChild>
       </Dialog>

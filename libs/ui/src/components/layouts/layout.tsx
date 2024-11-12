@@ -51,7 +51,11 @@ const LayoutType = ({ children, routePaths, menuItems }: LayoutTypeProps) => {
     );
   }
   if (layout === LAYOUT_OPTIONS.RETRO) {
-    return <RetroLayout routePaths={routePaths}>{children}</RetroLayout>;
+    return (
+      <RetroLayout routePaths={routePaths} menuItems={menuItems}>
+        {children}
+      </RetroLayout>
+    );
   }
   return (
     <ModernLayout menuItems={menuItems} routePaths={routePaths}>
@@ -92,7 +96,7 @@ export default function RootLayout({
       <SettingsDrawer />
       <Suspense fallback={null}>
         <ModalsContainer />
-        <DrawersContainer />
+        <DrawersContainer menuItems={menuItems} routePaths={routePaths} />
       </Suspense>
       <LayoutType routePaths={routePaths} menuItems={menuItems}>
         {children}

@@ -1,8 +1,8 @@
 import Image from './image';
 import AnchorLink from './links/anchor-link';
 import { useIsMounted } from '../hooks/use-is-mounted';
-import lightLogo from '@/assets/images/logo.svg';
-import darkLogo from '@/assets/images/logo-white.svg';
+import lightLogo from '../assets/images/logo.svg';
+import darkLogo from '../assets/images/logo-white.svg';
 import cn from 'classnames';
 import { useTheme } from '../themes/use-theme';
 

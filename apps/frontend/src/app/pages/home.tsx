@@ -1,20 +1,18 @@
-'use client';
-
 import { useEffect, useState } from 'react';
-import ComparisonChart from '@/components/ui/chats/comparison-chart';
-import Avatar from '@/components/ui/avatar';
-import OverviewChart from '@/components/ui/chats/overview-chart';
+import AuthorImage from '@/assets/images/author.jpg';
 import TransactionTable from '@/components/transaction/transaction-table';
-import WalletCard from '@/components/ui/wallet-card';
-import TransactCoin from '@/components/ui/transact-coin';
+import useTransactionColumns from '@/components/transaction/useTransactionColumns';
+import Avatar from '@/components/ui/avatar';
+import ComparisonChart from '@/components/ui/chats/comparison-chart';
+import OverviewChart from '@/components/ui/chats/overview-chart';
 import PriceFeedSlider from '@/components/ui/live-price-feed';
+import TopPools from '@/components/ui/top-pools';
+import TransactCoin from '@/components/ui/transact-coin';
+import WalletCard from '@/components/ui/wallet-card';
 import { priceFeedData } from '@/data/static/price-feed';
+import { TransactionData } from '@/data/static/transaction-data';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 //images
-import AuthorImage from '@/assets/images/author.jpg';
-import useTransactionColumns from '@/components/transaction/useTransactionColumns';
-import { TransactionData } from '@/data/static/transaction-data';
-import TopPools from '@/components/ui/top-pools';
 
 const topPoolsLimit = (breakpoint: string) => {
   switch (breakpoint) {

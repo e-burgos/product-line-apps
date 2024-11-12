@@ -1,5 +1,3 @@
-'use client';
-
 import { ForwardedRef, forwardRef } from 'react';
 import { DropzoneRootProps, DropzoneInputProps } from 'react-dropzone';
 import cn from 'classnames';

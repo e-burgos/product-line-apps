@@ -2,8 +2,8 @@ import cn from 'classnames';
 import Scrollbar from '../../scrollbar';
 import Avatar from '../../avatar';
 import TopupButton from '../../topup-button';
-import TransactCoin from '../../transact-coin';
-import WalletCard from '../../wallet-card-two';
+import TransactCoin from '../../../blockchain/components/transact-coin';
+import WalletCard from '../../../blockchain/components/wallet-card-two';
 //images
 import AuthorImage from '../../../assets/images/author.jpg';
 

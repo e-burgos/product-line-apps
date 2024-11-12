@@ -1,13 +1,11 @@
-'use client';
+import { create } from 'zustand';
 
-import { atom, useAtom } from 'jotai';
-
-const gridCompactViewAtom = atom(false);
-
-export function useGridSwitcher() {
-  const [isGridCompact, setIsGridCompact] = useAtom(gridCompactViewAtom);
-  return {
-    isGridCompact,
-    setIsGridCompact,
-  };
+interface GridSwitcherStore {
+  isGridCompact: boolean;
+  setIsGridCompact: (isGridCompact: boolean) => void;
 }
+
+export const useGridSwitcher = create<GridSwitcherStore>((set) => ({
+  isGridCompact: false,
+  setIsGridCompact: (isGridCompact) => set({ isGridCompact }),
+}));

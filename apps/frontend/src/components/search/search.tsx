@@ -1,5 +1,3 @@
-'use client';
-
 import Button from '@/components/ui/button';
 import Feeds from '@/components/search/feeds';
 import { Filters, GridSwitcher, SortList } from '@/components/search/filters';

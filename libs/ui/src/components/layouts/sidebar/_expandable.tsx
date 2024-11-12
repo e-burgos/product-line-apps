@@ -1,5 +1,3 @@
-'use client';
-
 import { useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -11,7 +9,7 @@ import { MenuItem } from '../../collapsible-menu';
 import Button from '../../button';
 import { Close } from '../../icons/close';
 import { useClickAway } from '../../../hooks/use-click-away';
-import AuthorImage from '@/assets/images/author.jpg';
+import AuthorImage from '../../../assets/images/author.jpg';
 import { useDrawerViewStore } from '../../drawer-views/useDrawerViewStore';
 import { IMenuItem } from '../../../types';
 

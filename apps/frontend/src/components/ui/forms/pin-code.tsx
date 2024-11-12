@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useRef } from 'react';
 import cn from 'classnames';
 // import FieldError from '../field-error-text';
@@ -154,7 +152,7 @@ export default function PinCode({
 
   function handleChange(
     event: React.ChangeEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ) {
     const inputValues = event.target.value.split('');
     inputRefs.current[index].value = inputValues[inputValues.length - 1];
@@ -187,7 +185,7 @@ export default function PinCode({
 
   function handlePaste(
     event: React.ClipboardEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ) {
     const copiedValue = event.clipboardData.getData('text').split('');
     for (let i = 0; i < length - index; i += 1) {
@@ -208,7 +206,7 @@ export default function PinCode({
         className={cn(
           containerClasses.base,
           center && containerClasses.center,
-          className
+          className,
         )}
       >
         {Array.from({ length }, (_, index) => (
@@ -235,7 +233,7 @@ export default function PinCode({
               inputClasses.variant[variant].color[color],
               error && inputClasses.error,
               mask && 'password-dot',
-              inputClassName
+              inputClassName,
             )}
             {...props}
           />

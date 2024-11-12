@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { SearchIcon } from './icons/search';
 import Avatar from './avatar';
-import CollectionImage1 from '@/assets/images/collection/collection-1.jpg';
-import CollectionImage2 from '@/assets/images/collection/collection-2.jpg';
-import CollectionImage3 from '@/assets/images/collection/collection-3.jpg';
-import CollectionImage4 from '@/assets/images/collection/collection-4.jpg';
+import CollectionImage1 from '../assets/images/collection/collection-1.jpg';
+import CollectionImage2 from '../assets/images/collection/collection-2.jpg';
+import CollectionImage3 from '../assets/images/collection/collection-3.jpg';
+import CollectionImage4 from '../assets/images/collection/collection-4.jpg';
 
 export const collectionList = [
   {

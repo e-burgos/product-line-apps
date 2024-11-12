@@ -5,11 +5,11 @@ import { Transition } from '../transition';
 import Button from '../button';
 import { Close } from '../icons/close';
 import { useTheme } from '../../themes/use-theme';
-import Followers from './profile/followers-view';
-import ProfileInfo from './profile/profile-info-view';
 import SearchView from './search/view';
 import { LAYOUT_OPTIONS } from '../../themes/config';
 import { MODAL_VIEW, useModalViewStore } from './useModalViewStore';
+import ProfileInfo from '../../blockchain/components/profile/profile-info-view';
+import Followers from '../../blockchain/components/profile/followers-view';
 
 function renderModalContent(view: MODAL_VIEW | string) {
   switch (view) {
