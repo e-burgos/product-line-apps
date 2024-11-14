@@ -7,7 +7,7 @@ import { coinList } from '../data/static/coin-list';
 import Button from '../../components/button';
 import { IconUSFlag } from '../../components/icons/icon-us-flag';
 import { useIsMounted } from '../../hooks/use-is-mounted';
-import { useBreakpoint } from '../../hooks/use-breakpoint';
+import { useBreakpoint } from '../../hooks';
 import CoinListBox from '../../components/coin-listbox';
 import { SwapIcon } from '../../components/icons/swap-icon';
 

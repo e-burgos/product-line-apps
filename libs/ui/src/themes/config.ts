@@ -4,6 +4,13 @@ export interface IThemeItem {
   value: string;
 }
 
+export interface ISettingAction {
+  disabledMode?: boolean;
+  disabledLayout?: boolean;
+  disabledDirection?: boolean;
+  disabledPreset?: boolean;
+}
+
 export type MODE = 'light' | 'dark';
 
 export type DIRECTION = 'ltr' | 'rtl';
@@ -111,6 +118,13 @@ export const defaultLogo = {
   path: '/',
   name: 'Site',
   secondName: 'Name',
+};
+
+export const defaultSettingActions: ISettingAction = {
+  disabledMode: false,
+  disabledLayout: false,
+  disabledDirection: false,
+  disabledPreset: false,
 };
 
 export const defaultLayout = LAYOUT_OPTIONS.MINIMAL;

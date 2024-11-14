@@ -51,16 +51,15 @@ export default function Sidebar({
           </Button>
         </div>
       </div>
-
       <div className="custom-scrollbar h-[calc(100%-98px)] overflow-hidden overflow-y-auto">
-        <div className="px-6 pb-5 2xl:px-8">
+        <div className="px-6 pb-2 2xl:px-8">
           <AuthorCard
             image={AuthorImage}
             name="Esteban Burgos"
-            authorRole="admin"
+            authorRole="Necesitas ayuda?"
           />
 
-          <div className="mt-12">
+          <div className="mt-8">
             {retroMenu.map((item, index) => (
               <MenuItem
                 onClick={closeDrawer}
@@ -72,17 +71,6 @@ export default function Sidebar({
               />
             ))}
           </div>
-          {/* <div className="relative mt-20 hidden flex-col rounded-lg bg-gray-200 p-6 dark:bg-[#333E59] lg:flex">
-            <div className="-mt-12">
-              <Image src={ShapeImage} alt="Shape image" width={200} />
-            </div>
-            <h2 className="mb-7 mt-5 text-center text-[20px] font-semibold leading-8 text-light-dark dark:text-white">
-              Explore the new Blockchain System
-            </h2>
-            <button className="h-12 rounded-lg bg-brand text-white">
-              Try Now{" "}
-            </button>
-          </div> */}
         </div>
       </div>
     </aside>

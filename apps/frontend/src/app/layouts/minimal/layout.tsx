@@ -1,16 +1,16 @@
-import Logo from "@/components/ui/logo";
-import cn from "classnames";
-import { FlashIcon } from "@/components/icons/flash";
-import SearchButton from "@/components/search/button";
-import ActiveLink from "@/components/ui/links/active-link";
-import Hamburger from "@/components/ui/hamburger";
-import WalletConnect from "@/app/config/wagmi/wallet-connect";
-import { MenuItems } from "@/app/layouts/sidebar/_layout-menu";
-import { useIsMounted } from "@/hooks/use-is-mounted";
-import { useBreakpoint } from "@/hooks/use-breakpoint";
-import { useWindowScroll } from "@/hooks/use-window-scroll";
-import { routePaths } from "@/app/router/routes";
-import { useDrawerViewStore } from "@/components/drawer-views/useDrawerViewStore";
+import Logo from '@/components/ui/logo';
+import cn from 'classnames';
+import { FlashIcon } from '@/components/icons/flash';
+import SearchButton from '@/components/search/button';
+import ActiveLink from '@/components/ui/links/active-link';
+import Hamburger from '@/components/ui/hamburger';
+import WalletConnect from '@/app/config/wagmi/wallet-connect';
+import { MenuItems } from '@/app/layouts/sidebar/_layout-menu';
+import { useIsMounted } from '@/hooks/use-is-mounted';
+import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { useWindowScroll } from '@/hooks/use-window-scroll';
+import { routePaths } from '@/app/router/routes';
+import { useDrawerViewStore } from '@/components/drawer-views/useDrawerViewStore';
 
 function NotificationButton() {
   const isMounted = useIsMounted();
@@ -40,7 +40,7 @@ function HeaderRightArea() {
       </div>
 
       <div className="hidden gap-6 lg:flex 2xl:gap-8">
-        {isMounted && ["xs", "sm", "md", "lg"].indexOf(breakpoint) == -1 && (
+        {isMounted && ['xs', 'sm', 'md', 'lg'].indexOf(breakpoint) === -1 && (
           <div>
             <SearchButton variant="transparent" className="dark:text-white" />
           </div>
@@ -53,7 +53,7 @@ function HeaderRightArea() {
         <NotificationButton />
         <Hamburger
           isOpen={isOpen}
-          onClick={() => openDrawer("EXPANDABLE_MENU")}
+          onClick={() => openDrawer('EXPANDABLE_MENU')}
           color="white"
           className="shadow-main ltr:ml-3.5 rtl:mr-3.5 dark:border dark:border-solid dark:border-gray-700 dark:bg-light-dark dark:text-white ltr:sm:ml-5 rtl:sm:mr-5"
         />
@@ -70,10 +70,10 @@ export function Header() {
   return (
     <nav
       className={cn(
-        "sticky top-0 z-30 flex w-full backdrop-blur items-center justify-between px-4 transition-all duration-300 ltr:right-0 rtl:left-0 sm:px-6 lg:px-8 3xl:px-10",
+        'sticky top-0 z-30 flex w-full backdrop-blur items-center justify-between px-4 transition-all duration-300 ltr:right-0 rtl:left-0 sm:px-6 lg:px-8 3xl:px-10',
         isMounted && windowScroll.y > 17
-          ? "h-16 bg-white/80 shadow-card sm:h-20 dark:bg-dark/80"
-          : "h-16 sm:h-24"
+          ? 'h-16 bg-white/80 shadow-card sm:h-20 dark:bg-dark/80'
+          : 'h-16 sm:h-24',
       )}
     >
       <div className="mx-auto flex w-full max-w-[2160px] items-center justify-between">
@@ -81,13 +81,13 @@ export function Header() {
           <div className="hidden lg:mr-6 lg:block xl:hidden">
             <Hamburger
               isOpen={isOpen}
-              onClick={() => openDrawer("CLASSIC_SIDEBAR")}
+              onClick={() => openDrawer('CLASSIC_SIDEBAR')}
               color="white"
               className="shadow-main dark:border dark:border-solid dark:border-gray-700 dark:bg-light-dark dark:text-white"
             />
           </div>
           <Logo />
-          {isMounted && ["xs", "sm", "md", "lg"].indexOf(breakpoint) == -1 && (
+          {isMounted && ['xs', 'sm', 'md', 'lg'].indexOf(breakpoint) === -1 && (
             <MenuItems />
           )}
         </div>
@@ -99,7 +99,9 @@ export function Header() {
 
 export default function MinimalLayout({
   children,
-}: React.PropsWithChildren<{}>) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <>
       <Header />

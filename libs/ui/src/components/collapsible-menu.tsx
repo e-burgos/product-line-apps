@@ -53,7 +53,7 @@ export function MenuItem({
                 : 'text-gray-500 hover:text-brand dark:hover:text-white'
             )}
             onClick={() => setIsOpen(!isOpen)}
-            //onTouchStart={() => setIsOpen(!isOpen)}
+            onTouchStart={() => setIsOpen(!isOpen)}
           >
             <span className="z-[1] flex items-center ltr:mr-3 rtl:ml-3">
               <span className={cn('ltr:mr-3 rtl:ml-3')}>{icon}</span>

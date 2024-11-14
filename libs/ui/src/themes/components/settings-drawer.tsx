@@ -16,7 +16,6 @@ import { ModernLayoutIcon } from '../../components/icons/modern-layout-icon';
 import { RetroLayoutIcon } from '../../components/icons/retro-layout-icon';
 import { MinimalLayoutIcon } from '../../components/icons/minimal-layout-icon';
 import { ClassicLayoutIcon } from '../../components/icons/classic-layout-icon';
-
 import { ColorPreset, LAYOUT_OPTIONS, LayoutOptions } from '../config';
 
 // Component: SwitcherButton
@@ -210,7 +209,7 @@ function ColorSwitcher() {
 }
 
 export function SettingsDrawer() {
-  const { isSettingsOpen, setIsSettingsOpen } = useTheme();
+  const { isSettingsOpen, setIsSettingsOpen, settingActions } = useTheme();
   return (
     <Transition appear show={isSettingsOpen} as={Fragment}>
       <Dialog
@@ -242,7 +241,7 @@ export function SettingsDrawer() {
             <div className="h-full w-full">
               <div className="flex h-16 items-center justify-between gap-6 border-b border-dashed border-gray-200 px-6 dark:border-gray-700">
                 <h3 className="text-base font-medium uppercase text-gray-900 dark:text-white">
-                  Settings
+                  Personalización
                 </h3>
                 <Button
                   title="Close"
@@ -258,10 +257,10 @@ export function SettingsDrawer() {
 
               <Scrollbar style={{ height: 'calc(100% - 64px)' }}>
                 <div className="pb-8">
-                  <ThemeSwitcher />
-                  <LayoutSwitcher />
-                  <DirectionSwitcher />
-                  <ColorSwitcher />
+                  {!settingActions?.disabledMode && <ThemeSwitcher />}
+                  {!settingActions?.disabledLayout && <LayoutSwitcher />}
+                  {!settingActions?.disabledDirection && <DirectionSwitcher />}
+                  {!settingActions?.disabledPreset && <ColorSwitcher />}
                 </div>
               </Scrollbar>
             </div>

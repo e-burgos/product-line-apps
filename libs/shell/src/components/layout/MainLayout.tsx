@@ -15,6 +15,8 @@ import {
   ColorPreset,
   defaultColorPreset,
   defaultLogo,
+  defaultSettingActions,
+  ISettingAction,
   IThemeItem,
   LAYOUT_OPTIONS,
   LogoType,
@@ -40,6 +42,7 @@ interface MainLayoutProps {
   brandColor?: PresetColorType;
   showSettings?: boolean;
   showSearch?: boolean;
+  settingActions?: ISettingAction;
 }
 
 export function MainLayout({
@@ -52,18 +55,25 @@ export function MainLayout({
   brandColor,
   showSettings,
   showSearch,
+  settingActions = defaultSettingActions,
 }: MainLayoutProps) {
-  const { mode, setLogo, setPreset, setShowSettings, setShowSearch } =
-    useTheme();
+  const {
+    mode,
+    setLogo,
+    setPreset,
+    setShowSettings,
+    setShowSearch,
+    setSettingActions,
+  } = useTheme();
   const htmlTag = document.documentElement;
   const menuItems = [...appMenuItems, ...commonMenuItems];
   const menuList = menuItems.filter((item) => !item.hide);
 
-  console.log('menuItems', menuList);
-
   const selectedColor = ColorPreset.find(
     (item: IThemeItem) => item.label === brandColor
   );
+
+  const checkSettingActions = settingActions || layout || brandColor;
 
   useEffect(() => {
     if (logo) {
@@ -81,15 +91,31 @@ export function MainLayout({
     if (showSearch) {
       setShowSearch(showSearch);
     } else setShowSearch(false);
+
+    if (checkSettingActions) {
+      setSettingActions({
+        ...defaultSettingActions,
+        disabledLayout: layout || settingActions?.disabledLayout ? true : false,
+        disabledPreset:
+          brandColor || settingActions?.disabledPreset ? true : false,
+        disabledDirection: settingActions?.disabledDirection ? true : false,
+        disabledMode: settingActions?.disabledMode ? true : false,
+      });
+    } else setSettingActions(defaultSettingActions);
   }, [
     logo,
     showSettings,
     showSearch,
+    settingActions,
     selectedColor,
     setLogo,
     setPreset,
     setShowSettings,
     setShowSearch,
+    setSettingActions,
+    layout,
+    brandColor,
+    checkSettingActions,
   ]);
 
   useEffect(() => {

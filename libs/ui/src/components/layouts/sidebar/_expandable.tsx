@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import cn from 'classnames';
 import AuthorCard from '../../author-card';
@@ -8,10 +8,10 @@ import LogoIcon from '../../logo-icon';
 import { MenuItem } from '../../collapsible-menu';
 import Button from '../../button';
 import { Close } from '../../icons/close';
-import { useClickAway } from '../../../hooks/use-click-away';
 import AuthorImage from '../../../assets/images/author-dark.jpeg';
 import { useDrawerViewStore } from '../../drawer-views/useDrawerViewStore';
 import { IMenuItem } from '../../../types';
+import { useIsMobile, useClickAway } from 'libs/ui/src/hooks';
 
 const sideBarMenuItems = (menuItems: IMenuItem[]) =>
   menuItems.map((item) => ({
@@ -34,15 +34,20 @@ export default function Sidebar({
   className?: string;
   menuItems: IMenuItem[];
 }) {
-  const router = useNavigate();
   const pathname = useLocation().pathname;
   const { closeDrawer } = useDrawerViewStore();
   const [open, setOpen] = useState(false);
+  const { isMobile } = useIsMobile();
 
   const ref = useRef<HTMLElement>(null);
   useClickAway(ref, () => {
     setOpen(false);
   });
+
+  useEffect(() => {
+    if (isMobile) setOpen(true);
+    if (!isMobile) setOpen(false);
+  }, [isMobile]);
 
   function isSubMenuActive(
     submenu: Array<{ name: string; icon?: JSX.Element; href: string }>
@@ -56,7 +61,6 @@ export default function Sidebar({
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
       onTouchStart={() => setOpen(true)}
-      //onPointerLeave={() => setOpen(false)}
       className={cn(
         open
           ? 'border-0 shadow-expand xs:w-80 xl:w-72 2xl:w-80 '
@@ -136,7 +140,7 @@ export default function Sidebar({
         </div>
       </div>
       <div className={cn('sticky bottom-5 mt-3 2xl:mt-12', open && 'px-8')}>
-        {!open ? (
+        {!open && (
           <motion.div
             initial={{ x: 50, y: -5 }}
             animate={{
@@ -144,11 +148,11 @@ export default function Sidebar({
               y: 0,
             }}
             className="cursor-pointer pb-2"
-            onClick={() => router('https://www.estebanburgos.com.ar/')}
           >
             <AuthorCard image={AuthorImage} />
           </motion.div>
-        ) : (
+        )}
+        {open && (
           <div>
             <motion.div
               initial={{ y: '80%' }}
@@ -162,7 +166,7 @@ export default function Sidebar({
               <AuthorCard
                 image={AuthorImage}
                 name="Esteban Burgos"
-                authorRole="Contactame"
+                authorRole="Necesitas ayuda?"
               />
             </motion.div>
           </div>

@@ -9,6 +9,9 @@ import { MenuItem } from '../../collapsible-menu';
 import { ChevronRight } from '../../icons/chevron-right';
 import { useDrawerViewStore } from '../../drawer-views/useDrawerViewStore';
 import { IMenuItem } from '../../../types';
+import { motion } from 'framer-motion';
+import AuthorCard from '../../author-card';
+import AuthorImage from '../../../assets/images/author-dark.jpeg';
 
 const handleMenuItems = (layoutMenuItems: IMenuItem[]) =>
   layoutMenuItems.map((item) => ({
@@ -39,15 +42,12 @@ export function MenuItems({ menuItems }: { menuItems: IMenuItem[] }) {
           <Fragment key={'layout' + item.name + index}>
             {item.dropdownItems ? (
               <li className="group/parent relative">
-                <a
-                  href="#"
-                  className="flex items-center text-sm font-medium uppercase text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-                >
-                  {item.name}
+                <div className="flex w-full items-center text-sm font-medium uppercase text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+                  <span className="text-[14px]">{item.name}</span>
                   <span className="z-[1] transition-transform duration-200 ltr:ml-3 rtl:mr-3">
-                    <ChevronDown />
+                    <ChevronDown className="h-2.5 w-2.5" />
                   </span>
-                </a>
+                </div>
                 <ul className="invisible absolute right-0 top-[130%] mt-2 w-64 rounded-lg bg-white p-3 opacity-0 shadow-large transition-all group-hover/parent:visible group-hover/parent:top-full group-hover/parent:opacity-100 ltr:right-0 rtl:left-0 dark:bg-gray-800">
                   {item.dropdownItems.map((dropDownItem, index) => (
                     <li
@@ -56,15 +56,14 @@ export function MenuItems({ menuItems }: { menuItems: IMenuItem[] }) {
                     >
                       {dropDownItem.dropdownItems ? (
                         <>
-                          <a
-                            href="#"
-                            className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium uppercase text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700/50 dark:hover:text-white"
-                          >
-                            {dropDownItem.name}
-                            <span className="z-[1] -mt-1 transition-transform duration-200 ltr:ml-3 rtl:mr-3">
-                              <ChevronRight className="h-3.5 w-3.5" />
+                          <div className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium uppercase text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700/50 dark:hover:text-white">
+                            <span className="text-[12px]">
+                              {dropDownItem.name}
                             </span>
-                          </a>
+                            <span className="z-[1] -mt-1 transition-transform duration-200 ltr:ml-3 rtl:mr-3">
+                              <ChevronRight className="h-2.5 w-2.5" />
+                            </span>
+                          </div>
                           <ul className="invisible absolute left-[107%] right-0 top-[130%] w-64 rounded-lg bg-white p-3 opacity-0 shadow-large transition-all group-hover:visible group-hover/parent:top-0 group-hover:opacity-100 ltr:right-0 rtl:left-0 dark:bg-gray-800">
                             {dropDownItem?.dropdownItems?.map(
                               (subMenu, index) => (
@@ -75,7 +74,9 @@ export function MenuItems({ menuItems }: { menuItems: IMenuItem[] }) {
                                     className="block rounded-lg px-3 py-2 text-sm font-medium uppercase !text-gray-600 transition hover:bg-gray-50 hover:text-gray-900 dark:!text-white dark:hover:bg-gray-700/50"
                                     activeClassName="!bg-gray-100 dark:!bg-gray-700 my-1 last:mb-0 first:mt-0 !text-gray-900 dark:!text-white"
                                   >
-                                    {subMenu.name}
+                                    <span className="text-[12px]">
+                                      {subMenu.name}
+                                    </span>
                                   </ActiveLink>
                                 </li>
                               )
@@ -89,7 +90,9 @@ export function MenuItems({ menuItems }: { menuItems: IMenuItem[] }) {
                           className="block rounded-lg px-3 py-2 text-sm font-medium uppercase !text-gray-600 transition hover:bg-gray-50 hover:text-gray-900 dark:!text-white dark:hover:bg-gray-700/50"
                           activeClassName="!bg-gray-100 dark:!bg-gray-700 my-1 last:mb-0 first:mt-0 !text-gray-900 dark:!text-white"
                         >
-                          {dropDownItem.name}
+                          <span className="text-[14px]">
+                            {dropDownItem.name}
+                          </span>
                         </ActiveLink>
                       )}
                     </li>
@@ -104,7 +107,7 @@ export function MenuItems({ menuItems }: { menuItems: IMenuItem[] }) {
                   className="mx-2 text-[13px] font-medium uppercase text-gray-600 transition first:ml-0 last:mr-0 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white 2xl:mx-3 2xl:text-sm 3xl:mx-4"
                   activeClassName="!text-gray-900 dark:!text-white"
                 >
-                  {item.name}
+                  <span className="text-[14px]">{item.name}</span>
                 </ActiveLink>
               </li>
             )}
@@ -134,7 +137,7 @@ export default function DrawerMenu({ menuItems }: DrawerMenuProps) {
     }),
   }));
   return (
-    <div className="relative w-full max-w-full bg-white dark:bg-dark xs:w-80">
+    <div className="relative w-full max-w-full bg-white dark:bg-dark xs:w-80 pb-4">
       <div className="flex h-24 items-center justify-between overflow-hidden px-6 py-4">
         <Logo />
         <div className="md:hidden">
@@ -165,6 +168,23 @@ export default function DrawerMenu({ menuItems }: DrawerMenuProps) {
             ))}
           </div>
         </div>
+      </div>
+      <div className="sticky mb-1 px-6">
+        <motion.div
+          initial={{ y: '80%' }}
+          animate={{
+            y: 0,
+            transition: {
+              delay: 0.1,
+            },
+          }}
+        >
+          <AuthorCard
+            image={AuthorImage}
+            name="Esteban Burgos"
+            authorRole="Necesitas ayuda?"
+          />
+        </motion.div>
       </div>
     </div>
   );

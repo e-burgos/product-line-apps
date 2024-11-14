@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import cn from 'classnames';
-import AuthorCard from '../../author-card';
 import Logo from '../../logo';
 import { MenuItem } from '../../collapsible-menu';
 import Button from '../../button';
 import { Close } from '../../icons/close';
-import AuthorImage from '../../../assets/images/author-dark.jpeg';
 import { IMenuItem } from '../../../types';
 import { useDrawerViewStore } from '../../drawer-views/useDrawerViewStore';
+import { motion } from 'framer-motion';
+import AuthorCard from '../../author-card';
+import AuthorImage from '../../../assets/images/author-dark.jpeg';
 
 interface SidebarProps {
   className?: string;
@@ -51,16 +52,26 @@ export default function Sidebar({ className, menuItems }: SidebarProps) {
           </Button>
         </div>
       </div>
-
-      <div className="custom-scrollbar h-[calc(100%-98px)] overflow-hidden overflow-y-auto">
-        <div className="px-6 pb-5 2xl:px-8">
+      <div className="sticky mb-6 px-6">
+        <motion.div
+          initial={{ y: '80%' }}
+          animate={{
+            y: 0,
+            transition: {
+              delay: 0.1,
+            },
+          }}
+        >
           <AuthorCard
             image={AuthorImage}
             name="Esteban Burgos"
-            authorRole="Admin"
+            authorRole="Necesitas ayuda?"
           />
-
-          <div className="mt-12">
+        </motion.div>
+      </div>
+      <div className="custom-scrollbar h-[calc(100%-98px)] overflow-hidden overflow-y-auto">
+        <div className="px-6 pb-5 2xl:px-8">
+          <div className="">
             {sideBarMenus?.map((item, index) => (
               <MenuItem
                 onClick={closeDrawer}

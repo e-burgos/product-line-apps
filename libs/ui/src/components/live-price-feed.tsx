@@ -2,7 +2,7 @@ import { ArrowUp } from './icons/arrow-up';
 import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y } from 'swiper/modules';
-import { useBreakpoint } from '../hooks/use-breakpoint';
+import { useBreakpoint } from '../hooks';
 import { useIsMounted } from '../hooks/use-is-mounted';
 import cn from 'classnames';
 

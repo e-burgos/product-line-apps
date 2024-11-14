@@ -3,9 +3,7 @@ import cn from 'classnames';
 import { FlashIcon } from '../../icons/flash';
 import ActiveLink from '../../links/active-link';
 import Hamburger from '../../hamburger';
-import { useIsMounted } from '../../../hooks/use-is-mounted';
-import { useBreakpoint } from '../../../hooks/use-breakpoint';
-import { useWindowScroll } from '../../../hooks/use-window-scroll';
+import { useBreakpoint, useIsMounted, useWindowScroll } from '../../../hooks';
 import { useDrawerViewStore } from '../../drawer-views/useDrawerViewStore';
 import SearchButton from '../../modal-views/search/button';
 import { MenuItems } from '../sidebar/_layout-menu';
@@ -60,9 +58,10 @@ function HeaderRightArea({
 
       <div className="flex items-center lg:hidden">
         {isNotificationButton && <NotificationButton />}
+        {rightButton && rightButton}
         <Hamburger
           isOpen={isOpen}
-          onClick={() => openDrawer('EXPANDABLE_MENU')}
+          onClick={() => openDrawer('CLASSIC_SIDEBAR')}
           color="white"
           className="shadow-main ltr:ml-3.5 rtl:mr-3.5 dark:border dark:border-solid dark:border-gray-700 dark:bg-light-dark dark:text-white ltr:sm:ml-5 rtl:sm:mr-5"
         />

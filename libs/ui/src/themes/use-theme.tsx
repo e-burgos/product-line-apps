@@ -10,6 +10,8 @@ import {
   LogoType,
   LAYOUT_OPTIONS,
   MODE,
+  ISettingAction,
+  defaultSettingActions,
 } from './config';
 import { storage } from '../libs/local-storage';
 
@@ -22,6 +24,7 @@ export interface ITheme {
   isSettingsOpen: boolean;
   showSettings: boolean;
   showSearch: boolean;
+  settingActions: ISettingAction;
   setPreset: (preset: IThemeItem) => void;
   setDirection: (direction: DIRECTION) => void;
   setLayout: (layout: LAYOUT_OPTIONS) => void;
@@ -30,6 +33,7 @@ export interface ITheme {
   setIsSettingsOpen: (isSettingsOpen: boolean) => void;
   setShowSettings: (showSettings: boolean) => void;
   setShowSearch: (showSearch: boolean) => void;
+  setSettingActions: (settingActions: ISettingAction) => void;
 }
 
 export const useTheme = create<ITheme>((set) => {
@@ -42,6 +46,7 @@ export const useTheme = create<ITheme>((set) => {
     logo: settings?.logo || defaultLogo,
     showSettings: settings?.showSettings || false,
     showSearch: settings?.showSearch || false,
+    settingActions: settings?.settingActions || defaultSettingActions,
     isSettingsOpen: false,
     setPreset: (preset: IThemeItem) =>
       set((state) => {
@@ -77,6 +82,11 @@ export const useTheme = create<ITheme>((set) => {
       set((state) => {
         storage.set('settings', { ...state, showSettings });
         return { showSettings };
+      }),
+    setSettingActions: (settingActions: ISettingAction) =>
+      set((state) => {
+        storage.set('settings', { ...state, settingActions });
+        return { settingActions };
       }),
     setIsSettingsOpen: (isSettingsOpen: boolean) =>
       set((state) => ({ ...state, isSettingsOpen })),

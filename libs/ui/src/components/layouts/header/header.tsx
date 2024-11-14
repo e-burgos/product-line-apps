@@ -74,14 +74,6 @@ export function RetroHeader({
           >
             <LogoIcon />
           </div>
-          <div className="mx-2 block sm:mx-4 xl:hidden">
-            <Hamburger
-              isOpen={false}
-              variant="transparent"
-              onClick={() => openDrawer('DEFAULT_SIDEBAR')}
-              className="dark:text-white"
-            />
-          </div>
           <SearchButton
             variant="transparent"
             className="ltr:-ml-[17px] rtl:-mr-[17px] dark:text-white"
@@ -89,7 +81,19 @@ export function RetroHeader({
         </div>
         <HeaderRightArea
           isNotificationButton={isNotificationButton}
-          rightButton={rightButton}
+          rightButton={
+            <>
+              <div className="mx-2 block sm:mx-4 xl:hidden">
+                <Hamburger
+                  isOpen={false}
+                  variant="transparent"
+                  onClick={() => openDrawer('DEFAULT_SIDEBAR')}
+                  className="dark:text-white"
+                />
+              </div>
+              {rightButton}
+            </>
+          }
         />
       </div>
     </nav>
@@ -127,14 +131,7 @@ export function ClassicHeader({
           >
             <LogoIcon />
           </div>
-          <div className="mx-2 block sm:mx-4 xl:hidden">
-            <Hamburger
-              isOpen={false}
-              variant="transparent"
-              onClick={() => openDrawer('CLASSIC_SIDEBAR')}
-              className="dark:text-white"
-            />
-          </div>
+
           <SearchButton
             variant="transparent"
             className="ltr:-ml-[17px] rtl:-mr-[17px] dark:text-white"
@@ -142,7 +139,19 @@ export function ClassicHeader({
         </div>
         <HeaderRightArea
           isNotificationButton={isNotificationButton}
-          rightButton={rightButton}
+          rightButton={
+            <>
+              <div className="mx-2 block sm:mx-4 xl:hidden">
+                <Hamburger
+                  isOpen={false}
+                  variant="transparent"
+                  onClick={() => openDrawer('CLASSIC_SIDEBAR')}
+                  className="dark:text-white"
+                />
+              </div>
+              {rightButton}
+            </>
+          }
         />
       </div>
     </nav>
@@ -180,14 +189,6 @@ export default function Header({
           >
             <LogoIcon />
           </div>
-          <div className="mx-2 block sm:mx-4 xl:hidden">
-            <Hamburger
-              isOpen={false}
-              variant="transparent"
-              onClick={() => openDrawer('DEFAULT_SIDEBAR')}
-              className="dark:text-white"
-            />
-          </div>
           <SearchButton
             variant="transparent"
             className="ltr:-ml-[17px] rtl:-mr-[17px] dark:text-white"
@@ -195,7 +196,19 @@ export default function Header({
         </div>
         <HeaderRightArea
           isNotificationButton={isNotificationButton}
-          rightButton={rightButton}
+          rightButton={
+            <>
+              <div className="mx-2 block sm:mx-4 xl:hidden">
+                <Hamburger
+                  isOpen={false}
+                  variant="transparent"
+                  onClick={() => openDrawer('DEFAULT_SIDEBAR')}
+                  className="dark:text-white"
+                />
+              </div>
+              {rightButton}
+            </>
+          }
         />
       </div>
     </nav>

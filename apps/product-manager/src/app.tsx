@@ -9,6 +9,10 @@ export function App() {
       menuItems={menuItems}
       logo={{ name: 'Product', secondName: 'Manager' }}
       brandColor="Green"
+      showSettings
+      settingActions={{
+        disabledDirection: true,
+      }}
     />
   );
 }

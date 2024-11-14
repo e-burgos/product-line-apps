@@ -7,7 +7,7 @@ import ActiveLink from './links/active-link';
 import AnchorLink from './links/anchor-link';
 import { RangeIcon } from './icons/range-icon';
 import { ExportIcon } from './icons/export-icon';
-import { useBreakpoint } from '../hooks/use-breakpoint';
+import { useBreakpoint } from '../hooks';
 import { useIsMounted } from '../hooks/use-is-mounted';
 import Listbox from './list-box';
 import { useTheme } from '../themes/use-theme';

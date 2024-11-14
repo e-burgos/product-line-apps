@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import cn from 'classnames';
 import { TabGroup, TabList, TabItem, TabPanels, TabPanel } from './tab';
-import { useBreakpoint } from '../hooks/use-breakpoint';
+import { useBreakpoint } from '../hooks';
 import { useIsMounted } from '../hooks/use-is-mounted';
 import { useClickAway } from '../hooks/use-click-away';
 import TabSelect from './tab-select';
@@ -54,7 +55,7 @@ export default function ParamTab({
   useEffect(() => {
     if (query)
       setSelectedTabIndex(tabMenu.findIndex((item) => query === item.path));
-  }, [query]);
+  }, [query, tabMenu]);
 
   useClickAway(dropdownEl, () => {
     setVisibleMobileMenu(false);
