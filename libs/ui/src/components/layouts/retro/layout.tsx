@@ -7,19 +7,24 @@ import { IMenuItem } from '../../../types';
 export default function RetroLayout({
   children,
   contentClassName,
-  routePaths,
+  isNotificationButton,
+  rightButton,
   menuItems,
   balance,
+  blockchainSidebar = true,
 }: React.PropsWithChildren<{
   contentClassName?: string;
-  routePaths: Record<string, string>;
+  isNotificationButton?: boolean;
+  rightButton?: React.ReactNode;
   menuItems: IMenuItem[];
   balance?: number;
+  blockchainSidebar?: boolean;
 }>) {
   return (
     <>
       <RetroHeader
-        routePaths={routePaths}
+        isNotificationButton={isNotificationButton}
+        rightButton={rightButton}
         className="ltr:xl:pl-72 rtl:xl:pr-72 ltr:2xl:pl-[320px] rtl:2xl:pr-[320px] ltr:3xl:pl-80 rtl:3xl:pr-80"
       />
       <Sidebar className="z-40 hidden xl:block" menuItems={menuItems} />
@@ -31,10 +36,12 @@ export default function RetroLayout({
       >
         <div className="px-4 sm:px-6 lg:px-8 3xl:px-10">{children}</div>
       </main>
-      <SidebarTwo
-        className="ltr:left-auto ltr:right-0 rtl:left-0 rtl:right-auto  xl:block"
-        balance={balance || 0}
-      />
+      {blockchainSidebar && (
+        <SidebarTwo
+          className="ltr:left-auto ltr:right-0 rtl:left-0 rtl:right-auto  xl:block"
+          balance={balance || 0}
+        />
+      )}
     </>
   );
 }

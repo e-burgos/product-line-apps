@@ -6,16 +6,24 @@ import { IMenuItem } from '../../../types';
 export default function ModernLayout({
   children,
   contentClassName,
-  routePaths,
+  headerClassName,
+  isNotificationButton,
+  rightButton,
   menuItems,
 }: React.PropsWithChildren<{
   contentClassName?: string;
-  routePaths: Record<string, string>;
+  headerClassName?: string;
+  isNotificationButton?: boolean;
+  rightButton?: React.ReactNode;
   menuItems: IMenuItem[];
 }>) {
   return (
     <div className="ltr:xl:pl-72 rtl:xl:pr-72 ltr:2xl:pl-80 rtl:2xl:pr-80">
-      <Header routePaths={routePaths} />
+      <Header
+        className={headerClassName}
+        isNotificationButton={isNotificationButton}
+        rightButton={rightButton}
+      />
       <Sidebar menuItems={menuItems} className="hidden xl:block" />
       <main
         className={cn(

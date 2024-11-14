@@ -116,10 +116,10 @@ export function MenuItems({ menuItems }: { menuItems: IMenuItem[] }) {
 }
 
 interface DrawerMenuProps {
-  menuItems?: IMenuItem[];
+  menuItems: IMenuItem[];
 }
 
-export default function DrawerMenu({ menuItems = [] }: DrawerMenuProps) {
+export default function DrawerMenu({ menuItems }: DrawerMenuProps) {
   const { closeDrawer } = useDrawerViewStore();
   const drawerMenuItems = menuItems.map((item) => ({
     name: item.name,

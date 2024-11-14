@@ -9,7 +9,7 @@ import { MenuItem } from '../../collapsible-menu';
 import Button from '../../button';
 import { Close } from '../../icons/close';
 import { useClickAway } from '../../../hooks/use-click-away';
-import AuthorImage from '../../../assets/images/author.jpg';
+import AuthorImage from '../../../assets/images/author-dark.jpeg';
 import { useDrawerViewStore } from '../../drawer-views/useDrawerViewStore';
 import { IMenuItem } from '../../../types';
 
@@ -30,11 +30,9 @@ const sideBarMenuItems = (menuItems: IMenuItem[]) =>
 export default function Sidebar({
   className,
   menuItems,
-  routePaths,
 }: {
   className?: string;
   menuItems: IMenuItem[];
-  routePaths: Record<string, string>;
 }) {
   const router = useNavigate();
   const pathname = useLocation().pathname;
@@ -57,6 +55,8 @@ export default function Sidebar({
       ref={ref}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
+      onTouchStart={() => setOpen(true)}
+      //onPointerLeave={() => setOpen(false)}
       className={cn(
         open
           ? 'border-0 shadow-expand xs:w-80 xl:w-72 2xl:w-80 '
@@ -79,18 +79,20 @@ export default function Sidebar({
           <Logo />
         )}
 
-        <div className="md:hidden">
-          <Button
-            title="Close"
-            color="white"
-            shape="circle"
-            variant="transparent"
-            size="small"
-            onClick={closeDrawer}
-          >
-            <Close className="h-auto w-2.5" />
-          </Button>
-        </div>
+        {open && (
+          <div className="md:hidden">
+            <Button
+              title="Close"
+              color="white"
+              shape="circle"
+              variant="transparent"
+              size="small"
+              onClick={closeDrawer}
+            >
+              <Close className="h-auto w-2.5" />
+            </Button>
+          </div>
+        )}
       </div>
 
       <div
@@ -142,7 +144,7 @@ export default function Sidebar({
               y: 0,
             }}
             className="cursor-pointer pb-2"
-            onClick={() => router(routePaths.profile)}
+            onClick={() => router('https://www.estebanburgos.com.ar/')}
           >
             <AuthorCard image={AuthorImage} />
           </motion.div>
@@ -156,12 +158,11 @@ export default function Sidebar({
                   delay: 0.1,
                 },
               }}
-              onClick={() => router(routePaths.profile)}
             >
               <AuthorCard
                 image={AuthorImage}
                 name="Esteban Burgos"
-                authorRole="Admin"
+                authorRole="Contactame"
               />
             </motion.div>
           </div>

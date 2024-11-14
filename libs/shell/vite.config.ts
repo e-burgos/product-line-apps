@@ -18,6 +18,12 @@ export default defineConfig({
       tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),
     }),
   ],
+  resolve: {
+    alias: {
+      'libs/ui/src': path.resolve(__dirname, '../ui/src'),
+      'libs/integrations/src': path.resolve(__dirname, '../integrations/src'),
+    },
+  },
   // build: {
   //   outDir: '../../dist/libs/shell',
   //   emptyOutDir: true,

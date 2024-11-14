@@ -53,6 +53,7 @@ export function MenuItem({
                 : 'text-gray-500 hover:text-brand dark:hover:text-white'
             )}
             onClick={() => setIsOpen(!isOpen)}
+            //onTouchStart={() => setIsOpen(!isOpen)}
           >
             <span className="z-[1] flex items-center ltr:mr-3 rtl:ml-3">
               <span className={cn('ltr:mr-3 rtl:ml-3')}>{icon}</span>
@@ -92,6 +93,13 @@ export function MenuItem({
                       navigate(item.href);
                       onClick && onClick();
                     }}
+                    onTouchStart={() => {
+                      navigate(item.href);
+                      onClick &&
+                        setTimeout(() => {
+                          onClick();
+                        }, 200);
+                    }}
                     href={item.href}
                     to={item.href}
                     className="flex items-center rounded-lg p-3 text-sm text-gray-500 transition-all before:h-1 before:w-1 before:rounded-full before:bg-gray-500 hover:text-brand ltr:pl-6 before:ltr:mr-5 rtl:pr-6 before:rtl:ml-5 dark:hover:text-white"
@@ -109,6 +117,13 @@ export function MenuItem({
           onClick={() => {
             navigate(href);
             onClick && onClick();
+          }}
+          onTouchStart={() => {
+            navigate(href);
+            onClick &&
+              setTimeout(() => {
+                onClick();
+              }, 200);
           }}
           href={href}
           to={href}

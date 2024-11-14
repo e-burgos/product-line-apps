@@ -1,16 +1,15 @@
 import { useDirection } from '../use-direction';
 import { useThemeColor } from '../use-theme-color';
 import { useTheme } from '../use-theme';
-import { useLocation } from 'react-router-dom';
 
 export function SettingsButton() {
   const { setIsSettingsOpen } = useTheme();
-  const pathname = useLocation().pathname;
-  const { preset, direction } = useTheme();
+  const { preset, direction, showSettings } = useTheme();
   useDirection(direction ? direction : 'ltr');
   useThemeColor(preset ? preset.value : '#14161a');
 
-  if (pathname !== '/profile') return null;
+  if (!showSettings) return null;
+
   return (
     <div className="fixed top-1/2 z-40 -translate-y-1/2 ltr:right-0 rtl:left-0">
       <button

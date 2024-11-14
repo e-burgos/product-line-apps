@@ -1,9 +1,14 @@
+import { useTheme } from '../../../themes';
 import Button from '../../button';
 import { SearchIcon } from '../../icons/search';
 import { useModalViewStore } from '../useModalViewStore';
 
 export default function SearchButton({ ...props }) {
   const { openModal } = useModalViewStore();
+  const { showSearch } = useTheme();
+
+  if (!showSearch) return null;
+
   return (
     <Button
       shape="circle"

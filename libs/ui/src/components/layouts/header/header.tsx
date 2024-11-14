@@ -9,16 +9,16 @@ import { useIsMounted } from '../../../hooks/use-is-mounted';
 import { useDrawerViewStore } from '../../drawer-views/useDrawerViewStore';
 import SearchButton from '../../modal-views/search/button';
 import Hamburger from '../../hamburger';
+import { commonRoutePaths } from 'libs/shell/src/router/routes';
 
-export function NotificationButton({
-  routePaths,
-}: {
-  routePaths: Record<string, string>;
-}) {
+export function NotificationButton() {
   const isMounted = useIsMounted();
   return (
     isMounted && (
-      <ActiveLink to={routePaths.notification} href={routePaths.notification}>
+      <ActiveLink
+        to={commonRoutePaths.notification}
+        href={commonRoutePaths.notification}
+      >
         <div className="relative flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-gray-100 bg-white text-brand shadow-main transition-all hover:-translate-y-0.5 hover:shadow-large focus:-translate-y-0.5 focus:shadow-large focus:outline-none dark:border-gray-700 dark:bg-light-dark dark:text-white sm:h-12 sm:w-12">
           <FlashIcon className="h-auto w-3 sm:w-auto" />
           <span className="absolute right-0 top-0 h-2.5 w-2.5 rounded-full bg-brand shadow-light dark:bg-slate-50 sm:h-3 sm:w-3" />
@@ -29,15 +29,15 @@ export function NotificationButton({
 }
 
 function HeaderRightArea({
-  routePaths,
+  isNotificationButton,
   rightButton,
 }: {
-  routePaths: Record<string, string>;
+  isNotificationButton?: boolean;
   rightButton?: React.ReactNode;
 }) {
   return (
     <div className="relative order-last flex shrink-0 items-center gap-4 sm:gap-6 lg:gap-8">
-      <NotificationButton routePaths={routePaths} />
+      {isNotificationButton && <NotificationButton />}
       {rightButton && rightButton}
     </div>
   );
@@ -45,10 +45,12 @@ function HeaderRightArea({
 
 export function RetroHeader({
   className,
-  routePaths,
+  isNotificationButton,
+  rightButton,
 }: {
   className?: string;
-  routePaths: Record<string, string>;
+  isNotificationButton?: boolean;
+  rightButton?: React.ReactNode;
 }) {
   const navigate = useNavigate();
   const isMounted = useIsMounted();
@@ -67,7 +69,7 @@ export function RetroHeader({
       <div className="flex h-full items-center justify-between px-4 sm:px-6 lg:px-8 3xl:px-10">
         <div className="flex items-center">
           <div
-            onClick={() => navigate(routePaths?.home)}
+            onClick={() => navigate(commonRoutePaths.home)}
             className="flex items-center xl:hidden"
           >
             <LogoIcon />
@@ -85,7 +87,10 @@ export function RetroHeader({
             className="ltr:-ml-[17px] rtl:-mr-[17px] dark:text-white"
           />
         </div>
-        <HeaderRightArea routePaths={routePaths} />
+        <HeaderRightArea
+          isNotificationButton={isNotificationButton}
+          rightButton={rightButton}
+        />
       </div>
     </nav>
   );
@@ -93,10 +98,12 @@ export function RetroHeader({
 
 export function ClassicHeader({
   className,
-  routePaths,
+  isNotificationButton,
+  rightButton,
 }: {
   className?: string;
-  routePaths: Record<string, string>;
+  isNotificationButton?: boolean;
+  rightButton?: React.ReactNode;
 }) {
   const navigate = useNavigate();
   const isMounted = useIsMounted();
@@ -115,7 +122,7 @@ export function ClassicHeader({
       <div className="flex h-full items-center justify-between px-4 sm:px-6 lg:px-8 3xl:px-10">
         <div className="flex items-center">
           <div
-            onClick={() => navigate(routePaths?.home || '/')}
+            onClick={() => navigate('/')}
             className="flex items-center xl:hidden"
           >
             <LogoIcon />
@@ -133,7 +140,10 @@ export function ClassicHeader({
             className="ltr:-ml-[17px] rtl:-mr-[17px] dark:text-white"
           />
         </div>
-        <HeaderRightArea routePaths={routePaths} />
+        <HeaderRightArea
+          isNotificationButton={isNotificationButton}
+          rightButton={rightButton}
+        />
       </div>
     </nav>
   );
@@ -141,10 +151,12 @@ export function ClassicHeader({
 
 export default function Header({
   className,
-  routePaths,
+  isNotificationButton,
+  rightButton,
 }: {
   className?: string;
-  routePaths: Record<string, string>;
+  isNotificationButton?: boolean;
+  rightButton?: React.ReactNode;
 }) {
   const navigate = useNavigate();
   const isMounted = useIsMounted();
@@ -163,7 +175,7 @@ export default function Header({
       <div className="flex h-full items-center justify-between px-4 sm:px-6 lg:px-8 3xl:px-10">
         <div className="flex items-center">
           <div
-            onClick={() => navigate(routePaths?.home || '/')}
+            onClick={() => navigate(commonRoutePaths.home)}
             className="flex items-center xl:hidden"
           >
             <LogoIcon />
@@ -181,7 +193,10 @@ export default function Header({
             className="ltr:-ml-[17px] rtl:-mr-[17px] dark:text-white"
           />
         </div>
-        <HeaderRightArea routePaths={routePaths} />
+        <HeaderRightArea
+          isNotificationButton={isNotificationButton}
+          rightButton={rightButton}
+        />
       </div>
     </nav>
   );

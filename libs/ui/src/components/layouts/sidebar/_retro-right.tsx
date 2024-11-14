@@ -5,7 +5,7 @@ import TopupButton from '../../topup-button';
 import TransactCoin from '../../../blockchain/components/transact-coin';
 import WalletCard from '../../../blockchain/components/wallet-card-two';
 //images
-import AuthorImage from '../../../assets/images/author.jpg';
+import AuthorImage from '../../../assets/images/author-dark.jpeg';
 
 export default function Sidebar({
   className,

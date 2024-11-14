@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface ImageProps {
   src: string;
@@ -11,6 +11,7 @@ interface ImageProps {
   priority?: boolean;
   className?: string;
   placeholder?: string;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
 }
 
 const Image: React.FC<ImageProps> = ({
@@ -19,6 +20,7 @@ const Image: React.FC<ImageProps> = ({
   width,
   alt,
   className,
+  objectFit = 'cover',
 }) => {
   return (
     <img
@@ -27,6 +29,13 @@ const Image: React.FC<ImageProps> = ({
       width={width}
       height={height}
       className={className}
+      style={{
+        objectFit: objectFit,
+        minWidth: width,
+        minHeight: height,
+        maxWidth: width,
+        maxHeight: height,
+      }}
     />
   );
 };

@@ -1,3 +1,4 @@
+import React from 'react';
 export interface IThemeItem {
   label: string;
   value: string;
@@ -6,6 +7,13 @@ export interface IThemeItem {
 export type MODE = 'light' | 'dark';
 
 export type DIRECTION = 'ltr' | 'rtl';
+
+export type LogoType = {
+  isoType?: React.ReactNode;
+  path?: string;
+  name?: string;
+  secondName?: string;
+};
 
 export enum LAYOUT_OPTIONS {
   AUTH = 'auth',
@@ -16,10 +24,6 @@ export enum LAYOUT_OPTIONS {
 }
 
 export const LayoutOptions: IThemeItem[] = [
-  {
-    label: 'Auth',
-    value: LAYOUT_OPTIONS.AUTH,
-  },
   {
     label: 'Modern',
     value: LAYOUT_OPTIONS.MODERN,
@@ -38,30 +42,56 @@ export const LayoutOptions: IThemeItem[] = [
   },
 ];
 
+export type PresetColorType =
+  | 'Green'
+  | 'Black'
+  | 'Blue'
+  | 'Red'
+  | 'Purple'
+  | 'Orange';
+
+export enum PRESET_LABEL_COLORS {
+  GREEN = 'Green',
+  BLACK = 'Black',
+  BLUE = 'Blue',
+  RED = 'Red',
+  PURPLE = 'Purple',
+  ORANGE = 'Orange',
+}
+
+export enum PRESET_COLORS {
+  GREEN = '#009e60',
+  BLACK = '#323743',
+  BLUE = '#2a52be',
+  RED = '#e34234',
+  PURPLE = '#9370DB',
+  ORANGE = '#ffa500',
+}
+
 export const ColorPreset: IThemeItem[] = [
   {
-    label: 'Green',
-    value: '#009e60',
+    label: PRESET_LABEL_COLORS.GREEN,
+    value: PRESET_COLORS.GREEN,
   },
   {
-    label: 'Black',
-    value: '#323743',
+    label: PRESET_LABEL_COLORS.BLACK,
+    value: PRESET_COLORS.BLACK,
   },
   {
-    label: 'Blue',
-    value: '#2a52be',
+    label: PRESET_LABEL_COLORS.BLUE,
+    value: PRESET_COLORS.BLUE,
   },
   {
-    label: 'Red',
-    value: '#e34234',
+    label: PRESET_LABEL_COLORS.RED,
+    value: PRESET_COLORS.RED,
   },
   {
-    label: 'Purple',
-    value: '#9370DB',
+    label: PRESET_LABEL_COLORS.PURPLE,
+    value: PRESET_COLORS.PURPLE,
   },
   {
-    label: 'Orange',
-    value: '#ffa500',
+    label: PRESET_LABEL_COLORS.ORANGE,
+    value: PRESET_COLORS.ORANGE,
   },
 ];
 
@@ -75,6 +105,13 @@ export const Direction: IThemeItem[] = [
     value: 'rtl',
   },
 ];
+
+export const defaultLogo = {
+  isoType: null,
+  path: '/',
+  name: 'Site',
+  secondName: 'Name',
+};
 
 export const defaultLayout = LAYOUT_OPTIONS.MINIMAL;
 

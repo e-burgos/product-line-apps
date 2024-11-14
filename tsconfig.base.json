@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@product-line/integrations": ["libs/integrations/src/index.ts"],
       "@shell": ["libs/shell/src/index.ts"],
       "@ui/*": ["libs/ui/src/index.ts"]
     }

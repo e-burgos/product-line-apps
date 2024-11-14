@@ -12,54 +12,46 @@ import { IMenuItem } from '../../types';
 
 export function renderDrawerContent(
   view: DRAWER_VIEW | string,
-  defaultMenuItems: IMenuItem[],
-  routePaths: Record<string, string>
+  menuItems: IMenuItem[]
 ) {
   switch (view) {
     case 'DEFAULT_SIDEBAR':
-      return <Sidebar menuItems={defaultMenuItems} />;
+      return <Sidebar menuItems={menuItems} />;
     case 'RETRO_SIDEBAR':
-      return <SidebarRetro menuItems={defaultMenuItems} />;
+      return <SidebarRetro menuItems={menuItems} />;
     case 'CLASSIC_SIDEBAR':
-      return <DrawerMenu menuItems={defaultMenuItems} />;
+      return <DrawerMenu menuItems={menuItems} />;
     case 'EXPANDABLE_MENU':
-      return (
-        <SidebarExpandable
-          menuItems={defaultMenuItems}
-          routePaths={routePaths}
-        />
-      );
+      return <SidebarExpandable menuItems={menuItems} />;
     case 'DRAWER_SEARCH':
       return <DrawerFilters />;
     default:
-      return <DrawerMenu />;
+      return <DrawerMenu menuItems={menuItems} />;
   }
 }
 
 export function renderDrawerContentByLayout(
   layout: LAYOUT_OPTIONS,
-  defaultMenuItems: IMenuItem[] = []
+  menuItems: IMenuItem[]
 ) {
   switch (layout) {
     case LAYOUT_OPTIONS.MODERN:
-      return <Sidebar menuItems={defaultMenuItems} />;
+      return <Sidebar menuItems={menuItems} />;
     case LAYOUT_OPTIONS.RETRO:
-      return <Sidebar menuItems={defaultMenuItems} />;
+      return <Sidebar menuItems={menuItems} />;
     case LAYOUT_OPTIONS.CLASSIC:
-      return <DrawerMenu menuItems={defaultMenuItems} />;
+      return <DrawerMenu menuItems={menuItems} />;
     case LAYOUT_OPTIONS.MINIMAL:
       return <DrawerFilters />;
     default:
-      return <DrawerMenu />;
+      return <DrawerMenu menuItems={menuItems} />;
   }
 }
 
 export default function DrawersContainer({
   menuItems,
-  routePaths,
 }: {
   menuItems: IMenuItem[];
-  routePaths: Record<string, string>;
 }) {
   const { view, isOpen, closeDrawer } = useDrawerViewStore();
 
@@ -94,7 +86,7 @@ export default function DrawersContainer({
           leaveTo="-translate-x-full"
         >
           <div className="fixed inset-y-0 left-0 flex w-full max-w-full xs:w-auto">
-            {view && renderDrawerContent(view, menuItems, routePaths)}
+            {view && renderDrawerContent(view, menuItems)}
           </div>
         </TransitionChild>
       </Dialog>

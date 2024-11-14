@@ -5,18 +5,11 @@ import { useTheme } from '../themes/use-theme';
 
 interface LogoPropTypes {
   className?: string;
-  path?: string;
-  name?: string;
-  secondName?: string;
 }
 
-export default function Logo({
-  className,
-  path,
-  name,
-  secondName,
-}: LogoPropTypes) {
-  const { mode } = useTheme();
+export default function Logo({ className }: LogoPropTypes) {
+  const { mode, preset, logo } = useTheme();
+  const { name, secondName, path } = logo;
   const isMounted = useIsMounted();
   const isDarkMode = mode === 'dark';
   return (
@@ -32,7 +25,9 @@ export default function Logo({
                 {name || 'Site Name'}
               </span>
               {secondName && (
-                <span className="text-2xl font-semibold xl:text-3xl text-green-500">
+                <span
+                  className={`text-2xl font-semibold xl:text-3xl text-${preset?.label?.toLowerCase()}-500`}
+                >
                   {secondName}
                 </span>
               )}
@@ -44,7 +39,9 @@ export default function Logo({
                 {name || 'Site Name'}
               </span>
               {secondName && (
-                <span className="text-2xl font-semibold xl:text-3xl text-green-500">
+                <span
+                  className={`text-2xl font-semibold xl:text-3xl text-${preset?.label?.toLowerCase()}-500`}
+                >
                   {secondName}
                 </span>
               )}

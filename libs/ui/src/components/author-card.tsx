@@ -11,13 +11,18 @@ export default function AuthorCard({
   name,
   authorRole,
 }: AuthorCardProps) {
+  const handleClick = () => {
+    window.open('https://www.estebanburgos.com.ar/', '_blank', 'noreferrer');
+  };
   return (
     <div
-      className={`flex items-center rounded-lg  ${
+      className={`flex items-center rounded-lg cursor-pointer  ${
         name
           ? 'bg-gray-100  p-5  dark:bg-light-dark'
           : 'ml-3 justify-center bg-none p-5 dark:mr-3 dark:bg-none'
       }`}
+      onClick={handleClick}
+      onTouchStart={handleClick}
     >
       <Avatar
         image={image}

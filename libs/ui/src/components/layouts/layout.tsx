@@ -24,11 +24,17 @@ import SettingsDrawer from '../../themes/components/settings-drawer';
 
 interface LayoutTypeProps {
   children: React.ReactNode;
-  routePaths: Record<string, string>;
+  isNotificationButton?: boolean;
+  rightButton?: React.ReactNode;
   menuItems: IMenuItem[];
 }
 
-const LayoutType = ({ children, routePaths, menuItems }: LayoutTypeProps) => {
+const LayoutType = ({
+  children,
+  menuItems,
+  isNotificationButton,
+  rightButton,
+}: LayoutTypeProps) => {
   const { layout } = useTheme();
   if (layout === LAYOUT_OPTIONS.AUTH) {
     return <AuthLayout>{children}</AuthLayout>;
@@ -36,7 +42,8 @@ const LayoutType = ({ children, routePaths, menuItems }: LayoutTypeProps) => {
   if (layout === LAYOUT_OPTIONS.MINIMAL) {
     return (
       <MinimalLayout
-        notificationPath={routePaths.notifications || '/'}
+        isNotificationButton={isNotificationButton}
+        rightButton={rightButton}
         menuItems={menuItems}
       >
         {children}
@@ -45,20 +52,32 @@ const LayoutType = ({ children, routePaths, menuItems }: LayoutTypeProps) => {
   }
   if (layout === LAYOUT_OPTIONS.CLASSIC) {
     return (
-      <ClassicLayout menuItems={menuItems} routePaths={routePaths}>
+      <ClassicLayout
+        menuItems={menuItems}
+        isNotificationButton={isNotificationButton}
+        rightButton={rightButton}
+      >
         {children}
       </ClassicLayout>
     );
   }
   if (layout === LAYOUT_OPTIONS.RETRO) {
     return (
-      <RetroLayout routePaths={routePaths} menuItems={menuItems}>
+      <RetroLayout
+        menuItems={menuItems}
+        isNotificationButton={isNotificationButton}
+        rightButton={rightButton}
+      >
         {children}
       </RetroLayout>
     );
   }
   return (
-    <ModernLayout menuItems={menuItems} routePaths={routePaths}>
+    <ModernLayout
+      menuItems={menuItems}
+      isNotificationButton={isNotificationButton}
+      rightButton={rightButton}
+    >
       {children}
     </ModernLayout>
   );
@@ -66,12 +85,14 @@ const LayoutType = ({ children, routePaths, menuItems }: LayoutTypeProps) => {
 
 export default function RootLayout({
   children,
-  routePaths,
   menuItems,
+  isNotificationButton,
+  rightButton,
 }: {
   children: React.ReactNode;
-  routePaths: Record<string, string>;
   menuItems: IMenuItem[];
+  isNotificationButton?: boolean;
+  rightButton?: React.ReactNode;
 }) {
   const { mode } = useTheme();
   const htmlTag = document.documentElement;
@@ -90,19 +111,19 @@ export default function RootLayout({
 
   return (
     <BrowserRouter>
-      {/* <WagmiConfig>
-        <QueryClientProvider> */}
       <SettingsButton />
       <SettingsDrawer />
       <Suspense fallback={null}>
         <ModalsContainer />
-        <DrawersContainer menuItems={menuItems} routePaths={routePaths} />
+        <DrawersContainer menuItems={menuItems} />
       </Suspense>
-      <LayoutType routePaths={routePaths} menuItems={menuItems}>
+      <LayoutType
+        menuItems={menuItems}
+        isNotificationButton={isNotificationButton}
+        rightButton={rightButton}
+      >
         {children}
       </LayoutType>
-      {/* </QueryClientProvider>
-      </WagmiConfig> */}
     </BrowserRouter>
   );
 }

@@ -1,4 +1,4 @@
-import AuthorImage from '../../../assets/images/author.jpg';
+import AuthorImage from '../../../assets/images/author-dark.jpeg';
 import NFT1 from '../../../assets/images/nft/nft-1.jpg';
 import NFT2 from '../../../assets/images/nft/nft-2.jpg';
 import NFT3 from '../../../assets/images/nft/nft-3.jpg';

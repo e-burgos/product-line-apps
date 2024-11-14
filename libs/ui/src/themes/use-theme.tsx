@@ -4,8 +4,10 @@ import {
   defaultDirection,
   defaultLayout,
   defaultMode,
+  defaultLogo,
   DIRECTION,
   IThemeItem,
+  LogoType,
   LAYOUT_OPTIONS,
   MODE,
 } from './config';
@@ -16,12 +18,18 @@ export interface ITheme {
   direction: DIRECTION;
   layout: LAYOUT_OPTIONS;
   mode: MODE;
+  logo: LogoType;
   isSettingsOpen: boolean;
+  showSettings: boolean;
+  showSearch: boolean;
   setPreset: (preset: IThemeItem) => void;
   setDirection: (direction: DIRECTION) => void;
   setLayout: (layout: LAYOUT_OPTIONS) => void;
   setMode: (mode: MODE) => void;
+  setLogo: (logo: LogoType) => void;
   setIsSettingsOpen: (isSettingsOpen: boolean) => void;
+  setShowSettings: (showSettings: boolean) => void;
+  setShowSearch: (showSearch: boolean) => void;
 }
 
 export const useTheme = create<ITheme>((set) => {
@@ -31,6 +39,9 @@ export const useTheme = create<ITheme>((set) => {
     direction: settings?.direction || defaultDirection,
     layout: settings?.layout || defaultLayout,
     mode: settings?.mode || defaultMode,
+    logo: settings?.logo || defaultLogo,
+    showSettings: settings?.showSettings || false,
+    showSearch: settings?.showSearch || false,
     isSettingsOpen: false,
     setPreset: (preset: IThemeItem) =>
       set((state) => {
@@ -51,6 +62,21 @@ export const useTheme = create<ITheme>((set) => {
       set((state) => {
         storage.set('settings', { ...state, mode });
         return { mode };
+      }),
+    setLogo: (logo: LogoType) =>
+      set((state) => {
+        storage.set('settings', { ...state, logo });
+        return { logo };
+      }),
+    setShowSearch: (showSearch: boolean) =>
+      set((state) => {
+        storage.set('settings', { ...state, showSearch });
+        return { showSearch };
+      }),
+    setShowSettings: (showSettings: boolean) =>
+      set((state) => {
+        storage.set('settings', { ...state, showSettings });
+        return { showSettings };
       }),
     setIsSettingsOpen: (isSettingsOpen: boolean) =>
       set((state) => ({ ...state, isSettingsOpen })),

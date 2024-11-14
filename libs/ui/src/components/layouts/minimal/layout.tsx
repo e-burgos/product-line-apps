@@ -10,16 +10,16 @@ import { useDrawerViewStore } from '../../drawer-views/useDrawerViewStore';
 import SearchButton from '../../modal-views/search/button';
 import { MenuItems } from '../sidebar/_layout-menu';
 import { IMenuItem } from '../../../types';
+import { commonRoutePaths } from 'libs/shell/src/router/routes';
 
-function NotificationButton({
-  notificationPath,
-}: {
-  notificationPath: string;
-}) {
+function NotificationButton() {
   const isMounted = useIsMounted();
   return (
     isMounted && (
-      <ActiveLink to={notificationPath || '/'} href={notificationPath || '/'}>
+      <ActiveLink
+        to={commonRoutePaths.notification}
+        href={commonRoutePaths.notification}
+      >
         <div className="relative flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-gray-100 bg-white text-brand shadow-main transition-all hover:-translate-y-0.5 hover:shadow-large focus:-translate-y-0.5 focus:shadow-large focus:outline-none dark:border-gray-700 dark:bg-light-dark dark:text-white sm:h-12 sm:w-12">
           <FlashIcon className="h-auto w-3 sm:w-auto" />
           <span className="absolute right-0 top-0 h-2.5 w-2.5 rounded-full bg-brand shadow-light dark:bg-white sm:h-3 sm:w-3" />
@@ -30,10 +30,10 @@ function NotificationButton({
 }
 
 function HeaderRightArea({
-  notificationPath,
+  isNotificationButton,
   rightButton,
 }: {
-  notificationPath: string;
+  isNotificationButton?: boolean;
   rightButton?: React.ReactNode;
 }) {
   const isMounted = useIsMounted();
@@ -54,12 +54,12 @@ function HeaderRightArea({
             <SearchButton variant="transparent" className="dark:text-white" />
           </div>
         )}
-        <NotificationButton notificationPath={notificationPath} />
+        {isNotificationButton && <NotificationButton />}
         {rightButton && rightButton}
       </div>
 
       <div className="flex items-center lg:hidden">
-        <NotificationButton notificationPath={notificationPath} />
+        {isNotificationButton && <NotificationButton />}
         <Hamburger
           isOpen={isOpen}
           onClick={() => openDrawer('EXPANDABLE_MENU')}
@@ -72,11 +72,13 @@ function HeaderRightArea({
 }
 
 export function Header({
-  notificationPath,
   menuItems,
+  isNotificationButton,
+  rightButton,
 }: {
-  notificationPath: string;
   menuItems: IMenuItem[];
+  isNotificationButton?: boolean;
+  rightButton?: React.ReactNode;
 }) {
   const isMounted = useIsMounted();
   const breakpoint = useBreakpoint();
@@ -106,7 +108,10 @@ export function Header({
             <MenuItems menuItems={menuItems} />
           )}
         </div>
-        <HeaderRightArea notificationPath={notificationPath} />
+        <HeaderRightArea
+          isNotificationButton={isNotificationButton}
+          rightButton={rightButton}
+        />
       </div>
     </nav>
   );
@@ -115,18 +120,21 @@ export function Header({
 interface MinimalLayoutProps {
   children: React.ReactNode;
   menuItems: IMenuItem[];
-  notificationPath?: string;
+  isNotificationButton?: boolean;
+  rightButton?: React.ReactNode;
 }
 
 export default function MinimalLayout({
   children,
   menuItems,
-  notificationPath,
+  isNotificationButton,
+  rightButton,
 }: MinimalLayoutProps) {
   return (
     <>
       <Header
-        notificationPath={notificationPath || '/'}
+        isNotificationButton={isNotificationButton}
+        rightButton={rightButton}
         menuItems={menuItems}
       />
       <div className="bg-light-100 dark:bg-dark-100 mt-8 flex min-h-screen flex-col gap-6 px-4 sm:px-6 lg:px-8 3xl:px-10">

@@ -2,10 +2,8 @@ import ComparisonChart from 'libs/ui/src/blockchain/components/chats/classic-com
 import OverviewChart from 'libs/ui/src/blockchain/components/chats/overview-chart';
 import TopPools from 'libs/ui/src/blockchain/components/top-pools';
 import TransactCoin from 'libs/ui/src/blockchain/components/transact-coin';
-import WalletCard from 'libs/ui/src/blockchain/components/wallet-card-two';
 import { priceFeedData } from 'libs/ui/src/blockchain/data/static/price-feed';
 import Avatar from 'libs/ui/src/components/avatar';
-import RootLayout from 'libs/ui/src/components/layouts/layout';
 import PriceFeedSlider from 'libs/ui/src/components/live-price-feed';
 import { useBreakpoint } from 'libs/ui/src/hooks';
 import { useEffect, useState } from 'react';
@@ -21,7 +19,7 @@ const topPoolsLimit = (breakpoint: string) => {
   }
 };
 
-export function App() {
+export function HomePage() {
   const [limit, setLimit] = useState(4);
   const breakpoint = useBreakpoint();
 
@@ -30,7 +28,7 @@ export function App() {
   }, [breakpoint]);
 
   return (
-    <RootLayout menuItems={[]} routePaths={{}}>
+    <div className="w-full">
       <PriceFeedSlider
         limit={4}
         priceFeeds={priceFeedData}
@@ -68,13 +66,9 @@ export function App() {
             <TopPools limit={limit} />
           </div>
         </div>
-
-        <div className="md:col-start-2 md:col-end-3 md:row-start-1 md:row-end-2 lg:col-span-6 lg:row-start-2 lg:row-end-3 xl:col-start-9 xl:col-end-13 xl:row-start-2 xl:row-end-3 2xl:col-start-10 2xl:col-end-13 2xl:row-start-2 2xl:row-end-3 3xl:col-span-3 3xl:row-start-2 3xl:row-end-3">
-          <WalletCard />
-        </div>
       </div>
-    </RootLayout>
+    </div>
   );
 }
 
-export default App;
+export default HomePage;

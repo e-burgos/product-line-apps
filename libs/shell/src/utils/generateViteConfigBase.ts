@@ -47,6 +47,10 @@ export function generateViteConfigBase(
       alias: {
         'libs/ui/src': path.resolve(modulePath, '../../libs/ui/src'),
         'libs/shell/src': path.resolve(modulePath, '../../libs/shell/src'),
+        'libs/integrations/src': path.resolve(
+          modulePath,
+          '../../libs/integrations/src'
+        ),
       },
     },
 

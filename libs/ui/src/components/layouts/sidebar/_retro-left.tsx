@@ -4,7 +4,7 @@ import Logo from '../../logo';
 import { MenuItem } from '../../collapsible-menu';
 import Button from '../../button';
 import { Close } from '../../icons/close';
-import AuthorImage from '../../../assets/images/author.jpg';
+import AuthorImage from '../../../assets/images/author-dark.jpeg';
 import { useDrawerViewStore } from '../../drawer-views/useDrawerViewStore';
 import { IMenuItem } from '../../../types';
 

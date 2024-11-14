@@ -1,5 +1,5 @@
 import CoverImage from '../../../assets/images/profile-cover.jpg';
-import AuthorImage from '../../../assets/images/author.jpg';
+import AuthorImage from '../../../assets/images/author-dark.jpeg';
 import { Instagram } from '../../../components/icons/brands/instagram';
 import { Twitter } from '../../../components/icons/brands/twitter';
 import { Facebook } from '../../../components/icons/brands/facebook';
