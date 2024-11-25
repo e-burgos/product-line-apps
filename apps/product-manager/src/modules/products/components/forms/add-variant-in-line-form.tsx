@@ -30,8 +30,6 @@ export const AddProductVariantInLineForm: FC = () => {
     formState: { errors, isValid },
   } = useForm<AddProductVariantInLineFormData>();
 
-  console.log('currentProduct', currentProduct);
-
   const products = useLiveQuery(() => db.products.toArray());
 
   async function onSubmit(values: AddProductVariantInLineFormData) {
