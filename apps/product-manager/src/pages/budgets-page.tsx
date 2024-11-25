@@ -70,6 +70,11 @@ export function BudgetsPage() {
           const budget = (row?.row?.original as Budget) || {};
           return <BudgetDetailsDatatable budgetId={budget?.id} />;
         }}
+        stateMessage={{
+          noData: 'No hay presupuestos'.toLocaleUpperCase(),
+          noDataDescription:
+            'Agrega un nuevo presupuesto para comenzar. Para agregar un nuevo presupuesto, haz clic en el botón "Agregar". Tips: Puedes exportar los presupuestos a Excel o compartirlos con otras personas.',
+        }}
         setCurrentRow={(row) => setCurrentBudget(row?.original as Budget)}
         rowActions={[
           {

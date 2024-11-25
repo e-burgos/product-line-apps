@@ -75,6 +75,11 @@ export function ProductsPage() {
           const product = (row?.row?.original as Product) || {};
           return <ProductVariantsDatatable productId={product?.id} />;
         }}
+        stateMessage={{
+          noData: 'No hay productos registrados'.toLocaleUpperCase(),
+          noDataDescription:
+            'Registra un producto para comenzar a agregar variantes. Para agregar un producto, haz clic en el botón "Agregar". Tips: Puedes exportar los productos a Excel o compartirlos con otras personas.',
+        }}
         setCurrentRow={(row) => setCurrentProduct(row?.original as Product)}
         rowActions={[
           {
