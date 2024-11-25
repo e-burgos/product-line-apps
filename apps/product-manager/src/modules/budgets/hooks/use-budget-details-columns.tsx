@@ -3,8 +3,6 @@ import { ColumnDef } from '@tanstack/react-table';
 import { ListIcon } from 'lucide-react';
 import { BudgetVariant } from '@product-manager-app/lib/db';
 import { formatCurrency } from '@product-manager-app/lib/utils';
-import DeleteDetail from '../modals/delete-detail';
-import EditBudgetDetailModal from '../modals/edit-budget-detail-modal';
 
 const useBudgetDetailsColumns = () => {
   const columns: ColumnDef<BudgetVariant, BudgetVariant>[] = useMemo(
@@ -64,22 +62,6 @@ const useBudgetDetailsColumns = () => {
           return (
             <div className="flex items-center gap-2">
               <span>{formatCurrency(amount)}</span>
-            </div>
-          );
-        },
-      },
-      {
-        id: 'actions',
-        header: 'Acciones',
-        enablePinning: false,
-        enableSorting: false,
-        maxSize: 50,
-        accessorFn: (row) => row,
-        cell: (info) => {
-          return (
-            <div className=" flex justify-start content-center gap-2">
-              <DeleteDetail detail={info?.getValue()} />
-              <EditBudgetDetailModal detail={info?.getValue()} />
             </div>
           );
         },

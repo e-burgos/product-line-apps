@@ -3,8 +3,6 @@ import { Package2 } from 'lucide-react';
 import { useMemo } from 'react';
 import { Variant } from '@product-manager-app/lib/db';
 import { formatCurrency } from '@product-manager-app/lib/utils';
-import DeleteVariant from '../components/modals/delete-variant';
-import EditVariantModal from '../components/modals/edit-variant-modal';
 
 const useProductVariantColumns = () => {
   const columns: ColumnDef<Variant, Variant>[] = useMemo(
@@ -50,22 +48,6 @@ const useProductVariantColumns = () => {
           return (
             <div className="flex items-center gap-2">
               <span>{formatCurrency(amount)}</span>
-            </div>
-          );
-        },
-      },
-      {
-        id: 'actions',
-        header: 'Acciones',
-        enablePinning: false,
-        enableSorting: false,
-        maxSize: 50,
-        accessorFn: (row) => row,
-        cell: (info) => {
-          return (
-            <div className=" flex justify-start content-center gap-2">
-              <DeleteVariant variant={info?.getValue()} />
-              <EditVariantModal variant={info?.getValue()} />
             </div>
           );
         },
