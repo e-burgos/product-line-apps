@@ -11,5 +11,6 @@ module.exports = {
     ),
     ...createGlobPatternsForDependencies(__dirname),
   ],
+  important: true,
   ...tailwindConfig,
 };

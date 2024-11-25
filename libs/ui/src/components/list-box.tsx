@@ -3,6 +3,7 @@ import { Listbox as HeadlessListbox } from '@headlessui/react';
 import cn from 'classnames';
 import { Transition } from './transition';
 import { ChevronDown } from './icons/chevron-down';
+import InputLabel from './input-label';
 
 export type ListboxOption = {
   name: string;
@@ -11,12 +12,14 @@ export type ListboxOption = {
 
 interface ListboxTypes {
   options: ListboxOption[];
-  selectedOption: ListboxOption;
-  onChange: React.Dispatch<React.SetStateAction<ListboxOption>>;
+  selectedOption?: ListboxOption;
+  onChange?: React.Dispatch<React.SetStateAction<ListboxOption>>;
   children?: React.ReactNode;
   onSelect?: (value: string) => void;
   variant?: 'ghost' | 'solid' | 'transparent';
   className?: string;
+  disabled?: boolean;
+  label?: string;
 }
 
 const listboxVariantClasses = {
@@ -35,15 +38,20 @@ export default function Listbox({
   selectedOption,
   className,
   children,
+  disabled,
+  label,
 }: ListboxTypes) {
   return (
     <div className={cn('relative', className)}>
+      {label && <InputLabel title={label} className="mb-1" />}
       <HeadlessListbox value={selectedOption} onChange={onChange}>
         <HeadlessListbox.Button
           className={cn(
             'text-case-inherit letter-space-inherit flex h-10 w-full items-center justify-between rounded-lg px-4 text-sm font-medium outline-none duration-200 sm:h-12 sm:px-5',
-            listboxVariantClasses[variant]
+            listboxVariantClasses[variant],
+            disabled && 'cursor-not-allowed opacity-50'
           )}
+          disabled={disabled}
         >
           <div className="flex items-center">{selectedOption?.name}</div>
           <ChevronDown />

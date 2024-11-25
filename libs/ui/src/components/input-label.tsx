@@ -19,8 +19,8 @@ function InputLabel({
     <div className={cn('relative mb-3', className)}>
       <span
         className={cn(
-          'block text-sm font-medium uppercase tracking-wider text-gray-900 dark:text-white',
-          titleClassName,
+          'block text-sm font-medium tracking-wider text-gray-900 dark:text-white',
+          titleClassName
         )}
       >
         {title}

@@ -129,7 +129,8 @@ Styles for Swiper slider
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 4px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -261,7 +262,7 @@ input.reset-password-pin-code::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-input.reset-password-pin-code[type="number"] {
+input.reset-password-pin-code[type='number'] {
   -moz-appearance: textfield;
 }
 

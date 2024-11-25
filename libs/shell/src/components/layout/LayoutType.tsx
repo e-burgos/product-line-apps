@@ -8,6 +8,7 @@ import { IMenuItem } from 'libs/ui/src/types';
 import { FC } from 'react';
 import { useTheme } from 'libs/ui/src/themes/use-theme';
 import { useLocation } from 'react-router-dom';
+import Toast from 'libs/ui/src/components/toast';
 
 interface LayoutTypeProps {
   children: React.ReactNode;
@@ -40,6 +41,7 @@ export const LayoutType: FC<LayoutTypeProps> = ({
             rightButton={rightButton}
           >
             {children}
+            <Toast />
           </MinimalLayout>
         );
       case LAYOUT_OPTIONS.CLASSIC:
@@ -50,6 +52,7 @@ export const LayoutType: FC<LayoutTypeProps> = ({
             rightButton={rightButton}
           >
             {children}
+            <Toast />
           </ClassicLayout>
         );
       case LAYOUT_OPTIONS.RETRO:
@@ -60,6 +63,7 @@ export const LayoutType: FC<LayoutTypeProps> = ({
             rightButton={rightButton}
           >
             {children}
+            <Toast />
           </RetroLayout>
         );
       default:
@@ -70,6 +74,7 @@ export const LayoutType: FC<LayoutTypeProps> = ({
             rightButton={rightButton}
           >
             {children}
+            <Toast />
           </ModernLayout>
         );
     }

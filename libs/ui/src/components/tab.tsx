@@ -4,25 +4,25 @@ import {
   TabList,
   TabPanels as HeadTabPanels,
   TabPanel as HeadTabPanel,
-} from "@headlessui/react";
-import { motion, LayoutGroup } from "framer-motion";
-import cn from "classnames";
+} from '@headlessui/react';
+import { motion, LayoutGroup } from 'framer-motion';
+import cn from 'classnames';
 
 export { Tab, TabGroup, TabList };
 
 export function TabItem({
   children,
   className,
-  tabItemLayoutId = "activeTabIndicator",
+  tabItemLayoutId = 'activeTabIndicator',
 }: React.PropsWithChildren<{ className?: string; tabItemLayoutId?: string }>) {
   return (
     <Tab
       className={({ selected }) =>
         cn(
-          "relative py-2 uppercase tracking-wider hover:text-gray-900 focus:outline-none dark:hover:text-gray-100 xs:py-2.5 sm:py-3",
+          'relative py-2 mb-4 text-md tracking-wider hover:text-gray-900 focus:outline-none dark:hover:text-gray-100 xs:py-2.5 sm:py-3',
           {
-            "font-medium text-brand dark:text-gray-100": selected,
-            "text-gray-600 dark:text-gray-400": !selected,
+            'font-medium text-brand': selected,
+            'text-gray-600 dark:text-gray-400': !selected,
           },
           className
         )
@@ -30,7 +30,7 @@ export function TabItem({
     >
       {({ selected }) => (
         <>
-          <span className="flex w-full justify-between px-3 md:px-0">
+          <span className="flex w-full justify-center px-3 md:px-0">
             {children}
           </span>
           {selected && (

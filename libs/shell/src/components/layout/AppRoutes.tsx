@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import NotFoundPage from '../pages/not-found';
 import { commonRoutePaths } from '../../router/routes';
 import { IMenuItem } from 'libs/ui/src/types';
@@ -41,6 +41,11 @@ export const AppRoutes: FC<AppRoutesProps> = ({ menuItems }) => {
       {routes.map((route) => (
         <Route key={route.key} path={route.path} element={route.element} />
       ))}
+      <Route
+        key={'home-page'}
+        path={'/'}
+        element={<Navigate replace to={routes[0].path} />}
+      />
       <Route
         key={'not-found-page'}
         path={commonRoutePaths.notFound}
