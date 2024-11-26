@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Row } from '@tanstack/react-table';
 import {
   HoverType,
@@ -25,6 +25,15 @@ interface RowActionsCellProps {
   setOpenActions: (value: boolean) => void;
 }
 
+interface RowActionsCellProps {
+  tableId: string;
+  row: Row<TData>;
+  hoverRow: HoverType;
+  rowActions?: IRowActions<TData>[];
+  setHoverRow: (value: HoverType) => void;
+  setOpenActions: (value: boolean) => void;
+}
+
 const RowActionsCell: React.FC<RowActionsCellProps> = ({
   tableId,
   row,
@@ -35,13 +44,19 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
 }) => {
   const { colors } = useTableColors();
   const [openOptions, setOpenOptions] = useState<boolean>(false);
-
   const [hoverOption, setHoverOption] = useState<HoverType>({
     hover: false,
     index: 0,
   });
-
-  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+  const [optionsContainerHeight, setOptionsContainerHeight] = useState<
+    number | null
+  >(null);
+  const [menuPosition, setMenuPosition] = useState({
+    top: 0,
+    left: 0,
+    bottom: 0,
+  });
+  const optionsContainerRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const updateMenuPosition = () => {
@@ -50,19 +65,29 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
       setMenuPosition({
         top: rect.top,
         left: rect.left,
+        bottom: rect.bottom,
       });
     }
   };
 
+  const updateOptionsContainerHeight = () => {
+    if (optionsContainerRef.current) {
+      setOptionsContainerHeight(optionsContainerRef.current.clientHeight);
+    }
+  };
+
   const toggleMenu = () => {
+    setOpenActions(!openOptions);
     setOpenOptions((prev) => !prev);
     updateMenuPosition();
+    updateOptionsContainerHeight();
   };
 
   useEffect(() => {
     const handleScrollOrResize = () => {
       if (openOptions) {
         updateMenuPosition();
+        updateOptionsContainerHeight();
       }
     };
 
@@ -74,11 +99,6 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
       window.removeEventListener('resize', handleScrollOrResize);
     };
   }, [openOptions]);
-
-  useEffect(() => {
-    setOpenActions?.(openOptions);
-    if (!hoverRow.hover) setOpenOptions(false);
-  }, [openOptions, setOpenActions, hoverRow.hover]);
 
   const handleAssetAction = (action: RowActionsType) => {
     switch (action) {
@@ -98,6 +118,31 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
         return <MoreIndicator size={20} direction={'vertical'} />;
     }
   };
+
+  const rowsLength = row
+    ?.getAllCells()[0]
+    ?.getContext()
+    ?.table?.getCenterRows()?.length;
+  const pagination = row
+    ?.getAllCells()[0]
+    ?.getContext()
+    ?.table?.getState()?.pagination;
+  const pageSize = pagination?.pageSize;
+  const rowIndexInPage = row.index % pageSize;
+
+  const handleOptionsContainerPosition = useCallback(
+    (containerHeight: number) => {
+      if (rowsLength > 1 && rowIndexInPage < rowsLength / 2 - 1)
+        return menuPosition.top;
+      return menuPosition.bottom - containerHeight;
+    },
+    [menuPosition.bottom, menuPosition.top, rowIndexInPage, rowsLength]
+  );
+
+  useEffect(() => {
+    setOpenActions?.(openOptions);
+    if (!hoverRow.hover) setOpenOptions(false);
+  }, [hoverRow.hover, openOptions, setOpenActions]);
 
   return (
     <div
@@ -132,56 +177,59 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
           {handleAssetAction('more')}
         </button>
       )}
-      {openOptions && (
-        <div
-          style={{
-            backgroundColor: colors?.paperBg,
-            border: `1px solid ${colors?.divider}`,
-            position: 'fixed',
-            zIndex: 1000,
-            top: menuPosition.top,
-            left: menuPosition.left - 180,
-          }}
-          className={styles.optionsContainer}
-          onMouseLeave={() => {
-            setOpenOptions(false);
-            setHoverOption({ hover: false, index: 0 });
-          }}
-        >
-          {rowActions?.map((action, index) => (
-            <div
-              key={`${tableId}-${action.label(row)}`}
-              className={styles.option}
-              onClick={() => {
-                action.onClick(row);
-                setOpenOptions(false);
-                setHoverRow({ hover: false, index: 0 });
-              }}
+
+      <div
+        ref={optionsContainerRef}
+        style={{
+          backgroundColor: colors?.paperBg,
+          visibility: openOptions ? 'visible' : 'hidden',
+          border: `1px solid ${colors?.divider}`,
+          position: 'fixed',
+          zIndex: 1000,
+          top: handleOptionsContainerPosition(optionsContainerHeight as number),
+          left: menuPosition.left - 180,
+        }}
+        className={styles.optionsContainer}
+        onMouseLeave={() => {
+          setHoverOption({ hover: false, index: 0 });
+          setOpenOptions(false);
+          setOpenActions(false);
+        }}
+      >
+        {rowActions?.map((action, index) => (
+          <div
+            key={`${tableId}-${action.label(row)}`}
+            className={styles.option}
+            onClick={() => {
+              action.onClick(row);
+              setOpenOptions(false);
+              setOpenActions(false);
+              setHoverRow({ hover: false, index: 0 });
+            }}
+            style={{
+              display:
+                action?.showOptions?.(row) === undefined ||
+                action?.showOptions?.(row)
+                  ? 'flex'
+                  : 'none',
+              backgroundColor:
+                hoverOption.hover && hoverOption.index === index
+                  ? colors?.rowHover
+                  : colors?.paperBg,
+            }}
+            onPointerEnter={() => setHoverOption({ hover: true, index })}
+            onPointerLeave={() => setHoverOption({ hover: false, index })}
+          >
+            <p
               style={{
-                display:
-                  action?.showOptions?.(row) === undefined ||
-                  action?.showOptions?.(row)
-                    ? 'flex'
-                    : 'none',
-                backgroundColor:
-                  hoverOption.hover && hoverOption.index === index
-                    ? colors?.rowHover
-                    : colors?.paperBg,
+                color: colors?.primaryText,
               }}
-              onPointerEnter={() => setHoverOption({ hover: true, index })}
-              onPointerLeave={() => setHoverOption({ hover: false, index })}
             >
-              <p
-                style={{
-                  color: colors?.primaryText,
-                }}
-              >
-                {action.label(row)}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
+              {action.label(row)}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

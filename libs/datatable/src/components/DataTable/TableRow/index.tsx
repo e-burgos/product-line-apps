@@ -71,6 +71,7 @@ const TableRow: FC<RowProps> = ({
       style={{
         ...style?.row,
         ...dragStyles,
+        zIndex: hoverRow.hover ? 10 : 0,
         backgroundColor: handleRowBg(),
       }}
     >

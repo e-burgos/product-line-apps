@@ -401,23 +401,23 @@ const DataTableComponent: React.FC<DataTableComponentProps<TData>> = ({
             )}
           </table>
         </DragDropTableContext>
-        {!checkState && !isManualPagination && pagination?.showPagination && (
-          <Pagination
-            tableId={tableId}
-            table={table}
-            pagination={pagination}
-            style={sx?.pagination}
-          />
-        )}
-        {isManualPagination && pagination?.showPagination && (
-          <ManualPagination
-            manualPagination={pagination.manualPagination}
-            rowsInfo={pagination.rowsInfo}
-            hideRecordsSelector={pagination.hideRecordsSelector}
-            style={sx?.pagination}
-          />
-        )}
       </div>
+      {!checkState && !isManualPagination && pagination?.showPagination && (
+        <Pagination
+          tableId={tableId}
+          table={table}
+          pagination={pagination}
+          style={sx?.pagination}
+        />
+      )}
+      {isManualPagination && pagination?.showPagination && (
+        <ManualPagination
+          manualPagination={pagination.manualPagination}
+          rowsInfo={pagination.rowsInfo}
+          hideRecordsSelector={pagination.hideRecordsSelector}
+          style={sx?.pagination}
+        />
+      )}
     </TableWrapper>
   );
 };

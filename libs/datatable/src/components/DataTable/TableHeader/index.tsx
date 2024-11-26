@@ -130,7 +130,7 @@ const TableHeader: FC<TableHeaderProps> = ({
         ...style,
         ...dragStyle,
         ...pinStyles,
-        zIndex: isDragging || isPinned ? 10 : 0,
+        zIndex: rowActionsColumn ? 0 : isDragging || isPinned ? 10 : 0,
         backgroundColor: handleBgColor(),
       }}
       onDoubleClick={() => header.column.resetSize()}
