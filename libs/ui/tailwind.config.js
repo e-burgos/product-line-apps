@@ -42,6 +42,7 @@ module.exports = {
       width: {
         'calc-320': 'calc(100% - 320px)',
         'calc-358': 'calc(100% - 358px)',
+        'w-calc-50-minus-10': 'calc(50% - 10px)',
       },
       fontFamily: {
         body: ['Roboto', 'monospace'],

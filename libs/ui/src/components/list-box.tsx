@@ -1,9 +1,13 @@
 import { Fragment } from 'react';
-import { Listbox as HeadlessListbox } from '@headlessui/react';
+import {
+  Listbox as HeadlessListbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+} from '@headlessui/react';
 import cn from 'classnames';
 import { Transition } from './transition';
 import { ChevronDown } from './icons/chevron-down';
-import InputLabel from './input-label';
 
 export type ListboxOption = {
   name: string;
@@ -20,6 +24,8 @@ interface ListboxTypes {
   className?: string;
   disabled?: boolean;
   label?: string;
+  useUppercaseLabel?: boolean;
+  required?: boolean;
 }
 
 const listboxVariantClasses = {
@@ -40,12 +46,29 @@ export default function Listbox({
   children,
   disabled,
   label,
+  useUppercaseLabel,
+  required,
 }: ListboxTypes) {
   return (
-    <div className={cn('relative', className)}>
-      {label && <InputLabel title={label} className="mb-1" />}
+    <div className={cn('relative text-xs sm:text-sm', className)}>
+      {label && (
+        <span
+          className={cn(
+            'block font-medium tracking-widest dark:text-gray-100',
+            useUppercaseLabel ? 'mb-2 uppercase sm:mb-3' : 'mb-1.5 ml-1.5'
+          )}
+        >
+          {label}
+
+          {required && (
+            <sup className="inline-block text-[13px] text-red-500 ltr:ml-1 rtl:mr-1">
+              *
+            </sup>
+          )}
+        </span>
+      )}
       <HeadlessListbox value={selectedOption} onChange={onChange}>
-        <HeadlessListbox.Button
+        <ListboxButton
           className={cn(
             'text-case-inherit letter-space-inherit flex h-10 w-full items-center justify-between rounded-lg px-4 text-sm font-medium outline-none duration-200 sm:h-12 sm:px-5',
             listboxVariantClasses[variant],
@@ -55,16 +78,16 @@ export default function Listbox({
         >
           <div className="flex items-center">{selectedOption?.name}</div>
           <ChevronDown />
-        </HeadlessListbox.Button>
+        </ListboxButton>
         <Transition
           as={Fragment}
           leave="transition ease-in duration-100"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <HeadlessListbox.Options className="absolute left-0 z-10 mt-1 grid w-full origin-top-right gap-0.5 rounded-lg border border-gray-200 bg-white p-1 shadow-large outline-none dark:border-gray-700 dark:bg-gray-800 xs:p-2">
+          <ListboxOptions className="absolute max-h-44 overflow-auto left-0 z-10 mt-1 grid w-full origin-top-right gap-0.5 rounded-lg border border-gray-200 bg-white p-1 shadow-large outline-none dark:border-gray-700 dark:bg-gray-800 xs:p-2">
             {options.map((option) => (
-              <HeadlessListbox.Option key={option.value} value={option}>
+              <ListboxOption key={option.value} value={option}>
                 {({ selected }) => (
                   <div
                     onClick={() => onSelect && onSelect(option.value)}
@@ -77,11 +100,11 @@ export default function Listbox({
                     {option.name}
                   </div>
                 )}
-              </HeadlessListbox.Option>
+              </ListboxOption>
             ))}
             {/* any custom / external link or element */}
             {children && children}
-          </HeadlessListbox.Options>
+          </ListboxOptions>
         </Transition>
       </HeadlessListbox>
     </div>

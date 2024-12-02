@@ -55,6 +55,10 @@ export function generateViteConfigBase(
           modulePath,
           '../../libs/datatable/src'
         ),
+        'libs/features/src': path.resolve(
+          modulePath,
+          '../../libs/features/src'
+        ),
       },
     },
 

@@ -2,6 +2,8 @@ import React from 'react';
 import Button from './button';
 import { Dialog, DialogPanel, DialogTitle } from './dialog';
 import CardContainer from './forms/card-container';
+import { Close } from './icons/close';
+import cn from 'classnames';
 
 interface ModalProps {
   isOpen: boolean;
@@ -9,6 +11,7 @@ interface ModalProps {
   hideButtons?: boolean;
   children?: React.ReactNode;
   buttonContainer?: React.ReactNode;
+  className?: string;
   text?: {
     title?: string;
     content?: string;
@@ -27,6 +30,7 @@ const Modal: React.FC<ModalProps> = ({
   hideButtons = false,
   children,
   buttonContainer,
+  className,
   setIsOpen,
   onSubmit,
   onBack,
@@ -50,7 +54,12 @@ const Modal: React.FC<ModalProps> = ({
         className={`fixed inset-0 z-10 w-screen overflow-y-auto bg-gray-700/90`}
       >
         <div className="flex min-h-full items-center justify-center p-4">
-          <CardContainer className="w-full max-w-lg rounded-xl shadow-card duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0">
+          <CardContainer
+            className={cn(
+              'w-full sm:max-w-[800px]  rounded-xl shadow-card duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0',
+              className
+            )}
+          >
             <DialogPanel
               transition
               className="w-full overflow-y backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
@@ -58,9 +67,13 @@ const Modal: React.FC<ModalProps> = ({
               {text?.title && (
                 <DialogTitle
                   as="h3"
-                  className="font-bold uppercase tracking-wider text-lg mb-4"
+                  className="flex w-full justify-between items-center font-bold uppercase tracking-wider text-lg h-14"
                 >
                   {text.title}
+                  <Close
+                    className="h-4 w-4 cursor-pointer"
+                    onClick={closeableClose}
+                  />
                 </DialogTitle>
               )}
               {text?.content && (

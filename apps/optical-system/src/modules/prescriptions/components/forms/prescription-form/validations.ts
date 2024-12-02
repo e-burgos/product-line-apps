@@ -1,0 +1,35 @@
+export interface PrescriptionFormData {
+  receiptNumber: number;
+  date: string;
+  description: string;
+  nearRightSphere: string;
+  nearRightCylinder: string;
+  nearRightAxis: string;
+  nearLeftSphere: string;
+  nearLeftCylinder: string;
+  nearLeftAxis: string;
+  farRightSphere: string;
+  farRightCylinder: string;
+  farRightAxis: string;
+  farLeftSphere: string;
+  farLeftCylinder: string;
+  farLeftAxis: string;
+  doctorName: string;
+  frameDesc: string;
+  framePrice: number;
+  crystalDesc: string;
+  crystalPrice: number;
+  contactlensDesc: string;
+  contactlensPrice: number;
+  arrangementDesc: string;
+  arrangementPrice: number;
+  subtotalAmount: number;
+  paymentMethod: string;
+  cashDeposit: number;
+  creditCardDeposit: number;
+  creditCardType: string;
+  creditCardNumber: number;
+  creditCardInstallments: number;
+  balanceAmount: number;
+  totalAmount: number;
+}

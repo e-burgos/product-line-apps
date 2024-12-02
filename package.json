@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "agro-swap": "npx nx run agro-swap-frontend:serve",
-    "product-manager": "npx nx run product-manager:serve"
+    "product-manager": "npx nx run product-manager:serve",
+    "optical": "npx nx run optical-system:serve"
   },
   "private": true,
   "dependencies": {
@@ -23,6 +24,7 @@
     "axios": "1.7.7",
     "classnames": "^2.3.2",
     "clsx": "^2.1.1",
+    "country-state-city": "^3.2.1",
     "date-fns": "4.1.0",
     "dexie": "^3.2.6",
     "dexie-react-hooks": "^1.1.7",
@@ -35,6 +37,7 @@
     "react-dom": "18.3.1",
     "react-dropzone": "14.2.3",
     "react-hook-form": "7.53.0",
+    "react-input-mask": "^2.0.4",
     "react-router-dom": "6.26.2",
     "react-table": "^7.8.0",
     "react-use": "^17.4.0",
@@ -70,6 +73,7 @@
     "@types/node": "18.16.9",
     "@types/react": "18.3.1",
     "@types/react-dom": "18.3.0",
+    "@types/react-input-mask": "^3.0.6",
     "@typescript-eslint/eslint-plugin": "^7.16.0",
     "@typescript-eslint/parser": "^7.16.0",
     "@vitejs/plugin-react": "^4.2.0",

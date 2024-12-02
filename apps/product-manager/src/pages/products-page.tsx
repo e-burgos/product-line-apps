@@ -1,14 +1,16 @@
 import { DataTable } from '@product-line/datatable';
+import {
+  AddProductModal,
+  AddVariantModal,
+  DeleteProduct,
+  EditProductModal,
+  Product,
+  ProductVariantsDatatable,
+  useProductColumns,
+  useProductData,
+  useProductStore,
+} from '@product-line/features';
 import Layout from '@product-manager-app/components/layout';
-import { Product } from '@product-manager-app/lib/db';
-import AddProductModal from '@product-manager-app/modules/products/components/modals/add-product-modal';
-import AddVariantModal from '@product-manager-app/modules/products/components/modals/add-variant-modal';
-import DeleteProduct from '@product-manager-app/modules/products/components/modals/delete-product';
-import EditProductModal from '@product-manager-app/modules/products/components/modals/edit-product-modal';
-import ProductVariantsDatatable from '@product-manager-app/modules/products/components/tables/product-variants-datatable';
-import useProductColumns from '@product-manager-app/modules/products/hooks/use-product-columns';
-import useProductData from '@product-manager-app/modules/products/hooks/use-product-data';
-import { useProductStore } from '@product-manager-app/modules/products/hooks/use-product-store';
 import Button from 'libs/ui/src/components/button/button';
 import { Download, Package2Icon, Share2 } from 'lucide-react';
 

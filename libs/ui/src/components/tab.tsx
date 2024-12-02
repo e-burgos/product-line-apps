@@ -1,38 +1,58 @@
 import {
   Tab,
-  TabGroup,
-  TabList,
+  TabGroup as HeadTabGroup,
+  TabList as HeadTabList,
   TabPanels as HeadTabPanels,
   TabPanel as HeadTabPanel,
+  TabGroupProps,
+  TabListProps,
 } from '@headlessui/react';
 import { motion, LayoutGroup } from 'framer-motion';
 import cn from 'classnames';
+import { FC } from 'react';
 
-export { Tab, TabGroup, TabList };
+export { Tab };
+
+export const TabGroup: FC<TabGroupProps> = (props) => {
+  return (
+    <HeadTabGroup className={cn('', props.className)} {...props}>
+      {props.children}
+    </HeadTabGroup>
+  );
+};
+
+export const TabList: FC<TabListProps> = (props) => {
+  return (
+    <HeadTabList className={cn('', props.className)} {...props}>
+      {props.children}
+    </HeadTabList>
+  );
+};
 
 export function TabItem({
   children,
   className,
-  tabItemLayoutId = 'activeTabIndicator',
-}: React.PropsWithChildren<{ className?: string; tabItemLayoutId?: string }>) {
+  disabled,
+}: React.PropsWithChildren<{ className?: string; disabled?: boolean }>) {
   return (
     <Tab
+      disabled={disabled}
       className={({ selected }) =>
         cn(
-          'relative py-2 mb-4 text-md tracking-wider hover:text-gray-900 focus:outline-none dark:hover:text-gray-100 xs:py-2.5 sm:py-3',
+          'relative text-md tracking-wider hover:text-gray-900 focus:outline-none dark:hover:text-gray-100',
+          'xs:py-2.5 sm:py-3 px-3 sm:h-12 h-8 sm:w-auto w-full',
           {
-            'font-medium text-brand': selected,
+            'font-medium rounded-full bg-brand': selected,
             'text-gray-600 dark:text-gray-400': !selected,
           },
           className
         )
       }
     >
-      {({ selected }) => (
+      {children}
+      {/* {({ selected }) => (
         <>
-          <span className="flex w-full justify-center px-3 md:px-0">
-            {children}
-          </span>
+          <span className="flex w-full justify-center px-4">{children}</span>
           {selected && (
             <motion.span
               className="absolute bottom-0 left-0 right-0 z-[1] h-0.5 w-full overflow-hidden rounded-full bg-brand dark:bg-gray-400 md:z-10"
@@ -40,7 +60,7 @@ export function TabItem({
             />
           )}
         </>
-      )}
+      )} */}
     </Tab>
   );
 }

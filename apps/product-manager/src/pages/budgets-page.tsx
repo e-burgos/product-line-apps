@@ -1,13 +1,15 @@
 import { DataTable } from '@product-line/datatable';
+import {
+  AddBudgetModal,
+  Budget,
+  BudgetDetailsDatatable,
+  DeleteBudget,
+  EditBudgetModal,
+  useBudgetColumns,
+  useBudgetData,
+  useBudgetStore,
+} from '@product-line/features';
 import Layout from '@product-manager-app/components/layout';
-import { Budget } from '@product-manager-app/lib/db';
-import useBudgetColumns from '@product-manager-app/modules/budgets/hooks/use-budget-columns';
-import useBudgetData from '@product-manager-app/modules/budgets/hooks/use-budget-data';
-import { useBudgetStore } from '@product-manager-app/modules/budgets/hooks/use-budget-store';
-import AddBudgetModal from '@product-manager-app/modules/budgets/modals/add-budget-modal';
-import DeleteBudget from '@product-manager-app/modules/budgets/modals/delete-budget';
-import EditBudgetModal from '@product-manager-app/modules/budgets/modals/edit-budget-modal';
-import BudgetDetailsDatatable from '@product-manager-app/modules/budgets/tables/budget-details-datatable';
 import Button from 'libs/ui/src/components/button/button';
 import { Download, Share2, TableCellsSplitIcon } from 'lucide-react';
 
