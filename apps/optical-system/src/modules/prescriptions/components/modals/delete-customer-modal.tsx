@@ -4,19 +4,21 @@ import { useToastStore } from 'libs/ui/src/hooks/use-toast-store';
 import Modal from 'libs/ui/src/components/modal';
 import { Prescription, db } from '@optical-system-app/lib/db';
 import Button from 'libs/ui/src/components/button';
-import { UserRoundXIcon } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { usePrescriptionStore } from '../../hooks/use-prescription-store';
 
 interface DeletePrescriptionModalProps {
   showButton?: boolean;
   prescriptionId?: number;
+  prescriptionData?: Prescription;
   backToPrescriptions?: boolean;
 }
 
 const DeletePrescriptionModal: React.FC<DeletePrescriptionModalProps> = ({
   showButton,
   prescriptionId: id,
+  prescriptionData,
   backToPrescriptions,
 }) => {
   const navigate = useNavigate();
@@ -24,10 +26,10 @@ const DeletePrescriptionModal: React.FC<DeletePrescriptionModalProps> = ({
     usePrescriptionStore();
   const { addToast } = useToastStore();
   const prescription = currentPrescription as Prescription;
-  const prescriptionId = id || prescription?.id;
+  const prescriptionId = prescriptionData?.id || id || prescription?.id;
 
   const handleDelete = async () => {
-    if (prescription?.id !== undefined) {
+    if (prescriptionId !== undefined) {
       try {
         await db.prescriptions.delete(prescriptionId!);
         addToast({
@@ -60,7 +62,7 @@ const DeletePrescriptionModal: React.FC<DeletePrescriptionModalProps> = ({
           onClick={() => setOpenDeleteModal(true)}
         >
           <div className="flex items-center">
-            <UserRoundXIcon className="h-4 w-4" />
+            <Trash2 className="h-4 w-4" />
           </div>
         </Button>
       )}
@@ -69,7 +71,10 @@ const DeletePrescriptionModal: React.FC<DeletePrescriptionModalProps> = ({
         className="w-[500px]"
         setIsOpen={setOpenDeleteModal}
         text={{
-          title: `Eliminar ficha N° ${prescription?.receiptNumber}`,
+          title: `Eliminar ficha N° ${
+            prescriptionData?.receiptNumber || prescription?.receiptNumber || ''
+          } 
+          `,
           content: '¿Estás seguro de que deseas eliminar a esta ficha?',
         }}
         onSubmit={handleDelete}

@@ -132,7 +132,7 @@ function PrescriptionsPage() {
         </CardTitle>
       </CardContainer>
       <DeletePrescriptionModal />
-      <EditPrescriptionModal hideButton />
+      <EditPrescriptionModal />
     </Layout>
   );
 }

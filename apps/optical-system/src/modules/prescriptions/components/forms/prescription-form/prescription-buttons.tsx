@@ -25,8 +25,9 @@ export const PrescriptionButtons: FC<PrescriptionButtonsProps> = ({
   errors,
   watch,
 }) => {
+  const { setCurrentPrescription } = usePrescriptionStore();
   const { currentCustomer, setCurrentCustomer } = useCustomerStore();
-  const { setOpenCreateModal } = usePrescriptionStore();
+  const { setOpenCreateModal, setOpenEditModal } = usePrescriptionStore();
 
   const handleDisable = () => {
     switch (selectedTab) {
@@ -136,9 +137,21 @@ export const PrescriptionButtons: FC<PrescriptionButtonsProps> = ({
                 reset();
                 setCurrentCustomer(null);
                 setOpenCreateModal(false);
+                setCurrentPrescription(null);
+                type === 'update' && setOpenEditModal(false);
               }}
             >
               Cerrar
+            </Button>
+          )}
+          {selectedTab !== 3 && type === 'update' && (
+            <Button
+              size="medium"
+              shape="rounded"
+              type="submit"
+              disabled={!isValid}
+            >
+              {'Guardar'}
             </Button>
           )}
           <Button
@@ -183,6 +196,8 @@ export const PrescriptionButtons: FC<PrescriptionButtonsProps> = ({
               reset();
               setCurrentCustomer(null);
               setOpenCreateModal(false);
+              setCurrentPrescription(null);
+              type === 'update' && setOpenEditModal(false);
             }}
           >
             Cerrar
@@ -193,7 +208,7 @@ export const PrescriptionButtons: FC<PrescriptionButtonsProps> = ({
             type="submit"
             disabled={!isValid}
           >
-            {type === 'create' ? 'Guardar' : 'Actualizar'}
+            {'Guardar'}
           </Button>
         </div>
       )}

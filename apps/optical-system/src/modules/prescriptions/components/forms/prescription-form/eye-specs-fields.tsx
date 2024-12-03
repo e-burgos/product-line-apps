@@ -9,11 +9,13 @@ interface EyeSpecsFieldsProps {
   register: UseFormRegister<PrescriptionFormData>;
   setValue?: UseFormSetValue<PrescriptionFormData>;
   errors?: FieldErrors<PrescriptionFormData>;
+  forDetail?: boolean;
 }
 
 const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
   register,
   errors,
+  forDetail = false,
 }) => {
   return (
     <>
@@ -22,6 +24,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
           <InputLabel title="Ojo Derecho" className="mb-0" />
           <div className="flex flex-row flex-wrap justify-between gap-2">
             <Input
+              disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="farRightSphere"
               type="decimal"
@@ -53,6 +56,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               })}
             />
             <Input
+              disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="farRightCylinder"
               type="decimal"
@@ -83,6 +87,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               })}
             />
             <Input
+              disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="farRightAxis"
               type="number"
@@ -111,6 +116,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
           <InputLabel title="Ojo Izquierdo" className="mb-0 mt-4" />
           <div className="flex flex-row flex-wrap justify-between gap-2">
             <Input
+              disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="farLeftSphere"
               type="decimal"
@@ -142,6 +148,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               })}
             />
             <Input
+              disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="farLeftCylinder"
               type="decimal"
@@ -172,6 +179,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               })}
             />
             <Input
+              disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="farLeftAxis"
               type="number"
@@ -202,6 +210,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
           <InputLabel title="Ojo Derecho" className="mb-0" />
           <div className="flex flex-row flex-wrap justify-between gap-2">
             <Input
+              disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="nearRightSphere"
               type="decimal"
@@ -233,6 +242,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               })}
             />
             <Input
+              disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="nearRightCylinder"
               type="decimal"
@@ -263,6 +273,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               })}
             />
             <Input
+              disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="nearRightAxis"
               type="number"
@@ -291,6 +302,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
           <InputLabel title="Ojo Izquierdo" className="mb-0 mt-4" />
           <div className="flex flex-row flex-wrap justify-between gap-2">
             <Input
+              disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="nearLeftSphere"
               type="decimal"
@@ -322,6 +334,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               })}
             />
             <Input
+              disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="nearLeftCylinder"
               type="decimal"
@@ -352,6 +365,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               })}
             />
             <Input
+              disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="nearLeftAxis"
               type="number"

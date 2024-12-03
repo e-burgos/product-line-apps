@@ -41,7 +41,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   ) => (
     <div className={cn('text-xs sm:text-sm', className)}>
       <div className={cn('relative', labelClassName)}>
-        <div className="absolute inset-y-0 left-0 flex items-center justify-center pl-1.5 w-10 pointer-events-none">
+        <div className="absolute inset-y-0 left-0 flex items-center justify-center pl-1.5 w-10">
           {icon && (
             <div
               className={cn(
@@ -61,7 +61,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             )}
           >
             {label}
-
             {props.required && (
               <sup className="inline-block text-[13px] text-red-500 ltr:ml-1 rtl:mr-1">
                 *
@@ -77,6 +76,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             className={cn(
               'mt-1 block h-10 w-full rounded-md border border-gray-200 bg-white px-4 py-2 text-sm placeholder-gray-400  transition-shadow duration-200 dark:invalid:border-red-500 dark:invalid:text-red-600 invalid:border-red-500 invalid:text-red-600 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 focus:invalid:border-red-500 focus:invalid:ring-red-500 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 dark:border-gray-700 dark:bg-light-dark dark:text-gray-100 dark:focus:border-gray-600 dark:focus:ring-gray-600 sm:h-12 sm:rounded-lg',
               icon && 'pl-10',
+              props.disabled
+                ? 'bg-gray-50 dark:bg-light-dark cursor-not-allowed dark:cursor-not-allowed pointer-events-none'
+                : '',
               inputClassName
             )}
             ref={ref as React.LegacyRef<InputMask>}
@@ -89,8 +91,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             {...props}
             className={cn(
-              'mt-1 block h-10 w-full rounded-md border border-gray-200 bg-white px-4 py-2 text-sm placeholder-gray-400  transition-shadow duration-200 dark:invalid:border-red-500 dark:invalid:text-red-600 invalid:border-red-500 invalid:text-red-600 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 focus:invalid:border-red-500 focus:invalid:ring-red-500 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 dark:border-gray-700 dark:bg-light-dark dark:text-gray-100 dark:focus:border-gray-600 dark:focus:ring-gray-600 sm:h-12 sm:rounded-lg',
+              'mt-1 block h-10 w-full rounded-md border border-gray-200 bg-white px-4 py-2 text-sm placeholder-gray-400 transition-shadow duration-200 dark:invalid:border-red-500 dark:invalid:text-red-600 invalid:border-red-500 invalid:text-red-600 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 focus:invalid:border-red-500 focus:invalid:ring-red-500 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 dark:border-gray-700 dark:bg-light-dark dark:text-gray-100 dark:focus:border-gray-600 dark:focus:ring-gray-600 sm:h-12 sm:rounded-lg',
               icon && 'pl-10',
+              props.disabled
+                ? 'bg-gray-50 dark:bg-light-dark cursor-not-allowed dark:cursor-not-allowed'
+                : '',
               inputClassName
             )}
           />
@@ -98,7 +103,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {suffix && (
           <span
             className={cn(
-              ' absolute whitespace-nowrap leading-normal',
+              'absolute whitespace-nowrap leading-normal',
               suffixClassName
             )}
           >

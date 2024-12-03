@@ -75,70 +75,72 @@ function CustomerDetailPage() {
         ),
       }}
     >
-      {!checkIsCustomer(customerId) && (
-        <CardContainer className="gap-12">
-          <CardTitle title="Cliente no encontrado" className="p-12">
+      {!checkIsCustomer(customerId) ? (
+        <CardContainer className="sm:py-10 py-8">
+          <CardTitle title="Cliente no encontrado" className="sm:p-4 p-4">
             <p>El cliente que buscas no existe o ha sido eliminado.</p>
           </CardTitle>
         </CardContainer>
-      )}
-      {customer && (
-        <CardContainer className="gap-12">
-          <CardTitle title="Datos del Cliente" className="mt-6">
-            <DetailCustomerForm customer={customer} />
-          </CardTitle>
-
-          <CardTitle title="Fichas del Cliente" className="mb-6">
-            <DataTable
-              tableId={'customer-detail'}
-              data={customerPrescriptions || []}
-              columns={columns}
-              border
-              pagination={{
-                showPagination: true,
-                pageSize: 5,
-                pageIndex: 0,
-                takeDefaultPagination: true,
-              }}
-              headerOptions={{
-                enableDragColumns: false,
-                headerContainer: (
-                  <div className="flex justify-end items-center w-full !h-20 max-h-20 p-4">
-                    <AddPrescriptionModal
-                      customerData={customer}
-                      type="update"
-                    />
-                  </div>
-                ),
-              }}
-              stateMessage={{
-                noData: 'No hay fichas registradas'.toLocaleUpperCase(),
-                noDataDescription:
-                  'Para agregar una nueva ficha, haz clic en el botón "Agregar".',
-              }}
-              setCurrentRow={(row) =>
-                setCurrentPrescription(row?.original as Prescription)
-              }
-              rowActions={[
-                {
-                  action: 'view',
-                  label: () => 'Detalles',
-                  onClick: () => setOpenEditModal(true),
-                },
-                {
-                  action: 'edit',
-                  label: () => 'Editar',
-                  onClick: () => setOpenEditModal(true),
-                },
-                {
-                  action: 'delete',
-                  label: () => 'Eliminar',
-                  onClick: () => setOpenDeleteModal(true),
-                },
-              ]}
-            />
-          </CardTitle>
-        </CardContainer>
+      ) : (
+        <>
+          {customer && (
+            <CardContainer className="sm:py-12 py-8 gap-12">
+              <CardTitle title="Datos del Cliente" className="sm:py-4 py-4">
+                <DetailCustomerForm customer={customer} />
+              </CardTitle>
+              <CardTitle title="Fichas del Cliente" className="sm:p-4 p-4">
+                <DataTable
+                  tableId={'customer-detail'}
+                  data={customerPrescriptions || []}
+                  columns={columns}
+                  border
+                  pagination={{
+                    showPagination: true,
+                    pageSize: 5,
+                    pageIndex: 0,
+                    takeDefaultPagination: true,
+                  }}
+                  headerOptions={{
+                    enableDragColumns: false,
+                    headerContainer: (
+                      <div className="flex justify-end items-center w-full !h-20 max-h-20 p-4">
+                        <AddPrescriptionModal
+                          customerData={customer}
+                          type="update"
+                        />
+                      </div>
+                    ),
+                  }}
+                  stateMessage={{
+                    noData: 'No hay fichas registradas'.toLocaleUpperCase(),
+                    noDataDescription:
+                      'Para agregar una nueva ficha, haz clic en el botón "Agregar".',
+                  }}
+                  setCurrentRow={(row) =>
+                    setCurrentPrescription(row?.original as Prescription)
+                  }
+                  rowActions={[
+                    {
+                      action: 'view',
+                      label: () => 'Detalles',
+                      onClick: () => setOpenEditModal(true),
+                    },
+                    {
+                      action: 'edit',
+                      label: () => 'Editar',
+                      onClick: () => setOpenEditModal(true),
+                    },
+                    {
+                      action: 'delete',
+                      label: () => 'Eliminar',
+                      onClick: () => setOpenDeleteModal(true),
+                    },
+                  ]}
+                />
+              </CardTitle>
+            </CardContainer>
+          )}
+        </>
       )}
     </Layout>
   );

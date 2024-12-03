@@ -15,6 +15,7 @@ interface DetailFieldsProps {
   setValue: UseFormSetValue<PrescriptionFormData>;
   watch: UseFormWatch<PrescriptionFormData>;
   errors?: FieldErrors<PrescriptionFormData>;
+  forDetail?: boolean;
 }
 
 const DetailFields: React.FC<DetailFieldsProps> = ({
@@ -22,6 +23,7 @@ const DetailFields: React.FC<DetailFieldsProps> = ({
   watch,
   setValue,
   errors,
+  forDetail = false,
 }) => {
   const framePrice = watch('framePrice') || 0;
   const crystalPrice = watch('crystalPrice') || 0;
@@ -45,6 +47,7 @@ const DetailFields: React.FC<DetailFieldsProps> = ({
     <>
       <CardTitle title="Detalles del Servicio">
         <Input
+          disabled={forDetail}
           className="w-full mb-4"
           label="Nombre del doctor (Receta)"
           id="doctorName"
@@ -53,12 +56,14 @@ const DetailFields: React.FC<DetailFieldsProps> = ({
         />
         <div className="flex flex-row flex-wrap justify-between gap-2">
           <Input
+            disabled={forDetail}
             className="w-full sm:w-calc-50-minus-8 mb-0"
             label="Armazón"
             id="frameDesc"
             {...register('frameDesc')}
           />
           <Input
+            disabled={forDetail}
             className="w-full sm:w-calc-50-minus-8 mb-4"
             label="Monto"
             id="framePrice"
@@ -77,12 +82,14 @@ const DetailFields: React.FC<DetailFieldsProps> = ({
             })}
           />
           <Input
+            disabled={forDetail}
             className="w-full sm:w-calc-50-minus-8 mb-0"
             label="Cristales"
             id="crystalDesc"
             {...register('crystalDesc')}
           />
           <Input
+            disabled={forDetail}
             className="w-full sm:w-calc-50-minus-8 mb-4"
             label="Monto"
             id="crystalPrice"
@@ -102,12 +109,14 @@ const DetailFields: React.FC<DetailFieldsProps> = ({
           />
 
           <Input
+            disabled={forDetail}
             className="w-full sm:w-calc-50-minus-8 mb-0"
             label="Lentes de contacto"
             id="contactlensDesc"
             {...register('contactlensDesc')}
           />
           <Input
+            disabled={forDetail}
             className="w-full sm:w-calc-50-minus-8 mb-4"
             label="Monto"
             id="contactlensPrice"
@@ -126,12 +135,14 @@ const DetailFields: React.FC<DetailFieldsProps> = ({
             })}
           />
           <Input
+            disabled={forDetail}
             className="w-full sm:w-calc-50-minus-8 mb-0"
             label="Arreglos"
             id="arrangementDesc"
             {...register('arrangementDesc')}
           />
           <Input
+            disabled={forDetail}
             className="w-full sm:w-calc-50-minus-8 mb-4"
             label="Monto"
             id="arrangementPrice"

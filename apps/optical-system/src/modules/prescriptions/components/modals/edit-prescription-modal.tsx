@@ -9,16 +9,20 @@ import usePrescriptionData from '../../hooks/use-prescription-data';
 import useCustomerData from '@optical-system-app/modules/customers/hooks/use-customer-data';
 import { Customer } from '@optical-system-app/lib/db';
 import { useCustomerStore } from '@optical-system-app/modules/customers/hooks/use-customer-store';
+import { useNavigate } from 'react-router-dom';
 
 interface EditPrescriptionModalProps {
-  hideButton?: boolean;
+  showButton?: boolean;
   prescriptionId?: number;
+  reloadPage?: boolean;
 }
 
 const EditPrescriptionModal: FC<EditPrescriptionModalProps> = ({
-  hideButton = false,
+  showButton = false,
   prescriptionId: id,
+  reloadPage = false,
 }) => {
+  const navigate = useNavigate();
   const {
     openEditModal,
     currentPrescription,
@@ -48,7 +52,7 @@ const EditPrescriptionModal: FC<EditPrescriptionModalProps> = ({
 
   return (
     <>
-      {!hideButton && (
+      {showButton && (
         <Button
           variant="solid"
           shape="rounded"
@@ -65,8 +69,12 @@ const EditPrescriptionModal: FC<EditPrescriptionModalProps> = ({
       <Modal
         isOpen={openEditModal}
         setIsOpen={setOpenEditModal}
+        onClose={() => {
+          setOpenEditModal(false);
+          if (reloadPage) navigate(0);
+        }}
         text={{
-          title: 'Nueva Ficha',
+          title: `Editar Ficha ${currentPrescription?.receiptNumber || ''}`,
         }}
         hideButtons
       >

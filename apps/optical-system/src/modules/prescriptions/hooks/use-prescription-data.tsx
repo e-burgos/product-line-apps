@@ -40,6 +40,9 @@ const usePrescriptionData = () => {
 
   const prescriptions = useLiveQuery(() => db.prescriptions?.toArray() || []);
 
+  const checkIsPrescription = (prescriptionId: number) =>
+    prescriptions?.find((p) => p.id === prescriptionId) ? true : false;
+
   const getPrescriptionById = (id: number) =>
     prescriptions?.find(
       (prescription) => prescription.id === id
@@ -57,6 +60,7 @@ const usePrescriptionData = () => {
     paymentMethodList,
     getPrescriptionById,
     useGetPrescriptionsByCustomerId,
+    checkIsPrescription,
   };
 };
 

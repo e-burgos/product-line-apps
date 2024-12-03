@@ -19,6 +19,7 @@ interface PaymentFieldsProps {
   setValue: UseFormSetValue<PrescriptionFormData>;
   watch: UseFormWatch<PrescriptionFormData>;
   errors?: FieldErrors<PrescriptionFormData>;
+  forDetail?: boolean;
 }
 
 const PaymentFields: React.FC<PaymentFieldsProps> = ({
@@ -26,6 +27,7 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
   setValue,
   watch,
   errors,
+  forDetail = false,
 }) => {
   const { currentPrescription } = usePrescriptionStore();
   const { paymentMethodList, creditCardList } = usePrescriptionData();
@@ -113,6 +115,7 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
             selectedOption={paymentMethodSelected}
             onChange={(e) => setPaymentMethodSelected(e as ListboxOption)}
             onSelect={(e) => setValue('paymentMethod', e)}
+            disabled={forDetail}
           />
           {paymentMethodSelected?.value?.includes('Tarjeta') && (
             <>
@@ -123,8 +126,10 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
                 selectedOption={creditCardSelected}
                 onChange={(e) => setCreditCardSelected(e as ListboxOption)}
                 onSelect={(e) => setValue('creditCardType', e)}
+                disabled={forDetail}
               />
               <Input
+                disabled={forDetail}
                 className="w-full sm:w-calc-50-minus-8 mb-4"
                 label="Pago con tarjeta"
                 id="creditCardDeposit"
@@ -143,6 +148,7 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
                 })}
               />
               <Input
+                disabled={forDetail}
                 className="w-full sm:w-calc-50-minus-8 mb-4"
                 label="Número de tarjeta"
                 id="creditCardNumber"
@@ -153,6 +159,7 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
                 {...register('creditCardNumber')}
               />
               <Input
+                disabled={forDetail}
                 className="w-full sm:w-calc-50-minus-8 mb-4"
                 label="Cuotas de la tarjeta"
                 id="creditCardInstallments"
@@ -172,6 +179,7 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
         {paymentMethodSelected?.value?.includes('Efectivo') && (
           <>
             <Input
+              disabled={forDetail}
               className="w-full mb-4"
               label="Pago en efectivo"
               id="cashDeposit"
@@ -233,6 +241,7 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
           />
         </div>
         <Textarea
+          disabled={forDetail}
           className="w-full"
           label="Comentarios"
           id="description"

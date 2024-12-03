@@ -6,22 +6,26 @@ import Listbox, { ListboxOption } from 'libs/ui/src/components/list-box';
 import useCustomerData from '@optical-system-app/modules/customers/hooks/use-customer-data';
 import { useCustomerStore } from '@optical-system-app/modules/customers/hooks/use-customer-store';
 import { CardTitle } from '@product-line/ui';
+import { Customer } from '@optical-system-app/lib/db';
 
 interface PrescriptionFieldsProps {
   type: 'create' | 'update';
   register: UseFormRegister<PrescriptionFormData>;
   setValue: UseFormSetValue<PrescriptionFormData>;
   errors: FieldErrors<PrescriptionFormData>;
+  customerData?: Customer;
+  forDetail?: boolean;
 }
 
 const PrescriptionFields: React.FC<PrescriptionFieldsProps> = ({
   type = 'create',
   register,
   errors,
+  forDetail = false,
+  customerData,
 }) => {
   const { customers, getCustomer } = useCustomerData();
   const { currentCustomer, setCurrentCustomer } = useCustomerStore();
-
   const [customerList, setCustomerList] = useState<ListboxOption[]>();
   const [selectedCustomer, setSelectedCustomer] = useState<ListboxOption>();
 
@@ -36,14 +40,6 @@ const PrescriptionFields: React.FC<PrescriptionFieldsProps> = ({
   }, [customers]);
 
   useEffect(() => {
-    if (type === 'create' && selectedCustomer) {
-      const customer = getCustomer(Number(selectedCustomer.value));
-      setCurrentCustomer(customer);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCustomer, type]);
-
-  useEffect(() => {
     if (type === 'update' && currentCustomer?.id)
       setSelectedCustomer({
         name: `${currentCustomer.name} ${currentCustomer.lastName}`,
@@ -51,10 +47,24 @@ const PrescriptionFields: React.FC<PrescriptionFieldsProps> = ({
       });
   }, [currentCustomer, type]);
 
+  useEffect(() => {
+    if (selectedCustomer)
+      setCurrentCustomer(getCustomer(Number(selectedCustomer.value)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCustomer]);
+
+  useEffect(() => {
+    if (currentCustomer === null) {
+      setCurrentCustomer(customerData as Customer);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentCustomer]);
+
   return (
     <CardTitle title="Datos de Ficha">
       <div className="flex flex-row flex-wrap justify-between gap-2">
         <Input
+          disabled={forDetail}
           className="w-full sm:w-calc-50-minus-8 mb-4"
           required
           label="Comprobante N°"
@@ -67,6 +77,7 @@ const PrescriptionFields: React.FC<PrescriptionFieldsProps> = ({
           })}
         />
         <Input
+          disabled={forDetail}
           className="w-full sm:w-calc-50-minus-8 mb-4"
           required
           label="Fecha"
@@ -86,8 +97,9 @@ const PrescriptionFields: React.FC<PrescriptionFieldsProps> = ({
           })}
         />
         <Listbox
+          disabled={forDetail}
           className="w-full mb-4"
-          label="Seleccionar Cliente"
+          label={forDetail ? 'Cliente' : 'Seleccionar Cliente'}
           options={customerList || []}
           selectedOption={selectedCustomer}
           onChange={(e) => setSelectedCustomer(e as ListboxOption)}

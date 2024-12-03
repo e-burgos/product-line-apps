@@ -19,6 +19,7 @@ interface ModalProps {
     backButton?: string;
   };
   setIsOpen: (isOpen: boolean) => void;
+  onClose?: () => void;
   onBack?: () => void;
   onSubmit?: () => void;
 }
@@ -34,12 +35,14 @@ const Modal: React.FC<ModalProps> = ({
   setIsOpen,
   onSubmit,
   onBack,
+  onClose,
 }) => {
   function close() {
     setIsOpen(false);
   }
 
   function closeableClose() {
+    onClose && onClose();
     closeable && setIsOpen(false);
   }
 

@@ -23,7 +23,8 @@ export const PrescriptionForm: FC<PrescriptionFormProps> = ({
   customerData,
 }) => {
   const { currentCustomer, setCurrentCustomer } = useCustomerStore();
-  const { setOpenCreateModal } = usePrescriptionStore();
+  const { setOpenCreateModal, setOpenEditModal, setCurrentPrescription } =
+    usePrescriptionStore();
   const { addToast } = useToastStore();
   const {
     handleSubmit,
@@ -57,35 +58,74 @@ export const PrescriptionForm: FC<PrescriptionFormProps> = ({
   const [selectedTab, setSelectedTab] = useState(0);
 
   const onSubmit: SubmitHandler<PrescriptionFormData> = async (data) => {
-    try {
-      await db.prescriptions.add({
-        ...data,
-        framePrice: Number(data.framePrice),
-        crystalPrice: Number(data.crystalPrice),
-        contactlensPrice: Number(data.contactlensPrice),
-        arrangementPrice: Number(data.arrangementPrice),
-        subtotalAmount: Number(data.subtotalAmount),
-        cashDeposit: Number(data.cashDeposit),
-        creditCardDeposit: Number(data.creditCardDeposit),
-        balanceAmount: Number(data.balanceAmount),
-        totalAmount: Number(data.totalAmount),
-        customerId: currentCustomer?.id as number,
-      });
-      reset();
-      setOpenCreateModal(false);
-      addToast({
-        id: 'prescription-created',
-        title: 'Ficha creada',
-        message: 'La ficha se ha creado correctamente.',
-        variant: 'success',
-      });
-    } catch {
-      addToast({
-        id: 'prescription-error',
-        title: 'Error',
-        message: 'No se pudo crear la ficha.',
-        variant: 'destructive',
-      });
+    if (type === 'create') {
+      try {
+        await db.prescriptions.add({
+          ...data,
+          framePrice: Number(data.framePrice),
+          crystalPrice: Number(data.crystalPrice),
+          contactlensPrice: Number(data.contactlensPrice),
+          arrangementPrice: Number(data.arrangementPrice),
+          subtotalAmount: Number(data.subtotalAmount),
+          cashDeposit: Number(data.cashDeposit),
+          creditCardDeposit: Number(data.creditCardDeposit),
+          balanceAmount: Number(data.balanceAmount),
+          totalAmount: Number(data.totalAmount),
+          customerId: currentCustomer?.id as number,
+        });
+        reset();
+        setCurrentCustomer(null);
+        setCurrentPrescription(null);
+        setOpenCreateModal(false);
+        addToast({
+          id: 'prescription-created',
+          title: 'Ficha creada',
+          message: 'La ficha se ha creado correctamente.',
+          variant: 'success',
+        });
+      } catch (e) {
+        console.error(e);
+        addToast({
+          id: 'prescription-error',
+          title: 'Error',
+          message: 'No se pudo crear la ficha.',
+          variant: 'destructive',
+        });
+      }
+    }
+    if (type === 'update') {
+      try {
+        await db.prescriptions.update(prescriptionData?.id as number, {
+          ...data,
+          framePrice: Number(data.framePrice),
+          crystalPrice: Number(data.crystalPrice),
+          contactlensPrice: Number(data.contactlensPrice),
+          arrangementPrice: Number(data.arrangementPrice),
+          subtotalAmount: Number(data.subtotalAmount),
+          cashDeposit: Number(data.cashDeposit),
+          creditCardDeposit: Number(data.creditCardDeposit),
+          balanceAmount: Number(data.balanceAmount),
+          totalAmount: Number(data.totalAmount),
+          customerId: currentCustomer?.id as number,
+        });
+        setCurrentCustomer(null);
+        setCurrentPrescription(null);
+        setOpenEditModal(false);
+        addToast({
+          id: 'prescription-updated',
+          title: 'Ficha actualizada',
+          message: 'La ficha se ha actualizado correctamente.',
+          variant: 'success',
+        });
+      } catch (e) {
+        console.error(e);
+        addToast({
+          id: 'prescription-error',
+          title: 'Error',
+          message: 'No se pudo actualizar la ficha.',
+          variant: 'destructive',
+        });
+      }
     }
   };
 
@@ -97,6 +137,7 @@ export const PrescriptionForm: FC<PrescriptionFormProps> = ({
           setValue={setValue}
           register={register}
           errors={errors}
+          customerData={customerData}
         />
       </div>
       <div style={{ display: selectedTab === 1 ? 'block' : 'none' }}>

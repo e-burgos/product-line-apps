@@ -61,7 +61,7 @@ module.exports = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
       animation: {
-        blink: 'blink 1.4s infinite both;',
+        blink: 'blink 1.4s infinite both',
         'move-up': 'moveUp 500ms infinite alternate',
         'scale-up': 'scaleUp 500ms infinite alternate',
         'drip-expand': 'expand 500ms ease-in forwards',
