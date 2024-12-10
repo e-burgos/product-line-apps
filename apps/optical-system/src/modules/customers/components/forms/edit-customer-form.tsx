@@ -178,7 +178,23 @@ export const EditCustomerForm: FC<EditCustomerFormProps> = ({ customerId }) => {
           label="Fecha de nacimiento"
           id="birthDate"
           type="date"
-          {...register('birthDate')}
+          error={errors?.birthDate?.message}
+          {...register('birthDate', {
+            max: {
+              value: new Date().toISOString().split('T')[0],
+              message: 'La fecha no puede ser mayor a la actual',
+            },
+            min: {
+              value: '1900-01-01',
+              message: 'La fecha no puede ser menor a 1900',
+            },
+            validate: (value) => {
+              const date = new Date(value as string);
+              const isValidDate =
+                date instanceof Date && !isNaN(date.getTime());
+              return isValidDate || 'La fecha no es válida';
+            },
+          })}
         />
         <Input
           className="w-full mb-4"

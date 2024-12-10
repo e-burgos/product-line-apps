@@ -154,9 +154,6 @@ export class ProductDatabase extends Dexie {
   budgetVariants!: Table<BudgetVariant>;
   customers!: Table<Customer>;
   prescriptions!: Table<Prescription>;
-  // crystalSpecs!: Table<CrystalSpecs>;
-  // prescriptionPayment!: Table<PrescriptionPayment>;
-  // prescriptionDetail!: Table<PrescriptionDetail>;
 
   constructor() {
     super('OpticalDB');
@@ -166,9 +163,6 @@ export class ProductDatabase extends Dexie {
       budgets: '++id, title',
       budgetVariants: '++id, budgetId, productId, variantId, title',
       customers: '++id, name, lastName',
-      // crystalSpecs: '++id',
-      // prescriptionPayment: '++id',
-      // prescriptionDetail: '++id',
       prescriptions: '++id, receiptNumber, customerId',
     });
   }

@@ -18,7 +18,6 @@ const usePrescriptionData = () => {
     { name: 'Cabal', value: 'Cabal' },
     { name: 'Argencard', value: 'Argencard' },
     { name: 'Cencosud', value: 'Cencosud' },
-    { name: 'Cordobesa', value: 'Cordobesa' },
     { name: 'Nativa', value: 'Nativa' },
     { name: 'Patagonia 365', value: 'Patagonia 365' },
     { name: 'Tuya', value: 'Tuya' },
@@ -32,8 +31,6 @@ const usePrescriptionData = () => {
     { name: 'Tarjeta de débito', value: 'Tarjeta de débito' },
     { name: 'Transferencia', value: 'Transferencia' },
     { name: 'Mercado Pago', value: 'Mercado Pago' },
-    { name: 'NaranjaX', value: 'NaranjaX' },
-    { name: 'Lemon', value: 'Lemon' },
     { name: 'Cheque', value: 'Cheque' },
     { name: 'Otro', value: 'Otro' },
   ];

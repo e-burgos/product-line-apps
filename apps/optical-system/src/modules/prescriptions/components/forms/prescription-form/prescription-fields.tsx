@@ -94,6 +94,12 @@ const PrescriptionFields: React.FC<PrescriptionFieldsProps> = ({
               value: '2020-01-01',
               message: 'La fecha no puede ser menor a 2020',
             },
+            validate: (value) => {
+              const date = new Date(value as string);
+              const isValidDate =
+                date instanceof Date && !isNaN(date.getTime());
+              return isValidDate || 'La fecha no es válida';
+            },
           })}
         />
         <Listbox
