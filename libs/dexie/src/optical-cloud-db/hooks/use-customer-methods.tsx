@@ -4,9 +4,11 @@ import { Customer } from '../types/db-types';
 import { useToastStore } from 'libs/ui/src/hooks';
 import { v4 as uuidv4 } from 'uuid';
 import { useCallback } from 'react';
+import usePrescriptionMethods from './use-prescription-methods';
 
 export const useCustomerMethods = () => {
   const { addToast } = useToastStore();
+  const { prescriptions } = usePrescriptionMethods();
 
   const addCustomer = async (customer: Customer) => {
     try {
@@ -88,11 +90,19 @@ export const useCustomerMethods = () => {
     [customers]
   );
 
+  const getPrescriptionsByCustomerId = (customerId: string) =>
+    prescriptions?.filter((p) => p.customerId === customerId) || [];
+
+  const checkIsCustomer = (customerId: string | undefined) =>
+    customers?.find((c) => c.id === customerId) ? true : false;
+
   return {
     addCustomer,
     updateCustomer,
     deleteCustomer,
     getCustomerById,
+    getPrescriptionsByCustomerId,
+    checkIsCustomer,
     customers,
   };
 };

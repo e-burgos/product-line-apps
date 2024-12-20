@@ -1,25 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  useCustomerMethods,
-  usePrescriptionMethods,
-} from '@product-line/dexie';
+import { useCustomerMethods } from '@product-line/dexie';
 import { formatCurrency } from '@product-line/features';
 import { useToastStore } from '@product-line/ui';
 import * as XLSX from 'xlsx';
 
 const useCustomerData = () => {
   const { addToast } = useToastStore();
-  const { customers } = useCustomerMethods();
-  const { prescriptions } = usePrescriptionMethods();
-
-  const checkIsCustomer = (customerId: string | undefined) =>
-    customers?.find((c) => c.id === customerId) ? true : false;
-
-  const getCustomer = (customerId: string) =>
-    customers?.find((c) => c.id === customerId) || null;
-
-  const getCustomerPrescriptions = (customerId: string) =>
-    prescriptions?.filter((p) => p.customerId === customerId) || [];
+  const {
+    customers,
+    getCustomerById,
+    getPrescriptionsByCustomerId,
+    checkIsCustomer,
+  } = useCustomerMethods();
 
   const exportToExcel = () => {
     const data: any[] = [];
@@ -34,7 +26,7 @@ const useCustomerData = () => {
         Dirección: customer.address,
       });
 
-      getCustomerPrescriptions(customer.id as string).forEach(
+      getPrescriptionsByCustomerId(customer.id as string).forEach(
         (prescription) => {
           data.push({
             Cliente: '',
@@ -57,6 +49,31 @@ const useCustomerData = () => {
     XLSX.writeFile(workbook, 'clientes.xlsx');
   };
 
+  const exportCustomersToExcel = () => {
+    const data: any[] = [];
+    if (!customers) return;
+
+    customers.forEach((customer) => {
+      data.push({
+        Nombre: customer?.name || '-',
+        Apellido: customer?.lastName || '-',
+        'Fecha de Nacimiento': customer?.birthDate || '-',
+        Dirección: customer?.address || '-',
+        'Código Postal': customer?.postalCode || '-',
+        Provincia: customer?.province || '-',
+        Localidad: customer?.locality || '-',
+        Teléfono: customer?.phone || '-',
+        Móvil: customer?.mobile || '-',
+        Email: customer?.email || '-',
+        Comentarios: customer?.comments || '-',
+      });
+    });
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Clientes');
+    XLSX.writeFile(workbook, 'clientes.xlsx');
+  };
+
   const exportOneCustomerToExcel = (customerId: string | undefined) => {
     if (!customerId) return;
     const customer = customers?.find((c) => c.id === customerId);
@@ -71,20 +88,22 @@ const useCustomerData = () => {
       Dirección: customer.address,
     });
 
-    getCustomerPrescriptions(customer.id as string).forEach((prescription) => {
-      data.push({
-        Cliente: '',
-        Direccion: '',
-        Email: '',
-        Teléfono: '',
-        Dirección: '',
-        Id: prescription?.id,
-        Fecha: prescription?.date,
-        Doctor: prescription?.doctorName,
-        Saldo: formatCurrency(prescription?.balanceAmount || 0),
-        'Monto Total': formatCurrency(prescription?.totalAmount || 0),
-      });
-    });
+    getPrescriptionsByCustomerId(customer.id as string).forEach(
+      (prescription) => {
+        data.push({
+          Cliente: '',
+          Direccion: '',
+          Email: '',
+          Teléfono: '',
+          Dirección: '',
+          Id: prescription?.id,
+          Fecha: prescription?.date,
+          Doctor: prescription?.doctorName,
+          Saldo: formatCurrency(prescription?.balanceAmount || 0),
+          'Monto Total': formatCurrency(prescription?.totalAmount || 0),
+        });
+      }
+    );
 
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
@@ -104,13 +123,14 @@ const useCustomerData = () => {
         (c) =>
           `Nombre: ${c.name}\nDirección: ${c.address}\nEmail: ${
             c.email
-          }\nTeléfono: ${c.phone}\n\nFichas:\n${getCustomerPrescriptions(
+          }\nTeléfono: ${c.phone}\n\nFichas:\n${getPrescriptionsByCustomerId(
             c.id as string
           )
             ?.map(
               (p) =>
                 `- ${p.date}: ${formatCurrency(
-                  getCustomerPrescriptions(c?.id as string)[0]?.totalAmount || 0
+                  getPrescriptionsByCustomerId(c?.id as string)[0]
+                    ?.totalAmount || 0
                 )}`
             )
             .join('\n')}\n\n`
@@ -143,11 +163,12 @@ const useCustomerData = () => {
       customer.address
     }\nEmail: ${customer.email}\nTeléfono: ${
       customer.phone
-    }\n\nFichas:\n${getCustomerPrescriptions(customer.id as string)
+    }\n\nFichas:\n${getPrescriptionsByCustomerId(customer.id as string)
       ?.map(
         (p) =>
           `- ${p.date}: ${formatCurrency(
-            getCustomerPrescriptions(customer.id as string)[0]?.totalAmount || 0
+            getPrescriptionsByCustomerId(customer.id as string)[0]
+              ?.totalAmount || 0
           )}`
       )
       .join('\n')}\n\n`;
@@ -172,11 +193,10 @@ const useCustomerData = () => {
   return {
     customers,
     exportToExcel,
+    exportCustomersToExcel,
     exportOneCustomerToExcel,
     shareCustomersData,
     shareOneCustomer,
-    getCustomer,
-    checkIsCustomer,
   };
 };
 

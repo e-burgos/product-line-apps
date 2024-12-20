@@ -79,18 +79,17 @@ export const usePrescriptionMethods = () => {
     }
   };
 
-  const getPrescriptionsByCustomerId = useCallback(
-    async (customerId: string) => {
-      return await db.prescriptions
-        .where('customerId')
-        .equals(customerId)
-        .toArray();
-    },
-    []
-  );
-
   const prescriptions = useLiveQuery(
     () => db.prescriptions.orderBy('receiptNumber').toArray() || []
+  );
+
+  const getPrescriptionsByCustomerId = useCallback(
+    (customerId: string) => {
+      return prescriptions?.filter(
+        (prescription) => prescription.customerId === customerId
+      );
+    },
+    [prescriptions]
   );
 
   const getPrescriptionById = (id: string) =>
@@ -98,12 +97,16 @@ export const usePrescriptionMethods = () => {
       (prescription) => prescription.id === id
     ) as Prescription;
 
+  const checkIsPrescription = (prescriptionId: string) =>
+    prescriptions?.find((p) => p.id === prescriptionId) ? true : false;
+
   return {
     addPrescription,
     updatePrescription,
     deletePrescription,
     getPrescriptionsByCustomerId,
     getPrescriptionById,
+    checkIsPrescription,
     prescriptions,
   };
 };

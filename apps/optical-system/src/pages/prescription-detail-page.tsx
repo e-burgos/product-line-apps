@@ -6,7 +6,6 @@ import CardContainer from 'libs/ui/src/components/forms/card-container';
 import { useEffect, useState } from 'react';
 import CardTitle from 'libs/ui/src/components/forms/card-title';
 import Layout from '@optical-system-app/components/layout';
-import usePrescriptionData from '@optical-system-app/modules/prescriptions/hooks/use-prescription-data';
 import EditPrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/edit-prescription-modal';
 import DeletePrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/delete-customer-modal';
 import DetailPrescriptionForm from '@optical-system-app/modules/prescriptions/components/forms/prescription-detail-form';
@@ -19,8 +18,7 @@ import {
 function PrescriptionDetailPage() {
   const { getCustomer, shareOneCustomer, exportOneCustomerToExcel } =
     useCustomerData();
-  const { getPrescriptionById } = usePrescriptionMethods();
-  const { checkIsPrescription } = usePrescriptionData();
+  const { getPrescriptionById, checkIsPrescription } = usePrescriptionMethods();
 
   const { id } = useParams();
   const prescriptionId = id?.toString() as string;

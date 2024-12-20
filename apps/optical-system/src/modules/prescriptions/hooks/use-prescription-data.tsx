@@ -1,9 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { db, Prescription } from '@product-line/dexie';
 import { ListboxOption } from '@product-line/ui';
-import { useLiveQuery } from 'dexie-react-hooks';
-//import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx';
 
 const usePrescriptionData = () => {
   //const { addToast } = useToastStore();
@@ -35,34 +31,9 @@ const usePrescriptionData = () => {
     { name: 'Otro', value: 'Otro' },
   ];
 
-  const prescriptions = useLiveQuery(() => db.prescriptions?.toArray() || []);
-
-  const checkIsPrescription = (prescriptionId: string) =>
-    prescriptions?.find((p) => p.id === prescriptionId) ? true : false;
-
-  const getPrescriptionById = (id: string) =>
-    prescriptions?.find(
-      (prescription) => prescription.id === id
-    ) as Prescription;
-
-  const useGetPrescriptionsByCustomerId = (customerId: string | undefined) =>
-    useLiveQuery(() => {
-      if (customerId) {
-        return db.prescriptions
-          .where('customerId')
-          .equals(customerId)
-          .toArray();
-      }
-      return [];
-    });
-
   return {
-    prescriptions,
     creditCardList,
     paymentMethodList,
-    getPrescriptionById,
-    useGetPrescriptionsByCustomerId,
-    checkIsPrescription,
   };
 };
 

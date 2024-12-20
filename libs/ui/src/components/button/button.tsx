@@ -53,6 +53,7 @@ export interface ButtonProps
   fullWidth?: boolean;
   loaderSize?: LoaderSizeTypes;
   loaderVariant?: LoaderVariantTypes;
+  tooltip?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -70,6 +71,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       size = 'medium',
       loaderSize = 'small',
       loaderVariant = 'scaleUp',
+      tooltip,
       onClick,
       ...buttonProps
     },
@@ -125,7 +127,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={buttonRef}
         onClick={clickHandler}
         className={cn(
-          'relative inline-flex shrink-0 items-center justify-center overflow-hidden text-center text-xs font-medium tracking-wider outline-none transition-all sm:text-sm',
+          'relative group inline-flex shrink-0 items-center justify-center overflow-hidden text-center text-xs font-medium tracking-wider outline-none transition-all sm:text-sm',
           !disabled
             ? buttonColorClassNames
             : 'cursor-not-allowed bg-gray-100 text-gray-400',
@@ -147,6 +149,12 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         <span className={cn(isLoading && 'invisible opacity-0')}>
           {children}
         </span>
+
+        {tooltip && (
+          <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-max px-2 py-1 text-xs text-white bg-black rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            {tooltip}
+          </span>
+        )}
 
         {isLoading && (
           <ButtonLoader size={loaderSize} variant={loaderVariant} />

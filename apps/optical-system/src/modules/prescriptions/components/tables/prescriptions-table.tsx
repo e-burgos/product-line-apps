@@ -97,7 +97,7 @@ function PrescriptionsTable() {
         </CardTitle>
       </CardContainer>
       <DeletePrescriptionModal />
-      <EditPrescriptionModal />
+      <EditPrescriptionModal prescriptionId={currentPrescription?.id} />
     </>
   );
 }

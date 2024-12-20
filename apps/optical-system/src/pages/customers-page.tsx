@@ -1,12 +1,12 @@
 import Layout from '@optical-system-app/components/layout';
 import Button from 'libs/ui/src/components/button/button';
-import { Users, Download, Share2 } from 'lucide-react';
+import { Users, Share2, Sheet } from 'lucide-react';
 import AddCustomerModal from '@optical-system-app/modules/customers/components/modals/add-customer-modal';
 import useCustomerData from '@optical-system-app/modules/customers/hooks/use-customer-data';
 import CustomersTable from '@optical-system-app/modules/customers/tables/customers-table';
 
 function CustomersPage() {
-  const { shareCustomersData, exportToExcel } = useCustomerData();
+  const { shareCustomersData, exportCustomersToExcel } = useCustomerData();
 
   return (
     <Layout
@@ -19,11 +19,11 @@ function CustomersPage() {
               variant="ghost"
               size="small"
               shape="rounded"
-              onClick={() => exportToExcel()}
-              title="Exportar a Excel"
+              onClick={() => exportCustomersToExcel()}
+              tooltip="Exportar a Excel"
               className="p-2"
             >
-              <Download className="h-4 w-4" />
+              <Sheet className="h-4 w-4" />
             </Button>
             <Button
               variant="ghost"

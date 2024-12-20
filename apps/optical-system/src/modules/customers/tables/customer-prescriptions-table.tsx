@@ -2,7 +2,6 @@ import { DataTable } from '@product-line/datatable';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { usePrescriptionStore } from '@optical-system-app/modules/prescriptions/hooks/use-prescription-store';
-import usePrescriptionData from '@optical-system-app/modules/prescriptions/hooks/use-prescription-data';
 import AddPrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/add-prescription-modal';
 import EditPrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/edit-prescription-modal';
 import DeletePrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/delete-customer-modal';
@@ -11,6 +10,7 @@ import {
   Customer,
   Prescription,
   useCustomerMethods,
+  usePrescriptionMethods,
 } from '@product-line/dexie';
 
 function CustomerPrescriptionsTable() {
@@ -23,12 +23,14 @@ function CustomerPrescriptionsTable() {
     setOpenDeleteModal,
     setOpenEditModal,
   } = usePrescriptionStore();
-  const { useGetPrescriptionsByCustomerId } = usePrescriptionData();
+  const { getPrescriptionsByCustomerId } = usePrescriptionMethods();
 
   const { id } = useParams();
   const customerId = id;
   const [customer, setCustomer] = useState<Customer | null>();
-  const customerPrescriptions = useGetPrescriptionsByCustomerId(customerId);
+  const customerPrescriptions = getPrescriptionsByCustomerId(
+    customerId as string
+  );
 
   useEffect(() => {
     if (customerId) setCustomer(getCustomerById(customerId));
