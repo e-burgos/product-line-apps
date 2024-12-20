@@ -1,4 +1,4 @@
-import { Prescription } from '@optical-system-app/lib/db';
+import { Prescription } from '@product-line/dexie';
 import { create } from 'zustand';
 
 export interface IPrescriptionStore {

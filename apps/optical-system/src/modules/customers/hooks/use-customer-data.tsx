@@ -1,27 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Customers, db } from '@optical-system-app/lib/db';
+import {
+  useCustomerMethods,
+  usePrescriptionMethods,
+} from '@product-line/dexie';
 import { formatCurrency } from '@product-line/features';
 import { useToastStore } from '@product-line/ui';
-import { useLiveQuery } from 'dexie-react-hooks';
 import * as XLSX from 'xlsx';
 
 const useCustomerData = () => {
   const { addToast } = useToastStore();
+  const { customers } = useCustomerMethods();
+  const { prescriptions } = usePrescriptionMethods();
 
-  const customers: Customers = useLiveQuery(
-    () => db.customers?.toArray() || []
-  );
-
-  const prescriptions = useLiveQuery(() => db.prescriptions?.toArray() || []);
-
-  const checkIsCustomer = (customerId: number) =>
+  const checkIsCustomer = (customerId: string | undefined) =>
     customers?.find((c) => c.id === customerId) ? true : false;
 
-  const getCustomer = (customerId: number) =>
+  const getCustomer = (customerId: string) =>
     customers?.find((c) => c.id === customerId) || null;
 
-  const getCustomerPrescriptions = (customerId: number | undefined) =>
+  const getCustomerPrescriptions = (customerId: string) =>
     prescriptions?.filter((p) => p.customerId === customerId) || [];
 
   const exportToExcel = () => {
@@ -37,20 +34,22 @@ const useCustomerData = () => {
         Dirección: customer.address,
       });
 
-      getCustomerPrescriptions(customer.id).forEach((prescription) => {
-        data.push({
-          Cliente: '',
-          Direccion: '',
-          Email: '',
-          Teléfono: '',
-          Dirección: '',
-          Id: prescription?.id,
-          Fecha: prescription?.date,
-          Doctor: prescription?.doctorName,
-          Saldo: formatCurrency(prescription?.balanceAmount || 0),
-          'Monto Total': formatCurrency(prescription?.totalAmount || 0),
-        });
-      });
+      getCustomerPrescriptions(customer.id as string).forEach(
+        (prescription) => {
+          data.push({
+            Cliente: '',
+            Direccion: '',
+            Email: '',
+            Teléfono: '',
+            Dirección: '',
+            Id: prescription?.id,
+            Fecha: prescription?.date,
+            Doctor: prescription?.doctorName,
+            Saldo: formatCurrency(prescription?.balanceAmount || 0),
+            'Monto Total': formatCurrency(prescription?.totalAmount || 0),
+          });
+        }
+      );
     });
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
@@ -58,7 +57,7 @@ const useCustomerData = () => {
     XLSX.writeFile(workbook, 'clientes.xlsx');
   };
 
-  const exportOneCustomerToExcel = (customerId: number | undefined) => {
+  const exportOneCustomerToExcel = (customerId: string | undefined) => {
     if (!customerId) return;
     const customer = customers?.find((c) => c.id === customerId);
     if (!customer) return;
@@ -72,7 +71,7 @@ const useCustomerData = () => {
       Dirección: customer.address,
     });
 
-    getCustomerPrescriptions(customer.id).forEach((prescription) => {
+    getCustomerPrescriptions(customer.id as string).forEach((prescription) => {
       data.push({
         Cliente: '',
         Direccion: '',
@@ -105,11 +104,13 @@ const useCustomerData = () => {
         (c) =>
           `Nombre: ${c.name}\nDirección: ${c.address}\nEmail: ${
             c.email
-          }\nTeléfono: ${c.phone}\n\nFichas:\n${getCustomerPrescriptions(c.id)
+          }\nTeléfono: ${c.phone}\n\nFichas:\n${getCustomerPrescriptions(
+            c.id as string
+          )
             ?.map(
               (p) =>
                 `- ${p.date}: ${formatCurrency(
-                  getCustomerPrescriptions(c?.id)[0]?.totalAmount || 0
+                  getCustomerPrescriptions(c?.id as string)[0]?.totalAmount || 0
                 )}`
             )
             .join('\n')}\n\n`
@@ -133,7 +134,7 @@ const useCustomerData = () => {
     }
   };
 
-  const shareOneCustomer = async (customerId: number | undefined) => {
+  const shareOneCustomer = async (customerId: string | undefined) => {
     if (!customers) return;
     const customer = customers?.find((c) => c.id === customerId);
     if (!customer) return;
@@ -142,11 +143,11 @@ const useCustomerData = () => {
       customer.address
     }\nEmail: ${customer.email}\nTeléfono: ${
       customer.phone
-    }\n\nFichas:\n${getCustomerPrescriptions(customer.id)
+    }\n\nFichas:\n${getCustomerPrescriptions(customer.id as string)
       ?.map(
         (p) =>
           `- ${p.date}: ${formatCurrency(
-            getCustomerPrescriptions(customer.id)[0]?.totalAmount || 0
+            getCustomerPrescriptions(customer.id as string)[0]?.totalAmount || 0
           )}`
       )
       .join('\n')}\n\n`;

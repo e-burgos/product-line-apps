@@ -1,25 +1,22 @@
 import React from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { BudgetVariant, db } from 'libs/features/src/data/product-db';
 import { DataTable } from '@product-line/datatable';
 import useBudgetDetailsColumns from '../hooks/use-budget-details-columns';
 import DeleteDetail from '../modals/delete-detail';
 import EditBudgetDetailModal from '../modals/edit-budget-detail-modal';
 import { useBudgetStore } from '../hooks/use-budget-store';
+import { BudgetVariant, useBudgetMethods } from '@product-line/dexie';
 
 interface BudgetDetailsDatatableProps {
-  budgetId?: number;
+  budgetId: string;
 }
 
 export const BudgetDetailsDatatable: React.FC<BudgetDetailsDatatableProps> = ({
   budgetId,
 }) => {
-  const { setCurrentDetail, setOpenDeleteDetailModal, setOpenEditDetailModal } =
-    useBudgetStore();
+  const { setCurrentDetail } = useBudgetStore();
   const { columns } = useBudgetDetailsColumns();
-  const details = useLiveQuery(() => db.budgetVariants.toArray())?.filter(
-    (v) => v.budgetId === Number(budgetId)
-  );
+  const { getBudgetVariants } = useBudgetMethods();
+  const details = getBudgetVariants(budgetId);
 
   return (
     <>
@@ -28,10 +25,12 @@ export const BudgetDetailsDatatable: React.FC<BudgetDetailsDatatableProps> = ({
         data={details || []}
         columns={columns}
         pagination={{
-          showPagination: true,
-          pageSize: 5,
-          pageIndex: 0,
-          takeDefaultPagination: true,
+          showPagination: false,
+        }}
+        headerOptions={{
+          enableDragColumns: false,
+          enablePinLeftColumns: false,
+          enablePinRightColumns: false,
         }}
         stateMessage={{
           noData: 'No hay detalles'.toLocaleUpperCase(),
@@ -41,18 +40,6 @@ export const BudgetDetailsDatatable: React.FC<BudgetDetailsDatatableProps> = ({
         setCurrentRow={(row) =>
           setCurrentDetail(row?.original as BudgetVariant)
         }
-        rowActions={[
-          {
-            action: 'edit',
-            label: () => 'Editar',
-            onClick: () => setOpenEditDetailModal(true),
-          },
-          {
-            action: 'delete',
-            label: () => 'Borrar',
-            onClick: () => setOpenDeleteDetailModal(true),
-          },
-        ]}
       />
       <DeleteDetail />
       <EditBudgetDetailModal />

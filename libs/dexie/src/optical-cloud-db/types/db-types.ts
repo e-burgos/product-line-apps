@@ -1,44 +1,51 @@
-import Dexie, { type Table } from 'dexie';
-
 export interface Budget {
-  id?: number;
+  id?: string;
   title: string;
   description: string;
   totalAmount?: number;
 }
 
-export type Budgets = Budget[] | undefined;
-
 export interface BudgetVariant {
-  id?: number;
-  budgetId: number;
-  variantId: number;
-  productId: number;
+  id?: string;
+  budgetId: string;
+  variantId: string;
+  productId: string;
   title: string;
   description: string;
   quantity: number;
   amount: number;
 }
 
-export interface Product {
-  id?: number;
-  title: string;
-  description: string;
-  totalAmount?: number;
+export type Budgets = Budget[] | undefined;
+
+export interface BudgetWithVariants extends Budget {
+  count?: number;
+  variants?: BudgetVariant[];
 }
 
-export type Products = Product[] | undefined;
-
 export interface Variant {
-  id?: number;
-  productId: number;
+  id?: string;
+  productId: string;
   title: string;
   description: string;
   amount: number;
 }
 
+export interface Product {
+  id?: string;
+  title: string;
+  description: string;
+}
+
+export interface ProductWithVariants extends Product {
+  count?: number;
+  variants?: Variant[];
+}
+
+export type Products = Product[] | undefined;
+
 export interface Customer {
-  id?: number;
+  id?: string;
   name: string;
   lastName: string;
   birthDate?: string;
@@ -58,7 +65,7 @@ export interface CustomerWithPrescriptions extends Customer {
 export type Customers = Customer[] | undefined;
 
 export interface CrystalSpecs {
-  id?: number;
+  id?: string;
   nearRightSphere: string;
   nearRightCylinder: string;
   nearRightAxis: string;
@@ -74,7 +81,7 @@ export interface CrystalSpecs {
 }
 
 export interface PrescriptionPayment {
-  id?: number;
+  id?: string;
   paymentMethod: string;
   cashDeposit: number;
   creditCardDeposit: number;
@@ -86,7 +93,7 @@ export interface PrescriptionPayment {
 }
 
 export interface PrescriptionDetail {
-  id?: number;
+  id?: string;
   doctorName: string;
   frameDesc: string;
   framePrice: number;
@@ -100,8 +107,8 @@ export interface PrescriptionDetail {
 }
 
 export interface Prescription {
-  id?: number;
-  customerId: number;
+  id?: string;
+  customerId: string;
   receiptNumber: number;
   date: string;
   description: string;
@@ -138,7 +145,7 @@ export interface Prescription {
 }
 
 export interface PrescriptionFullData {
-  id?: number;
+  id?: string;
   date: string;
   description: string;
   customer: Customer;
@@ -146,26 +153,3 @@ export interface PrescriptionFullData {
   prescriptionPayment: PrescriptionPayment;
   prescriptionDetail: PrescriptionDetail;
 }
-
-export class ProductDatabase extends Dexie {
-  products!: Table<Product>;
-  variants!: Table<Variant>;
-  budgets!: Table<Budget>;
-  budgetVariants!: Table<BudgetVariant>;
-  customers!: Table<Customer>;
-  prescriptions!: Table<Prescription>;
-
-  constructor() {
-    super('OpticalDB');
-    this.version(1).stores({
-      products: '++id, title',
-      variants: '++id, productId, title',
-      budgets: '++id, title',
-      budgetVariants: '++id, budgetId, productId, variantId, title',
-      customers: '++id, name, lastName',
-      prescriptions: '++id, receiptNumber, customerId',
-    });
-  }
-}
-
-export const db = new ProductDatabase();

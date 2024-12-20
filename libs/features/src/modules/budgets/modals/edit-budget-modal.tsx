@@ -1,8 +1,8 @@
 import { FC } from 'react';
-import { Budget } from 'libs/features/src/data/product-db';
 import { useBudgetStore } from '../hooks/use-budget-store';
 import Modal from 'libs/ui/src/components/modal';
 import { EditBudgetForm } from '../forms/edit-budget-form';
+import { Budget } from '@product-line/dexie';
 
 export const EditBudgetModal: FC = () => {
   const { openEditModal, setOpenEditModal, currentBudget } = useBudgetStore();

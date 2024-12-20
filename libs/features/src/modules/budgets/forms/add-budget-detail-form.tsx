@@ -1,19 +1,18 @@
 import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  Budget,
-  db,
-  Variant,
-  type Product,
-} from 'libs/features/src/data/product-db';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { useToastStore } from 'libs/ui/src/hooks/use-toast-store';
 import { Input } from 'libs/ui/src/components';
 import { formatCurrency } from 'libs/features/src/utils/utils';
 import Button from 'libs/ui/src/components/button';
 import InputLabel from 'libs/ui/src/components/input-label';
 import Listbox, { ListboxOption } from 'libs/ui/src/components/list-box';
 import { useBudgetStore } from '../hooks/use-budget-store';
+import {
+  Budget,
+  Product,
+  useBudgetMethods,
+  useProductMethods,
+  Variant,
+} from '@product-line/dexie';
 
 export type AddBudgetDetailsFormData = {
   budgetId: string;
@@ -23,13 +22,15 @@ export type AddBudgetDetailsFormData = {
 };
 
 export const AddBudgetDetailsForm: FC = () => {
+  const { addBudgetVariant, budgets } = useBudgetMethods();
+  const { getProductVariantsById } = useProductMethods();
+  const { products } = useProductMethods();
   const { setOpenCreateModal } = useBudgetStore();
   const [selectedBudget, setSelectedBudget] = useState<ListboxOption>();
   const [selectedProduct, setSelectedProduct] = useState<ListboxOption>();
   const [selectedVariantOption, setSelectedVariantOption] =
     useState<ListboxOption>();
   const [selectedVariant, setSelectedVariant] = useState<Variant>();
-  const { addToast } = useToastStore();
   const {
     register,
     handleSubmit,
@@ -42,43 +43,26 @@ export const AddBudgetDetailsForm: FC = () => {
   const budgetId = watch('budgetId');
   const productId = watch('productId');
   const quantity = watch('quantity');
-
-  const budgets = useLiveQuery(() => db.budgets.toArray()) as Budget[];
-  const products = useLiveQuery(() => db.products.toArray());
-  const variants = useLiveQuery(() => db.variants.toArray())?.filter(
-    (v: Variant) => v.productId === Number(productId)
-  );
+  const variants = getProductVariantsById(productId);
 
   async function onSubmit(values: AddBudgetDetailsFormData) {
-    try {
-      if (selectedVariant?.id) {
-        await db.budgetVariants.add({
-          budgetId: Number(values.budgetId),
-          productId: Number(values.productId),
-          variantId: Number(values.variantId),
-          title: selectedVariant?.title,
-          description: selectedVariant?.description,
-          quantity: Number(values.quantity),
-          amount: Number(selectedVariant?.amount) * Number(values.quantity),
-        });
+    if (selectedVariant?.id) {
+      const add = await addBudgetVariant({
+        budgetId: values.budgetId,
+        productId: values.productId,
+        variantId: values.variantId,
+        title: selectedVariant?.title,
+        description: selectedVariant?.description,
+        quantity: Number(values.quantity),
+        amount: Number(selectedVariant?.amount) * Number(values.quantity),
+      });
+      if (add.isSuccess) {
         reset();
         setSelectedBudget(undefined);
         setSelectedProduct(undefined);
         setSelectedVariant(undefined);
-        addToast({
-          id: 'detail-created',
-          title: 'Detalle creado',
-          message: 'El detalle se ha creado correctamente.',
-          variant: 'success',
-        });
+        setOpenCreateModal(false);
       }
-    } catch {
-      addToast({
-        id: 'detail-error',
-        title: 'Error',
-        message: 'No se pudo crear el detalle.',
-        variant: 'destructive',
-      });
     }
   }
 
@@ -101,7 +85,7 @@ export const AddBudgetDetailsForm: FC = () => {
     })) || [];
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-8">
       <div>
         <InputLabel title={'Presupuestos'} />
         <Listbox
@@ -151,9 +135,7 @@ export const AddBudgetDetailsForm: FC = () => {
             onChange={(e) => setSelectedVariantOption(e as ListboxOption)}
             onSelect={(value) => {
               setValue('variantId', value);
-              setSelectedVariant(
-                variants?.find((p) => p.id === parseInt(value))
-              );
+              setSelectedVariant(variants?.find((p) => p.id === value));
             }}
           />
         </div>
@@ -195,7 +177,7 @@ export const AddBudgetDetailsForm: FC = () => {
           />
         </div>
       )}
-      <div className="flex justify-end gap-2">
+      <div className="flex justify-end gap-2 pt-4">
         <Button
           size="medium"
           shape="rounded"
@@ -204,7 +186,17 @@ export const AddBudgetDetailsForm: FC = () => {
         >
           {'Cerrar'}
         </Button>
-        <Button size="medium" shape="rounded" type="submit" disabled={!isValid}>
+        <Button
+          size="medium"
+          shape="rounded"
+          type="submit"
+          disabled={
+            !isValid ||
+            !selectedVariant?.id ||
+            !quantity ||
+            !selectedBudget?.value
+          }
+        >
           {'Guardar'}
         </Button>
       </div>

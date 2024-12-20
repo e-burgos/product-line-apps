@@ -3,10 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import { PrescriptionFormData } from './validations';
 import Listbox, { ListboxOption } from 'libs/ui/src/components/list-box';
-import useCustomerData from '@optical-system-app/modules/customers/hooks/use-customer-data';
 import { useCustomerStore } from '@optical-system-app/modules/customers/hooks/use-customer-store';
 import { CardTitle } from '@product-line/ui';
-import { Customer } from '@optical-system-app/lib/db';
+import { Customer, useCustomerMethods } from '@product-line/dexie';
 
 interface PrescriptionFieldsProps {
   type: 'create' | 'update';
@@ -18,13 +17,12 @@ interface PrescriptionFieldsProps {
 }
 
 const PrescriptionFields: React.FC<PrescriptionFieldsProps> = ({
-  type = 'create',
   register,
   errors,
   forDetail = false,
   customerData,
 }) => {
-  const { customers, getCustomer } = useCustomerData();
+  const { customers, getCustomerById } = useCustomerMethods();
   const { currentCustomer, setCurrentCustomer } = useCustomerStore();
   const [customerList, setCustomerList] = useState<ListboxOption[]>();
   const [selectedCustomer, setSelectedCustomer] = useState<ListboxOption>();
@@ -33,25 +31,24 @@ const PrescriptionFields: React.FC<PrescriptionFieldsProps> = ({
     if (customers) {
       const customersData = customers?.map((state) => ({
         name: `${state.name} ${state.lastName}`,
-        value: state?.id?.toString() as string,
+        value: state?.id as string,
       }));
       setCustomerList(customersData);
     }
   }, [customers]);
 
   useEffect(() => {
-    if (type === 'update' && currentCustomer?.id)
+    if (currentCustomer?.id)
       setSelectedCustomer({
         name: `${currentCustomer.name} ${currentCustomer.lastName}`,
         value: currentCustomer?.id?.toString() as string,
       });
-  }, [currentCustomer, type]);
+  }, [currentCustomer]);
 
   useEffect(() => {
     if (selectedCustomer)
-      setCurrentCustomer(getCustomer(Number(selectedCustomer.value)));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCustomer]);
+      setCurrentCustomer(getCustomerById(selectedCustomer?.value) as Customer);
+  }, [getCustomerById, selectedCustomer, setCurrentCustomer]);
 
   useEffect(() => {
     if (currentCustomer === null) {
@@ -68,6 +65,7 @@ const PrescriptionFields: React.FC<PrescriptionFieldsProps> = ({
           className="w-full sm:w-calc-50-minus-8 mb-4"
           required
           label="Comprobante N°"
+          placeholder="Ingrese el número de comprobante"
           id="receiptNumber"
           type="number"
           mask="999999"
@@ -83,6 +81,7 @@ const PrescriptionFields: React.FC<PrescriptionFieldsProps> = ({
           label="Fecha"
           id="date"
           type="date"
+          placeholder="Seleccione una fecha"
           error={errors?.date?.message}
           {...register('date', {
             required: 'La fecha es obligatoria',

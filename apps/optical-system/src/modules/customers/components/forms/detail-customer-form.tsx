@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Input from 'libs/ui/src/components/forms/input';
 import Textarea from 'libs/ui/src/components/forms/textarea';
 import Listbox from 'libs/ui/src/components/list-box';
-import { Customer } from '@optical-system-app/lib/db';
+import { Customer } from '@product-line/dexie';
 
 interface DetailCustomerFormProps {
   customer: Customer;

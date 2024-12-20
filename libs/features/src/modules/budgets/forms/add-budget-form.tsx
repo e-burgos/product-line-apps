@@ -1,9 +1,9 @@
 import { useForm } from 'react-hook-form';
-import { Input, useToastStore } from '@product-line/ui';
-import { db } from 'libs/features/src/data/product-db';
+import { Input } from '@product-line/ui';
 import Button from 'libs/ui/src/components/button';
 import { FC } from 'react';
 import { useBudgetStore } from '../hooks/use-budget-store';
+import { useBudgetMethods } from '@product-line/dexie';
 
 export type AddBudgetFormData = {
   title: string;
@@ -11,8 +11,8 @@ export type AddBudgetFormData = {
 };
 
 export const AddBudgetForm: FC = () => {
+  const { addBudget } = useBudgetMethods();
   const { setOpenCreateModal } = useBudgetStore();
-  const { addToast } = useToastStore();
   const {
     register,
     handleSubmit,
@@ -21,30 +21,22 @@ export const AddBudgetForm: FC = () => {
   } = useForm<AddBudgetFormData>();
 
   async function onSubmit(values: AddBudgetFormData) {
-    try {
-      await db.budgets.add({
-        title: values.title,
-        description: values.description,
-      });
+    const add = await addBudget({
+      title: values.title,
+      description: values.description,
+    });
+    if (add.isSuccess) {
       reset();
-      addToast({
-        id: 'budget-created',
-        title: 'Presupuesto creado',
-        message: 'El presupuesto se ha creado correctamente.',
-        variant: 'success',
-      });
-    } catch {
-      addToast({
-        id: 'budget-error',
-        title: 'Error',
-        message: 'No se pudo crear el presupuesto.',
-        variant: 'destructive',
-      });
+      setOpenCreateModal(false);
     }
   }
 
   return (
-    <form noValidate onSubmit={handleSubmit(onSubmit)}>
+    <form
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-6 mt-8"
+    >
       <Input
         className="w-full mb-4"
         required
@@ -66,7 +58,7 @@ export const AddBudgetForm: FC = () => {
           required: 'La descripción es obligatoria',
         })}
       />
-      <div className="flex justify-end gap-2 mt-6">
+      <div className="flex justify-end gap-2 pt-4">
         <Button
           size="medium"
           shape="rounded"

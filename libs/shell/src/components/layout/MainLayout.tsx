@@ -4,13 +4,12 @@ import ModalsContainer from 'libs/ui/src/components/modal-views/container';
 import DrawersContainer from 'libs/ui/src/components/drawer-views/container';
 import SettingsButton from 'libs/ui/src/themes/components/settings-button';
 import SettingsDrawer from 'libs/ui/src/themes/components/settings-drawer';
-import { WalletConnect, WagmiConfig } from 'libs/integrations/src';
 import { QueryClientProvider } from '../../config/query-client-provider';
 import { useTheme } from 'libs/ui/src/themes/use-theme';
 import { IMenuItem } from 'libs/ui/src/types';
 import LayoutType from './LayoutType';
 import AppRoutes from './AppRoutes';
-import { commonMenuItems } from '../../router/menu-items';
+//import { commonMenuItems } from '../../router/menu-items';
 import {
   ColorPreset,
   defaultColorPreset,
@@ -34,7 +33,6 @@ import 'libs/ui/src/assets/css/fonts.css';
 
 interface MainLayoutProps {
   menuItems: IMenuItem[];
-  isWagmiConfig?: boolean;
   layout?: LAYOUT_OPTIONS;
   isNotificationButton?: boolean;
   rightButton?: React.ReactNode;
@@ -48,7 +46,6 @@ interface MainLayoutProps {
 export function MainLayout({
   menuItems: appMenuItems,
   layout,
-  isWagmiConfig = false,
   isNotificationButton,
   rightButton,
   logo,
@@ -66,7 +63,10 @@ export function MainLayout({
     setSettingActions,
   } = useTheme();
   const htmlTag = document.documentElement;
-  const menuItems = [...appMenuItems, ...commonMenuItems];
+  const menuItems = [
+    ...appMenuItems,
+    //...commonMenuItems
+  ];
   const menuList = menuItems.filter((item) => !item.hide);
 
   const selectedColor = ColorPreset.find(
@@ -129,30 +129,6 @@ export function MainLayout({
       }
     }
   }, [htmlTag, mode]);
-
-  if (isWagmiConfig)
-    return (
-      <BrowserRouter>
-        <WagmiConfig>
-          <QueryClientProvider>
-            <SettingsButton />
-            <SettingsDrawer />
-            <Suspense fallback={null}>
-              <ModalsContainer />
-              <DrawersContainer menuItems={menuList} />
-            </Suspense>
-            <LayoutType
-              layout={layout}
-              menuItems={menuList}
-              isNotificationButton={isNotificationButton}
-              rightButton={<WalletConnect />}
-            >
-              <AppRoutes menuItems={menuItems} />
-            </LayoutType>
-          </QueryClientProvider>
-        </WagmiConfig>
-      </BrowserRouter>
-    );
 
   return (
     <BrowserRouter>

@@ -11,9 +11,11 @@ import {
   TabPanels,
 } from 'libs/ui/src/components/tab';
 import { AddProductVariantForm } from '../forms/add-variant-form';
+import { useWindowSize } from 'react-use';
 
 export const AddProductModal = () => {
   const { openCreateModal, setOpenCreateModal } = useProductStore();
+  const { width } = useWindowSize();
   return (
     <>
       <Button
@@ -23,8 +25,8 @@ export const AddProductModal = () => {
         onClick={() => setOpenCreateModal(true)}
       >
         <div className="flex items-center">
-          <Plus className="h-4 w-4 mr-2" />
-          Agregar Producto
+          <Plus className={width > 700 ? 'h-4 w-4 mr-2' : 'h-6 w-6'} />
+          {width > 700 && 'Agregar Producto'}
         </div>
       </Button>
 
@@ -35,6 +37,7 @@ export const AddProductModal = () => {
         text={{
           title: 'Nuevo Producto',
         }}
+        className="w-full md:w-1/2 "
         hideButtons
       >
         <TabGroup>

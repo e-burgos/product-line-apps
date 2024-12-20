@@ -31,7 +31,12 @@ export const LayoutType: FC<LayoutTypeProps> = ({
 
   const handleLayout = () => {
     if (location.pathname.includes('/auth/'))
-      return <AuthLayout>{children}</AuthLayout>;
+      return (
+        <AuthLayout>
+          {children}
+          <Toast />
+        </AuthLayout>
+      );
     switch (selectedLayout) {
       case LAYOUT_OPTIONS.MINIMAL:
         return (

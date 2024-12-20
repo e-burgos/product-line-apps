@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
-import { Input, useToastStore } from '@product-line/ui';
-import { db } from 'libs/features/src/data/product-db';
+import { Input } from '@product-line/ui';
+import { useBudgetMethods } from '@product-line/dexie';
 import Button from 'libs/ui/src/components/button';
 import { FC, useEffect } from 'react';
 import { useBudgetStore } from '../hooks/use-budget-store';
@@ -11,9 +11,9 @@ export type EditBudgetFormData = {
 };
 
 export const EditBudgetForm: FC = () => {
+  const { updateBudget, getBudgetById } = useBudgetMethods();
   const { setOpenEditModal, currentBudget } = useBudgetStore();
-  const { addToast } = useToastStore();
-  const budgetId = currentBudget?.id as number;
+  const budgetId = currentBudget?.id as string;
   const {
     register,
     handleSubmit,
@@ -22,8 +22,8 @@ export const EditBudgetForm: FC = () => {
   } = useForm<EditBudgetFormData>();
 
   useEffect(() => {
-    async function loadBudgets() {
-      const budget = await db.budgets.get(budgetId);
+    function loadBudgets() {
+      const budget = getBudgetById(budgetId);
       if (budget) {
         reset({
           title: budget.title,
@@ -32,34 +32,29 @@ export const EditBudgetForm: FC = () => {
       }
     }
     loadBudgets();
-  }, [budgetId, reset]);
+  }, [budgetId, getBudgetById, reset]);
 
   async function onSubmit(values: EditBudgetFormData) {
-    try {
-      await db.budgets.update(budgetId, {
-        title: values.title,
-        description: values.description,
-      });
-      addToast({
-        id: 'budget-updated',
-        title: 'Presupuesto actualizado',
-        message: 'El presupuesto se ha actualizado correctamente.',
-        variant: 'success',
-      });
-      setOpenEditModal(false);
-    } catch {
+    const add = await updateBudget({
+      id: budgetId,
+      title: values.title,
+      description: values.description,
+    });
+    if (add.isSuccess) {
       reset();
-      addToast({
-        id: 'budget-error',
-        variant: 'destructive',
-        title: 'Error',
-        message: 'No se pudo actualizar el presupuesto.',
-      });
+      setOpenEditModal(false);
+    }
+    if (add.isError) {
+      reset();
     }
   }
 
   return (
-    <form noValidate onSubmit={handleSubmit(onSubmit)}>
+    <form
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-6 mt-6"
+    >
       <Input
         className="w-full mb-4"
         required
@@ -81,7 +76,7 @@ export const EditBudgetForm: FC = () => {
           required: 'La descripción es obligatoria',
         })}
       />
-      <div className="flex justify-end gap-2 mt-6">
+      <div className="flex justify-end gap-2 pt-4">
         <Button
           size="medium"
           shape="rounded"

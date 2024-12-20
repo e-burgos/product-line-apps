@@ -1,37 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useToastStore } from '@product-line/ui';
-import { db, Products } from 'libs/features/src/data/product-db';
 import { formatCurrency } from 'libs/features/src/utils/utils';
-import { useLiveQuery } from 'dexie-react-hooks';
 import * as XLSX from 'xlsx';
+import { ProductWithVariants, useProductMethods } from '@product-line/dexie';
 
 export const useProductData = () => {
   const { addToast } = useToastStore();
+  const { getProductsWithVariants } = useProductMethods();
 
-  const products: Products = useLiveQuery(async () => {
-    const products = await db.products.toArray();
-    const productsWithVariants = await Promise.all(
-      products.map(async (product) => {
-        const variants = await db.variants
-          .where('productId')
-          .equals(product.id!)
-          .toArray();
-        const totalAmount = variants?.length;
-        return {
-          ...product,
-          variants,
-          totalAmount,
-        };
-      })
-    );
-    return productsWithVariants;
-  });
-
-  const variants = useLiveQuery(() => db.variants.toArray());
-
-  const getProductVariants = (productId: number | undefined) =>
-    variants?.filter((v) => v.productId === productId) || [];
+  const products: ProductWithVariants[] = getProductsWithVariants();
 
   const exportToExcel = () => {
     const data: any[] = [];
@@ -41,10 +18,10 @@ export const useProductData = () => {
       data.push({
         Producto: product.title,
         Descripción: product.description,
-        Variantes: product.totalAmount,
+        Variantes: product.count,
       });
 
-      getProductVariants(product.id).forEach((variant) => {
+      product.variants?.forEach((variant) => {
         data.push({
           Producto: '',
           Descripción: '',
@@ -62,7 +39,7 @@ export const useProductData = () => {
     XLSX.writeFile(workbook, 'productos.xlsx');
   };
 
-  const exportOneProductToExcel = (productId: number | undefined) => {
+  const exportOneProductToExcel = (productId: string) => {
     if (!productId) return;
     const product = products?.find((p) => p.id === productId);
     if (!product) return;
@@ -71,10 +48,10 @@ export const useProductData = () => {
     data.push({
       Producto: product.title,
       Descripción: product.description,
-      Variantes: product.totalAmount,
+      Variantes: product.count,
     });
 
-    getProductVariants(product.id).forEach((variant) => {
+    product.variants?.forEach((variant) => {
       data.push({
         Producto: '',
         Descripción: '',
@@ -106,9 +83,7 @@ export const useProductData = () => {
           }\nTotal: ${new Intl.NumberFormat('es-AR', {
             style: 'currency',
             currency: 'ARS',
-          }).format(
-            product.totalAmount || 0
-          )}\n\nVariantes:\n${getProductVariants(product.id)
+          }).format(product.count || 0)}\n\nVariantes:\n${product.variants
             ?.map((v) => `- ${v.title}: ${formatCurrency(v.amount)}`)
             .join('\n')}\n\n`
       )
@@ -138,9 +113,7 @@ export const useProductData = () => {
 
     const shareText = `Nombre: ${product.title}\nDescripción: ${
       product.description
-    }\nVariantes: ${
-      product.totalAmount || 0
-    }\n\nVariantes:\n${getProductVariants(product.id)
+    }\nVariantes: ${product.count || 0}\n\nVariantes:\n${product.variants
       ?.map((v) => `- ${v.title}: ${formatCurrency(v.amount)}`)
       .join('\n')}\n\n`;
 

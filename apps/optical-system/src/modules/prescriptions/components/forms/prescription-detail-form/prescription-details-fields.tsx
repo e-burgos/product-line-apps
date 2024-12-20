@@ -2,7 +2,7 @@ import Input from 'libs/ui/src/components/forms/input';
 import React, { useEffect, useState } from 'react';
 import Listbox, { ListboxOption } from 'libs/ui/src/components/list-box';
 import { CardTitle } from '@product-line/ui';
-import { Customer, Prescription } from '@optical-system-app/lib/db';
+import { Customer, Prescription } from '@product-line/dexie';
 
 interface PrescriptionDetailsFieldsProps {
   prescriptionData: Prescription;
@@ -32,6 +32,7 @@ const PrescriptionDetailsFields: React.FC<PrescriptionDetailsFieldsProps> = ({
           className="w-full sm:w-calc-50-minus-8 mb-4"
           required
           label="Comprobante N°"
+          placeholder="Ingrese el número de comprobante"
           id="receiptNumber"
           type="number"
           mask="999999"
@@ -43,6 +44,7 @@ const PrescriptionDetailsFields: React.FC<PrescriptionDetailsFieldsProps> = ({
           label="Fecha"
           id="date"
           type="date"
+          placeholder="Seleccione la fecha"
           value={prescriptionData?.date}
         />
         {selectedCustomer && (

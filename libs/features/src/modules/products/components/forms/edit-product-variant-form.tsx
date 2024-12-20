@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import { useProductStore } from '../../hooks/use-product-store';
-import { db, Variant } from 'libs/features/src/data/product-db';
-import { useToastStore } from 'libs/ui/src/hooks/use-toast-store';
 import { useForm } from 'react-hook-form';
 import { Input } from 'libs/ui/src/components';
 import Button from 'libs/ui/src/components/button';
+import { useProductMethods, Variant } from '@product-line/dexie';
+import { DollarSign } from 'lucide-react';
 
 export type EditProductVariantFormData = {
   productId: string;
@@ -14,16 +14,16 @@ export type EditProductVariantFormData = {
 };
 
 interface EditProductVariantFormProps {
-  variantId: number;
+  variantId: string;
 }
 
 export const EditProductVariantForm: FC<EditProductVariantFormProps> = ({
   variantId,
 }) => {
+  const { getProductVariantById, updateProductVariant } = useProductMethods();
   const { setOpenEditVariantModal } = useProductStore();
   const [variant, setVariant] = useState<Variant>();
 
-  const { addToast } = useToastStore();
   const {
     register,
     handleSubmit,
@@ -31,9 +31,11 @@ export const EditProductVariantForm: FC<EditProductVariantFormProps> = ({
     formState: { errors, isValid },
   } = useForm<EditProductVariantFormData>();
 
+  console.log(errors);
+
   useEffect(() => {
-    async function loadVariant() {
-      const variant = await db.variants.get(variantId);
+    function loadVariant() {
+      const variant = getProductVariantById(variantId);
       if (variant) {
         setVariant(variant);
         reset({
@@ -45,31 +47,19 @@ export const EditProductVariantForm: FC<EditProductVariantFormProps> = ({
       }
     }
     loadVariant();
-  }, [reset, variantId]);
+  }, [getProductVariantById, reset, variantId]);
 
   async function onSubmit(values: EditProductVariantFormData) {
-    try {
-      await db.variants.update(variantId, {
-        productId: variant?.productId,
-        id: variantId,
-        title: values.title,
-        description: values.description,
-        amount: parseFloat(values.amount),
-      });
-      addToast({
-        id: 'variant-updated',
-        title: 'Variante actualizada',
-        message: 'La variante se ha actualizado correctamente.',
-        variant: 'success',
-      });
+    const update = await updateProductVariant({
+      id: variantId,
+      productId: variant?.productId as string,
+      title: values.title,
+      description: values.description,
+      amount: parseFloat(values.amount),
+    });
+    if (update.isSuccess) {
+      reset();
       setOpenEditVariantModal(false);
-    } catch {
-      addToast({
-        id: 'variant-error',
-        title: 'Error',
-        message: 'Hubo un error al actualizar la variante.',
-        variant: 'destructive',
-      });
     }
   }
 
@@ -80,6 +70,7 @@ export const EditProductVariantForm: FC<EditProductVariantFormProps> = ({
         required
         label="Título"
         id="title"
+        placeholder='Ejemplo: "Talle M", "Color Azul"'
         error={errors?.title?.message}
         {...register('title', {
           required: 'El título es obligatorio',
@@ -91,22 +82,31 @@ export const EditProductVariantForm: FC<EditProductVariantFormProps> = ({
         className="w-full mb-4"
         label="Descripción"
         id="description"
+        placeholder='Ejemplo: "Descripción del talle M"'
         error={errors?.description?.message}
-        {...register('description', {
-          required: 'La descripción es obligatoria',
-        })}
+        {...register('description', {})}
       />
       <Input
         className="w-full mb-4"
         required
+        placeholder="0.00"
         label="Precio"
         id="amount"
-        inputMode="decimal"
+        type="number"
+        step="0.01"
+        min="0"
+        max="9999999999"
+        icon={<DollarSign className="h-4 w-4 mt-1" />}
         error={errors?.amount?.message}
         {...register('amount', {
           required: 'El precio es obligatorio',
           validate: (value) =>
             Number(value) > 0 || 'El monto debe ser mayor a 0',
+          pattern: {
+            value: /^[0-9]+(\.[0-9]{1,2})?$/,
+            message:
+              'El precio debe ser válido. Utilice punto o como para max 2 decimales.',
+          },
         })}
       />
 

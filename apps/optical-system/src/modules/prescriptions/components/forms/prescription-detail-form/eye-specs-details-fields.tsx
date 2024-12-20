@@ -2,7 +2,7 @@ import Input from 'libs/ui/src/components/forms/input';
 import React from 'react';
 import CardTitle from 'libs/ui/src/components/forms/card-title';
 import InputLabel from 'libs/ui/src/components/input-label';
-import { Prescription } from '@optical-system-app/lib/db';
+import { Prescription } from '@product-line/dexie';
 
 interface EyeSpecsDetailsFieldsProps {
   prescriptionData: Prescription;
@@ -23,7 +23,6 @@ const EyeSpecsDetailsFields: React.FC<EyeSpecsDetailsFieldsProps> = ({
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="farRightSphere"
               type="decimal"
-              pattern="^[-+]?[0-9]*\.?[0-9]+$"
             />
             <Input
               disabled

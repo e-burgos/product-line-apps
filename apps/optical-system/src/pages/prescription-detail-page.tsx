@@ -1,7 +1,6 @@
 import Button from 'libs/ui/src/components/button/button';
 import { Download, ReceiptIcon, Share2 } from 'lucide-react';
 import useCustomerData from '@optical-system-app/modules/customers/hooks/use-customer-data';
-import { Customer, Prescription } from '@optical-system-app/lib/db';
 import { useParams } from 'react-router-dom';
 import CardContainer from 'libs/ui/src/components/forms/card-container';
 import { useEffect, useState } from 'react';
@@ -11,14 +10,20 @@ import usePrescriptionData from '@optical-system-app/modules/prescriptions/hooks
 import EditPrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/edit-prescription-modal';
 import DeletePrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/delete-customer-modal';
 import DetailPrescriptionForm from '@optical-system-app/modules/prescriptions/components/forms/prescription-detail-form';
+import {
+  Customer,
+  Prescription,
+  usePrescriptionMethods,
+} from '@product-line/dexie';
 
 function PrescriptionDetailPage() {
   const { getCustomer, shareOneCustomer, exportOneCustomerToExcel } =
     useCustomerData();
-  const { getPrescriptionById, checkIsPrescription } = usePrescriptionData();
+  const { getPrescriptionById } = usePrescriptionMethods();
+  const { checkIsPrescription } = usePrescriptionData();
 
   const { id } = useParams();
-  const prescriptionId = Number(id);
+  const prescriptionId = id?.toString() as string;
   const [customer, setCustomer] = useState<Customer | null>();
   const prescription = getPrescriptionById(prescriptionId);
 

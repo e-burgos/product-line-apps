@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Table2 } from 'lucide-react';
-import { Budget } from 'libs/features/src/data/product-db';
+import { Budget, useBudgetMethods } from '@product-line/dexie';
 import { formatCurrency } from 'libs/features/src/utils/utils';
 
 export const useBudgetColumns = () => {
+  const { getBudgetVariants } = useBudgetMethods();
   const columns: ColumnDef<Budget, Budget>[] = useMemo(
     () => [
       {
@@ -45,18 +46,18 @@ export const useBudgetColumns = () => {
         maxSize: 100,
         accessorFn: (row) => row,
         cell: (info) => {
-          const amount = parseFloat(
-            info?.getValue()?.totalAmount?.toString() || '0'
-          );
+          const amount = getBudgetVariants(
+            info?.getValue()?.id as string
+          )?.reduce((acc, variant) => acc + variant.amount, 0);
           return (
             <div className="flex items-center gap-2">
-              <span>{formatCurrency(amount)}</span>
+              <span>{formatCurrency(amount || 0)}</span>
             </div>
           );
         },
       },
     ],
-    []
+    [getBudgetVariants]
   );
   return { columns: columns || [] };
 };

@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import cn from "classnames";
-import AuthorCard from "@/components/ui/author-card";
-import Logo from "@/components/ui/logo";
-import LogoIcon from "@/components/ui/logo-icon";
-import { MenuItem } from "@/components/ui/collapsible-menu";
-import Button from "@/components/ui/button";
-import { Close } from "@/components/icons/close";
-import { useClickAway } from "@/hooks/use-click-away";
-import { defaultMenuItems } from "@/app/router/menu-items";
-import { routePaths } from "@/app/router/routes";
-import AuthorImage from "@/assets/images/author.jpg";
-import { useDrawerViewStore } from "@/components/drawer-views/useDrawerViewStore";
+import { useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import cn from 'classnames';
+import AuthorCard from '@/components/ui/author-card';
+import Logo from '@/components/ui/logo';
+import LogoIcon from '@/components/ui/logo-icon';
+import { MenuItem } from '@/components/ui/collapsible-menu';
+import Button from '@/components/ui/button';
+import { Close } from '@/components/icons/close';
+import { useClickAway } from '@/hooks/use-click-away';
+import { defaultMenuItems } from '@/app/router/menu-items';
+import { routePaths } from '@/app/router/routes';
+import AuthorImage from '@/assets/images/author.jpg';
+import { useDrawerViewStore } from '@/components/drawer-views/useDrawerViewStore';
 
 const sideBarMenuItems = defaultMenuItems.map((item) => ({
   name: item.name,
@@ -41,7 +41,7 @@ export default function Sidebar({ className }: { className?: string }) {
   });
 
   function isSubMenuActive(
-    submenu: Array<{ name: string; icon?: JSX.Element; href: string }>
+    submenu: Array<{ name: string; icon?: JSX.Element; href: string }>,
   ) {
     return submenu?.map((item) => item.href).includes(pathname);
   }
@@ -53,16 +53,16 @@ export default function Sidebar({ className }: { className?: string }) {
       onMouseLeave={() => setOpen(false)}
       className={cn(
         open
-          ? "border-0 shadow-expand xs:w-80 xl:w-72 2xl:w-80 "
-          : "w-24 border-dashed border-gray-200 ltr:border-r rtl:border-l 2xl:w-28",
-        "top-0 z-40 h-full max-w-full  bg-body duration-200 ltr:left-0 rtl:right-0  dark:border-gray-700 dark:bg-dark xl:fixed",
-        className
+          ? 'border-0 shadow-expand xs:w-80 xl:w-72 2xl:w-80 '
+          : 'w-24 border-dashed border-gray-200 ltr:border-r rtl:border-l 2xl:w-28',
+        'top-0 z-40 h-full max-w-full  bg-body duration-200 ltr:left-0 rtl:right-0  dark:border-gray-700 dark:bg-dark xl:fixed',
+        className,
       )}
     >
       <div
         className={cn(
-          "relative flex h-24 items-center  overflow-hidden px-6 py-4 pt-0 2xl:px-8 3xl:pt-6",
-          open ? "flex-start" : "justify-center"
+          'relative flex h-24 items-center  overflow-hidden px-6 py-4 pt-0 2xl:px-8 3xl:pt-6',
+          open ? 'flex-start' : 'justify-center',
         )}
       >
         {!open ? (
@@ -89,8 +89,8 @@ export default function Sidebar({ className }: { className?: string }) {
 
       <div
         className={cn(
-          "custom-scrollbar -mt-4 overflow-hidden overflow-y-auto 2xl:-mt-7",
-          open ? "h-[calc(100%-190px)]" : "h-[calc(100%-170px)]"
+          'custom-scrollbar -mt-4 overflow-hidden overflow-y-auto 2xl:-mt-7',
+          open ? 'h-[calc(100%-190px)]' : 'h-[calc(100%-170px)]',
         )}
       >
         <div className="px-6 pb-5 2xl:px-8">
@@ -102,7 +102,7 @@ export default function Sidebar({ className }: { className?: string }) {
                     item.href === pathname ||
                     isSubMenuActive(item.dropdownItems!)
                   }
-                  key={"drawer" + item.name + index}
+                  key={'drawer' + item.name + index}
                   href=""
                   icon={item.icon}
                 />
@@ -113,7 +113,7 @@ export default function Sidebar({ className }: { className?: string }) {
               {sideBarMenuItems.map((item, index) => (
                 <MenuItem
                   onClick={closeDrawer}
-                  key={"drawer-full" + item.name + index}
+                  key={'drawer-full' + item.name + index}
                   name={item.name}
                   href={item.href}
                   icon={item.icon}
@@ -124,7 +124,7 @@ export default function Sidebar({ className }: { className?: string }) {
           )}
         </div>
       </div>
-      <div className={cn("sticky bottom-5 mt-3 2xl:mt-12", open && "px-8")}>
+      <div className={cn('sticky bottom-5 mt-3 2xl:mt-12', open && 'px-8')}>
         {!open ? (
           <motion.div
             initial={{ x: 50, y: -5 }}
@@ -140,7 +140,7 @@ export default function Sidebar({ className }: { className?: string }) {
         ) : (
           <div>
             <motion.div
-              initial={{ y: "80%" }}
+              initial={{ y: '80%' }}
               animate={{
                 y: 0,
                 transition: {
@@ -151,7 +151,7 @@ export default function Sidebar({ className }: { className?: string }) {
             >
               <AuthorCard
                 image={AuthorImage}
-                name="Esteban Burgos"
+                name="Contactar Soporte"
                 role="admin"
               />
             </motion.div>

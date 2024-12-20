@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
-import { useToastStore } from 'libs/ui/src/hooks/use-toast-store';
 import Modal from 'libs/ui/src/components/modal';
-import { Prescription, db } from '@optical-system-app/lib/db';
 import Button from 'libs/ui/src/components/button';
 import { Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { usePrescriptionStore } from '../../hooks/use-prescription-store';
+import { Prescription, usePrescriptionMethods } from '@product-line/dexie';
 
 interface DeletePrescriptionModalProps {
   showButton?: boolean;
-  prescriptionId?: number;
+  prescriptionId?: string;
   prescriptionData?: Prescription;
   backToPrescriptions?: boolean;
 }
@@ -21,34 +20,21 @@ const DeletePrescriptionModal: React.FC<DeletePrescriptionModalProps> = ({
   prescriptionData,
   backToPrescriptions,
 }) => {
+  const { deletePrescription } = usePrescriptionMethods();
   const navigate = useNavigate();
   const { openDeleteModal, setOpenDeleteModal, currentPrescription } =
     usePrescriptionStore();
-  const { addToast } = useToastStore();
   const prescription = currentPrescription as Prescription;
   const prescriptionId = prescriptionData?.id || id || prescription?.id;
 
   const handleDelete = async () => {
     if (prescriptionId !== undefined) {
-      try {
-        await db.prescriptions.delete(prescriptionId!);
-        addToast({
-          id: 'prescription-deleted',
-          title: 'Ficha eliminada',
-          message: 'Los datos de esta ficha han sido eliminados.',
-          variant: 'success',
-        });
+      const deleteOperation = await deletePrescription(prescriptionId);
+      if (deleteOperation.isSuccess) {
         setOpenDeleteModal(false);
         if (backToPrescriptions) navigate('/prescriptions');
-      } catch {
-        addToast({
-          id: 'error-deleting-prescription',
-          title: 'Error',
-          message: 'Ocurrió un error al eliminar la ficha',
-          variant: 'destructive',
-        });
-        setOpenDeleteModal(false);
       }
+      if (deleteOperation.isError) setOpenDeleteModal(false);
     }
   };
 

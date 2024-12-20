@@ -15,6 +15,7 @@ export const EditVariantModal: FC = () => {
       text={{
         title: `Editar Variante ${variant?.title || ''}`,
       }}
+      className="w-full md:w-1/2"
       hideButtons
     >
       {variant?.id ? <EditProductVariantForm variantId={variant.id} /> : null}

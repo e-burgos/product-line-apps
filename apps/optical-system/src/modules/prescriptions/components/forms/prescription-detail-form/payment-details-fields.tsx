@@ -5,7 +5,7 @@ import usePrescriptionData from '@optical-system-app/modules/prescriptions/hooks
 import Textarea from 'libs/ui/src/components/forms/textarea';
 import CardTitle from 'libs/ui/src/components/forms/card-title';
 import { CreditCard, DollarSign, SquareDivideIcon } from 'lucide-react';
-import { Prescription } from '@optical-system-app/lib/db';
+import { Prescription } from '@product-line/dexie';
 
 interface PaymentDetailsFieldsProps {
   prescriptionData: Prescription;

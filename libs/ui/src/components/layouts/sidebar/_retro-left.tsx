@@ -55,7 +55,7 @@ export default function Sidebar({
         <div className="px-6 pb-2 2xl:px-8">
           <AuthorCard
             image={AuthorImage}
-            name="Esteban Burgos"
+            name="Contactar Soporte"
             authorRole="Necesitas ayuda?"
           />
 

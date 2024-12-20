@@ -6,7 +6,7 @@ import { useWindowSize } from 'react-use';
 import PrescriptionForm from '../forms/prescription-form';
 import { useCustomerStore } from '@optical-system-app/modules/customers/hooks/use-customer-store';
 import { FC, useEffect } from 'react';
-import { Customer } from '@optical-system-app/lib/db';
+import { Customer } from '@product-line/dexie';
 
 interface AddPrescriptionModalProps {
   hideButton?: boolean;

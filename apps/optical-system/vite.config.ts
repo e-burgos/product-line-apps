@@ -4,7 +4,11 @@ import { generateViteConfigBase } from '../../libs/shell/src/utils/generateViteC
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
-  const port = parseInt(env.VITE_APP_OPTICAL_SYSTEM_PORT || '4203');
-
-  return generateViteConfigBase('optical-system', 'Siochana Visión', port, env);
+  const port = parseInt(env.VITE_APP_OPTICAL_PORT || '4203');
+  return generateViteConfigBase(
+    'optical-system',
+    env.VITE_APP_OPTICAL_APP_NAME || 'Siochana Visión',
+    port,
+    env
+  );
 });

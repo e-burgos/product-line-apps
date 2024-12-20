@@ -1,7 +1,7 @@
+import { Customer } from '@product-line/dexie';
 import { ColumnDef } from '@tanstack/react-table';
 import { User } from 'lucide-react';
 import { useMemo } from 'react';
-import { Customer } from '@optical-system-app/lib/db';
 
 const useCustomerColumns = () => {
   const columns: ColumnDef<Customer, Customer>[] = useMemo(

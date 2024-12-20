@@ -165,7 +165,7 @@ export default function Sidebar({
             >
               <AuthorCard
                 image={AuthorImage}
-                name="Esteban Burgos"
+                name="Contactar Soporte"
                 authorRole="Necesitas ayuda?"
               />
             </motion.div>

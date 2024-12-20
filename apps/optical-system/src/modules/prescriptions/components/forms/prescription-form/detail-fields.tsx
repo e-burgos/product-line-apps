@@ -60,6 +60,7 @@ const DetailFields: React.FC<DetailFieldsProps> = ({
             disabled={forDetail}
             className="w-full sm:w-calc-50-minus-8 mb-0"
             label="Armazón"
+            placeholder='Ejemplo: "Armazón de acetato"'
             id="frameDesc"
             {...register('frameDesc')}
           />
@@ -87,6 +88,7 @@ const DetailFields: React.FC<DetailFieldsProps> = ({
             disabled={forDetail}
             className="w-full sm:w-calc-50-minus-8 mb-0"
             label="Cristales"
+            placeholder='Ejemplo: "Cristales antirreflejo"'
             id="crystalDesc"
             {...register('crystalDesc')}
           />
@@ -110,11 +112,11 @@ const DetailFields: React.FC<DetailFieldsProps> = ({
               },
             })}
           />
-
           <Input
             disabled={forDetail}
             className="w-full sm:w-calc-50-minus-8 mb-0"
             label="Lentes de contacto"
+            placeholder='Ejemplo: "Lentes de contacto blandos"'
             id="contactlensDesc"
             {...register('contactlensDesc')}
           />
@@ -142,6 +144,7 @@ const DetailFields: React.FC<DetailFieldsProps> = ({
             disabled={forDetail}
             className="w-full sm:w-calc-50-minus-8 mb-0"
             label="Arreglos"
+            placeholder='Ejemplo: "Ajuste de armazón"'
             id="arrangementDesc"
             {...register('arrangementDesc')}
           />

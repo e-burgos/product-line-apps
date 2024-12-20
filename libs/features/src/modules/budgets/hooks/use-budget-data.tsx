@@ -1,40 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { useLiveQuery } from 'dexie-react-hooks';
 import * as XLSX from 'xlsx';
 import { useToastStore } from 'libs/ui/src/hooks/use-toast-store';
-import { Budgets, db } from 'libs/features/src/data/product-db';
+import { useBudgetMethods } from '@product-line/dexie';
 import { formatCurrency } from 'libs/features/src/utils/utils';
 
 export const useBudgetData = () => {
   const { addToast } = useToastStore();
+  const { getBudgetsWithVariants, getBudgetVariants } = useBudgetMethods();
 
-  const budgets: Budgets = useLiveQuery(async () => {
-    const budgets = await db.budgets.toArray();
-    const budgetsWithVariants = await Promise.all(
-      budgets.map(async (budget) => {
-        const variants = await db.budgetVariants
-          .where('budgetId')
-          .equals(budget.id!)
-          .toArray();
-        const totalAmount = variants.reduce(
-          (sum, variant) => sum + variant.amount,
-          0
-        );
-        return {
-          ...budget,
-          variants,
-          totalAmount,
-        };
-      })
-    );
-    return budgetsWithVariants;
-  });
-
-  const budgetVariants = useLiveQuery(() => db.budgetVariants.toArray());
-
-  const getBudgetDetails = (budgetId: number | undefined) =>
-    budgetVariants?.filter((v) => v.budgetId === budgetId) || [];
+  const budgets = getBudgetsWithVariants();
 
   const exportToExcel = () => {
     const data: any[] = [];
@@ -47,7 +21,7 @@ export const useBudgetData = () => {
         'Monto Total': formatCurrency(budget.totalAmount || 0),
       });
 
-      getBudgetDetails(budget.id).forEach((detail) => {
+      getBudgetVariants(budget.id as string)?.forEach((detail) => {
         data.push({
           Presupuesto: '',
           Descripción: '',
@@ -66,7 +40,7 @@ export const useBudgetData = () => {
     XLSX.writeFile(workbook, 'presupuestos.xlsx');
   };
 
-  const exportOneBudgetToExcel = (budgetId: number | undefined) => {
+  const exportOneBudgetToExcel = (budgetId: string | undefined) => {
     if (!budgetId) return;
     const budget = budgets?.find((b) => b.id === budgetId);
     if (!budget) return;
@@ -78,7 +52,7 @@ export const useBudgetData = () => {
       'Monto Total': formatCurrency(budget.totalAmount || 0),
     });
 
-    getBudgetDetails(budget.id).forEach((detail) => {
+    getBudgetVariants(budget?.id as string)?.forEach((detail) => {
       data.push({
         Presupuesto: '',
         Descripción: '',
@@ -111,8 +85,8 @@ export const useBudgetData = () => {
           }\nTotal: ${new Intl.NumberFormat('es-AR', {
             style: 'currency',
             currency: 'ARS',
-          }).format(budget.totalAmount || 0)}\n\nDetalles:\n${getBudgetDetails(
-            budget.id
+          }).format(budget.totalAmount || 0)}\n\nDetalles:\n${getBudgetVariants(
+            budget?.id as string
           )
             ?.map(
               (v) =>
@@ -153,8 +127,8 @@ export const useBudgetData = () => {
     }\nTotal: ${new Intl.NumberFormat('es-AR', {
       style: 'currency',
       currency: 'ARS',
-    }).format(budget.totalAmount || 0)}\n\nDetalles:\n${getBudgetDetails(
-      budget.id
+    }).format(budget.totalAmount || 0)}\n\nDetalles:\n${getBudgetVariants(
+      budget?.id as string
     )
       ?.map(
         (v) =>

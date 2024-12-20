@@ -1,12 +1,11 @@
 import { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { User, ReceiptText, CalendarDays } from 'lucide-react';
-import { Prescription } from '@optical-system-app/lib/db';
-import useCustomerData from '@optical-system-app/modules/customers/hooks/use-customer-data';
 import { formatCurrency, formatDate } from '@product-line/features';
+import { Prescription, useCustomerMethods } from '@product-line/dexie';
 
-const usePrescriptionColumns = (hideCustomerColumn?: boolean) => {
-  const { getCustomer } = useCustomerData();
+const usePrescriptionColumns = () => {
+  const { getCustomerById } = useCustomerMethods();
   const columns: ColumnDef<Prescription, Prescription>[] = useMemo(
     () => [
       {
@@ -24,22 +23,6 @@ const usePrescriptionColumns = (hideCustomerColumn?: boolean) => {
         },
       },
       {
-        id: 'customer',
-        header: 'Cliente',
-        enablePinning: false,
-        accessorFn: (row) => row,
-        cell: (info) => {
-          const customer = getCustomer(info?.getValue()?.customerId);
-          return (
-            <div className="flex items-center gap-2">
-              <User className="h-4 w-4 text-muted-foreground" />
-              <span>{`${customer?.name} ${customer?.lastName}` || '-'}</span>
-            </div>
-          );
-        },
-        hidden: hideCustomerColumn,
-      },
-      {
         id: 'date',
         header: 'Fecha',
         enablePinning: false,
@@ -50,6 +33,22 @@ const usePrescriptionColumns = (hideCustomerColumn?: boolean) => {
             <div className="flex items-center gap-2">
               <CalendarDays className="h-4 w-4 text-muted-foreground" />
               <span>{formatDate(date) || '-'}</span>
+            </div>
+          );
+        },
+      },
+      {
+        id: 'customer',
+        header: 'Cliente',
+        enablePinning: false,
+        size: 200,
+        accessorFn: (row) => row,
+        cell: (info) => {
+          const customer = getCustomerById(info?.getValue()?.customerId);
+          return (
+            <div className="flex items-center gap-2">
+              <User className="h-4 w-4 text-muted-foreground" />
+              <span>{`${customer?.name} ${customer?.lastName}` || '-'}</span>
             </div>
           );
         },
@@ -104,7 +103,7 @@ const usePrescriptionColumns = (hideCustomerColumn?: boolean) => {
         },
       },
     ],
-    [getCustomer, hideCustomerColumn]
+    [getCustomerById]
   );
   return { columns: columns || [] };
 };

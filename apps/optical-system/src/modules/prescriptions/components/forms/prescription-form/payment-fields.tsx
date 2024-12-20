@@ -137,6 +137,7 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
                 step="0.01"
                 min="0"
                 max="9999999999"
+                placeholder="Ingrese un monto"
                 icon={<DollarSign className="h-4 w-4 mt-1" />}
                 error={errors?.creditCardDeposit?.message}
                 {...register('creditCardDeposit', {
@@ -151,6 +152,7 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
                 disabled={forDetail}
                 className="w-full sm:w-calc-50-minus-8 mb-4"
                 label="Número de tarjeta"
+                placeholder="Ingrese el número de tarjeta"
                 id="creditCardNumber"
                 type="number"
                 mask="9999 9999 9999 9999"
@@ -163,6 +165,7 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
                 className="w-full sm:w-calc-50-minus-8 mb-4"
                 label="Cuotas de la tarjeta"
                 id="creditCardInstallments"
+                placeholder='Ingrese la cantidad de cuotas. Ej: "3"'
                 type="number"
                 icon={<SquareDivideIcon className="h-4 w-4 mt-1" />}
                 error={errors?.creditCardInstallments?.message}
@@ -244,6 +247,7 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
           disabled={forDetail}
           className="w-full"
           label="Comentarios"
+          placeholder="Ingrese un comentario, si es necesario, por ejemplo: 'Descuento por pago en efectivo'"
           id="description"
           {...register('description')}
         />

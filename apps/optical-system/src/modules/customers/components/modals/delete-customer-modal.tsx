@@ -1,16 +1,14 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
-import { useToastStore } from 'libs/ui/src/hooks/use-toast-store';
 import Modal from 'libs/ui/src/components/modal';
 import { useCustomerStore } from '../../hooks/use-customer-store';
-import { Customer, db } from '@optical-system-app/lib/db';
 import Button from 'libs/ui/src/components/button';
 import { UserRoundXIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Customer, useCustomerMethods } from '@product-line/dexie';
 
 interface DeleteCustomerModalProps {
   showButton?: boolean;
-  customerId?: number;
+  customerId?: string;
   backToCustomers?: boolean;
 }
 
@@ -19,25 +17,20 @@ const DeleteCustomerModal: React.FC<DeleteCustomerModalProps> = ({
   customerId: id,
   backToCustomers,
 }) => {
+  const { deleteCustomer } = useCustomerMethods();
   const navigate = useNavigate();
   const { openDeleteModal, setOpenDeleteModal, currentCustomer } =
     useCustomerStore();
-  const { addToast } = useToastStore();
   const customer = currentCustomer as Customer;
   const customerId = id || customer?.id;
 
   const handleDelete = async () => {
-    if (customer?.id !== undefined) {
-      await db.prescriptions.where('customerId').equals(customerId!).delete();
-      await db.customers.delete(customerId!);
-      addToast({
-        id: 'customer-deleted',
-        title: 'Cliente eliminado',
-        message: 'Los datos del cliente y sus fichas han sido eliminados.',
-        variant: 'success',
-      });
-      setOpenDeleteModal(false);
-      if (backToCustomers) navigate('/customers');
+    if (customerId !== undefined) {
+      const deleteMethod = await deleteCustomer(customerId);
+      if (deleteMethod.isSuccess) {
+        setOpenDeleteModal(false);
+        if (backToCustomers) navigate('/customers');
+      }
     }
   };
 

@@ -1,8 +1,8 @@
 import Modal from 'libs/ui/src/components/modal';
 import { FC } from 'react';
 import { useProductStore } from '../../hooks/use-product-store';
-import { Product } from 'libs/features/src/data/product-db';
 import { EditProductForm } from '../forms/edit-product-form';
+import { Product } from '@product-line/dexie';
 
 export const EditProductModal: FC = () => {
   const { openEditModal, setOpenEditModal, currentProduct } = useProductStore();
@@ -14,6 +14,7 @@ export const EditProductModal: FC = () => {
       setIsOpen={setOpenEditModal}
       hideButtons
       closeable
+      className="w-full md:w-1/2"
       text={{
         title: `Editar ${product?.title || 'Producto'}`,
       }}

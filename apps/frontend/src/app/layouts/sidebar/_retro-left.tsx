@@ -1,12 +1,12 @@
-import cn from "classnames";
-import AuthorCard from "@/components/ui/author-card";
-import Logo from "@/components/ui/logo";
-import { MenuItem } from "@/components/ui/collapsible-menu";
-import Button from "@/components/ui/button";
-import { Close } from "@/components/icons/close";
-import { defaultMenuItems } from "@/app/router/menu-items";
-import AuthorImage from "@/assets/images/author.jpg";
-import { useDrawerViewStore } from "@/components/drawer-views/useDrawerViewStore";
+import cn from 'classnames';
+import AuthorCard from '@/components/ui/author-card';
+import Logo from '@/components/ui/logo';
+import { MenuItem } from '@/components/ui/collapsible-menu';
+import Button from '@/components/ui/button';
+import { Close } from '@/components/icons/close';
+import { defaultMenuItems } from '@/app/router/menu-items';
+import AuthorImage from '@/assets/images/author.jpg';
+import { useDrawerViewStore } from '@/components/drawer-views/useDrawerViewStore';
 
 export default function Sidebar({
   className,
@@ -32,8 +32,8 @@ export default function Sidebar({
   return (
     <aside
       className={cn(
-        "top-0 z-40 h-full w-full max-w-full border-dashed border-gray-200 bg-body ltr:left-0 ltr:border-r rtl:right-0 rtl:border-l dark:border-gray-700 dark:bg-dark xs:w-80 xl:fixed  xl:w-72 2xl:w-80",
-        className
+        'top-0 z-40 h-full w-full max-w-full border-dashed border-gray-200 bg-body ltr:left-0 ltr:border-r rtl:right-0 rtl:border-l dark:border-gray-700 dark:bg-dark xs:w-80 xl:fixed  xl:w-72 2xl:w-80',
+        className,
       )}
     >
       <div className="relative flex h-24 items-center justify-between overflow-hidden px-6 py-4 2xl:px-8">
@@ -54,7 +54,11 @@ export default function Sidebar({
 
       <div className="custom-scrollbar h-[calc(100%-98px)] overflow-hidden overflow-y-auto">
         <div className="px-6 pb-5 2xl:px-8">
-          <AuthorCard image={AuthorImage} name="Esteban Burgos" role="admin" />
+          <AuthorCard
+            image={AuthorImage}
+            name="Contactar Soporte"
+            role="admin"
+          />
 
           <div className="mt-12">
             {retroMenu.map((item, index) => (

@@ -1,18 +1,18 @@
 import { FC } from 'react';
 import { useProductStore } from '../../hooks/use-product-store';
-import { Input, useToastStore } from '@product-line/ui';
-import { useForm } from 'react-hook-form';
-import { db } from 'libs/features/src/data/product-db';
+import { Input } from '@product-line/ui';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import Button from 'libs/ui/src/components/button';
+import { useProductMethods } from '@product-line/dexie';
 
-export type AddProductFormData = {
+export interface AddProductFormData {
   title: string;
   description: string;
-};
+}
 
 export const AddProductForm: FC = () => {
   const { setOpenCreateModal } = useProductStore();
-  const { addToast } = useToastStore();
+  const { addProduct } = useProductMethods();
   const {
     register,
     handleSubmit,
@@ -20,53 +20,45 @@ export const AddProductForm: FC = () => {
     formState: { errors, isValid },
   } = useForm<AddProductFormData>();
 
-  async function onSubmit(values: AddProductFormData) {
-    try {
-      await db.products.add({
-        title: values.title,
-        description: values.description,
-      });
+  const onSubmit: SubmitHandler<AddProductFormData> = async (values) => {
+    const add = await addProduct({
+      title: values.title,
+      description: values.description,
+    });
+    if (add.isSuccess) {
       reset();
-      addToast({
-        id: 'product-created',
-        title: 'Producto creado',
-        message: 'El producto se ha creado correctamente.',
-        variant: 'success',
-      });
-    } catch {
-      addToast({
-        id: 'product-error',
-        variant: 'destructive',
-        title: 'Error',
-        message: 'No se pudo crear el producto.',
-      });
+      setOpenCreateModal(false);
     }
-  }
+  };
 
   return (
-    <form noValidate onSubmit={handleSubmit(onSubmit)}>
+    <form
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-6 mt-8"
+    >
       <Input
         className="w-full mb-4"
         required
         label="Título"
         id="title"
+        placeholder="Título del producto"
         error={errors?.title?.message}
         {...register('title', {
-          required: 'El título es obligatorio',
+          required: 'El nombre es obligatorio',
           validate: (value) =>
-            value.length > 3 || 'El título debe tener al menos 3 caracteres',
+            value.length > 2 || 'El nombre debe tener al menos 3 caracteres',
         })}
       />
       <Input
         className="w-full mb-4"
         label="Descripción"
         id="description"
+        placeholder="Descripción del producto"
         error={errors?.description?.message}
-        {...register('description', {
-          required: 'La descripción es obligatoria',
-        })}
+        {...register('description', {})}
       />
-      <div className="flex justify-end gap-2 mt-6">
+      <div className="flex justify-end gap-2 pt-4">
         <Button
           size="medium"
           shape="rounded"

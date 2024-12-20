@@ -7,7 +7,7 @@ import EditCustomerForm from '../forms/edit-customer-form';
 
 interface EditCustomerModalProps {
   showButton?: boolean;
-  customerId?: number;
+  customerId?: string;
 }
 
 const EditCustomerModal: FC<EditCustomerModalProps> = ({
@@ -42,7 +42,7 @@ const EditCustomerModal: FC<EditCustomerModalProps> = ({
         hideButtons
       >
         <EditCustomerForm
-          customerId={(customerId as number) || (currentCustomer?.id as number)}
+          customerId={customerId || (currentCustomer?.id as string)}
         />
       </Modal>
     </>

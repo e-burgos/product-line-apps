@@ -1,4 +1,4 @@
-import { Product, Variant } from 'libs/features/src/data/product-db';
+import { Product, Variant } from '@product-line/dexie';
 import { create } from 'zustand';
 
 export interface IProductStore {

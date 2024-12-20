@@ -2,7 +2,7 @@ import React from 'react';
 import Input from 'libs/ui/src/components/forms/input';
 import CardTitle from 'libs/ui/src/components/forms/card-title';
 import { DollarSign } from 'lucide-react';
-import { Prescription } from '@optical-system-app/lib/db';
+import { Prescription } from '@product-line/dexie';
 
 interface DetailDetailsFieldsProps {
   prescriptionData: Prescription;

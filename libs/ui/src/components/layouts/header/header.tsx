@@ -82,17 +82,17 @@ export function RetroHeader({
         <HeaderRightArea
           isNotificationButton={isNotificationButton}
           rightButton={
-            <>
+            <div className="flex flex-row items-center justify-center ">
+              {rightButton}
               <div className="mx-2 block sm:mx-4 xl:hidden">
                 <Hamburger
                   isOpen={false}
-                  variant="transparent"
                   onClick={() => openDrawer('DEFAULT_SIDEBAR')}
-                  className="dark:text-white"
+                  color="white"
+                  className="shadow-main dark:border dark:border-solid dark:border-gray-700 dark:bg-light-dark dark:text-white"
                 />
               </div>
-              {rightButton}
-            </>
+            </div>
           }
         />
       </div>
@@ -140,17 +140,17 @@ export function ClassicHeader({
         <HeaderRightArea
           isNotificationButton={isNotificationButton}
           rightButton={
-            <>
+            <div className="flex flex-row items-center justify-center ">
+              {rightButton}
               <div className="mx-2 block sm:mx-4 xl:hidden">
                 <Hamburger
                   isOpen={false}
-                  variant="transparent"
                   onClick={() => openDrawer('CLASSIC_SIDEBAR')}
-                  className="dark:text-white"
+                  color="white"
+                  className="shadow-main dark:border dark:border-solid dark:border-gray-700 dark:bg-light-dark dark:text-white"
                 />
               </div>
-              {rightButton}
-            </>
+            </div>
           }
         />
       </div>
@@ -197,17 +197,17 @@ export default function Header({
         <HeaderRightArea
           isNotificationButton={isNotificationButton}
           rightButton={
-            <>
+            <div className="flex flex-row items-center justify-center ">
+              {rightButton}
               <div className="mx-2 block sm:mx-4 xl:hidden">
                 <Hamburger
                   isOpen={false}
-                  variant="transparent"
                   onClick={() => openDrawer('DEFAULT_SIDEBAR')}
-                  className="dark:text-white"
+                  color="white"
+                  className="shadow-main dark:border dark:border-solid dark:border-gray-700 dark:bg-light-dark dark:text-white"
                 />
               </div>
-              {rightButton}
-            </>
+            </div>
           }
         />
       </div>

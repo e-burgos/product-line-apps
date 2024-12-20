@@ -1,25 +1,20 @@
 import React from 'react';
-import { useToastStore } from 'libs/ui/src/hooks/use-toast-store';
-import { db } from 'libs/features/src/data/product-db';
 import { useBudgetStore } from '../hooks/use-budget-store';
 import Modal from 'libs/ui/src/components/modal';
+import { useBudgetMethods } from '@product-line/dexie';
 
 export const DeleteDetail: React.FC = () => {
-  const { addToast } = useToastStore();
+  const { deleteBudgetVariant } = useBudgetMethods();
   const { openDeleteDetailModal, currentDetail, setOpenDeleteDetailModal } =
     useBudgetStore();
   const detail = currentDetail;
 
   const handleDelete = async () => {
     if (detail?.id) {
-      await db.budgetVariants.delete(detail.id);
-      addToast({
-        id: 'detail-deleted',
-        title: 'Detalle eliminado',
-        message: 'El detalle han sido eliminado.',
-        variant: 'success',
-      });
-      setOpenDeleteDetailModal(false);
+      const deleted = await deleteBudgetVariant(detail.id);
+      if (deleted) {
+        setOpenDeleteDetailModal(false);
+      }
     }
   };
   return (

@@ -1,9 +1,9 @@
 import { FC, useEffect } from 'react';
 import { useProductStore } from '../../hooks/use-product-store';
-import { Input, useToastStore } from '@product-line/ui';
+import { Input } from '@product-line/ui';
 import { useForm } from 'react-hook-form';
-import { db } from 'libs/features/src/data/product-db';
 import Button from 'libs/ui/src/components/button';
+import { useProductMethods } from '@product-line/dexie';
 
 export type EditProductFormData = {
   title: string;
@@ -11,12 +11,12 @@ export type EditProductFormData = {
 };
 
 interface EditProductFormProps {
-  productId: number;
+  productId: string;
 }
 
 export const EditProductForm: FC<EditProductFormProps> = ({ productId }) => {
+  const { getProductById, updateProduct } = useProductMethods();
   const { setOpenEditModal } = useProductStore();
-  const { addToast } = useToastStore();
   const {
     register,
     handleSubmit,
@@ -25,8 +25,8 @@ export const EditProductForm: FC<EditProductFormProps> = ({ productId }) => {
   } = useForm<EditProductFormData>();
 
   useEffect(() => {
-    async function loadProduct() {
-      const product = await db.products.get(productId);
+    function loadProduct() {
+      const product = getProductById(productId);
       if (product) {
         reset({
           title: product.title,
@@ -35,33 +35,26 @@ export const EditProductForm: FC<EditProductFormProps> = ({ productId }) => {
       }
     }
     loadProduct();
-  }, [productId, reset]);
+  }, [getProductById, productId, reset]);
 
   async function onSubmit(values: EditProductFormData) {
-    try {
-      await db.products.update(productId, {
-        title: values.title,
-        description: values.description,
-      });
-      addToast({
-        id: 'product-udpated',
-        title: 'Producto creado',
-        message: 'El producto se actualizó correctamente.',
-        variant: 'success',
-      });
+    const update = await updateProduct({
+      id: productId,
+      title: values.title,
+      description: values.description,
+    });
+    if (update.isSuccess) {
+      reset();
       setOpenEditModal(false);
-    } catch {
-      addToast({
-        id: 'product-error',
-        variant: 'destructive',
-        title: 'Error',
-        message: 'No se pudo actualizar el producto.',
-      });
     }
   }
 
   return (
-    <form noValidate onSubmit={handleSubmit(onSubmit)}>
+    <form
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-6 mt-4"
+    >
       <Input
         className="w-full mb-4"
         required
@@ -83,7 +76,7 @@ export const EditProductForm: FC<EditProductFormProps> = ({ productId }) => {
           required: 'La descripción es obligatoria',
         })}
       />
-      <div className="flex justify-end gap-2 mt-6">
+      <div className="flex justify-end gap-2 pt-4">
         <Button
           size="medium"
           shape="rounded"

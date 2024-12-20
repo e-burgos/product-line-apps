@@ -2,7 +2,7 @@ import React from 'react';
 import Input from './input';
 import { Search } from 'lucide-react';
 
-function InputSearcher({
+export function InputSearcher({
   value: initialValue,
   onChange,
   debounce = 500,

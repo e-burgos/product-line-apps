@@ -26,9 +26,9 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
             <Input
               disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
+              placeholder="Ingrese un valor"
               id="farRightSphere"
               type="decimal"
-              pattern="^[-+]?[0-9]*\.?[0-9]+$"
               error={errors?.farRightSphere?.message}
               icon={
                 <span className="text-[10px] font-bold border h-5 rounded mt-0.5 px-0.5">
@@ -58,6 +58,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
             <Input
               disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
+              placeholder="Ingrese un valor"
               id="farRightCylinder"
               type="decimal"
               error={errors?.farRightCylinder?.message}
@@ -89,6 +90,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
             <Input
               disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
+              placeholder="Ingrese un valor"
               id="farRightAxis"
               type="number"
               error={errors?.farRightAxis?.message}
@@ -118,6 +120,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
             <Input
               disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
+              placeholder="Ingrese un valor"
               id="farLeftSphere"
               type="decimal"
               pattern="^[-+]?[0-9]*\.?[0-9]+$"
@@ -150,6 +153,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
             <Input
               disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
+              placeholder="Ingrese un valor"
               id="farLeftCylinder"
               type="decimal"
               error={errors?.farLeftCylinder?.message}
@@ -181,6 +185,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
             <Input
               disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
+              placeholder="Ingrese un valor"
               id="farLeftAxis"
               type="number"
               error={errors?.farLeftAxis?.message}
@@ -212,6 +217,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
             <Input
               disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
+              placeholder="Ingrese un valor"
               id="nearRightSphere"
               type="decimal"
               pattern="^[-+]?[0-9]*\.?[0-9]+$"
@@ -244,6 +250,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
             <Input
               disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
+              placeholder="Ingrese un valor"
               id="nearRightCylinder"
               type="decimal"
               error={errors?.nearRightCylinder?.message}
@@ -275,6 +282,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
             <Input
               disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
+              placeholder="Ingrese un valor"
               id="nearRightAxis"
               type="number"
               error={errors?.nearRightAxis?.message}
@@ -304,6 +312,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
             <Input
               disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
+              placeholder="Ingrese un valor"
               id="nearLeftSphere"
               type="decimal"
               pattern="^[-+]?[0-9]*\.?[0-9]+$"
@@ -336,6 +345,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
             <Input
               disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
+              placeholder="Ingrese un valor"
               id="nearLeftCylinder"
               type="decimal"
               error={errors?.nearLeftCylinder?.message}
@@ -367,6 +377,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
             <Input
               disabled={forDetail}
               className="w-full sm:w-calc-33-minus-4 mb-1"
+              placeholder="Ingrese un valor"
               id="nearLeftAxis"
               type="number"
               error={errors?.nearLeftAxis?.message}

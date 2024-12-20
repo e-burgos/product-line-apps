@@ -1,6 +1,6 @@
 export interface PrescriptionFormData {
-  receiptNumber: number;
   date: string;
+  receiptNumber: number;
   description: string;
   nearRightSphere: string;
   nearRightCylinder: string;

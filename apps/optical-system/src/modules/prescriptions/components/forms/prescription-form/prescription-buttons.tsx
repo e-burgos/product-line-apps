@@ -37,6 +37,7 @@ export const PrescriptionButtons: FC<PrescriptionButtonsProps> = ({
           errors.date ||
           !watch('receiptNumber') ||
           !watch('date') ||
+          currentCustomer === undefined ||
           currentCustomer === null
         ) {
           return true;

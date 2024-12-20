@@ -1,15 +1,21 @@
+import { sortingCompareStringFn } from '@product-line/datatable';
+import { Product, useProductMethods } from '@product-line/dexie';
 import { ColumnDef } from '@tanstack/react-table';
 import { Package } from 'lucide-react';
 import { useMemo } from 'react';
-import { Product } from 'libs/features/src/data/product-db';
 
 export const useProductColumns = () => {
+  const { getProductVariantsById } = useProductMethods();
   const columns: ColumnDef<Product, Product>[] = useMemo(
     () => [
       {
         id: 'title',
         header: 'Producto',
-        enablePinning: false,
+        sortingFn: (rowA, rowB) =>
+          sortingCompareStringFn(rowA.original?.title, rowB.original?.title),
+        meta: {
+          filterVariant: 'text',
+        },
         size: 150,
         accessorFn: (row) => row,
         cell: (info) => {
@@ -37,14 +43,15 @@ export const useProductColumns = () => {
         },
       },
       {
-        id: 'totalAmount',
+        id: 'count',
         header: 'Cantidad',
         enablePinning: false,
         enableSorting: false,
         maxSize: 100,
         accessorFn: (row) => row,
         cell: (info) => {
-          const amount = info?.getValue()?.totalAmount || 0;
+          const amount =
+            getProductVariantsById(info?.getValue()?.id as string)?.length || 0;
 
           return (
             <div className="flex items-center gap-2">
@@ -56,7 +63,7 @@ export const useProductColumns = () => {
         },
       },
     ],
-    []
+    [getProductVariantsById]
   );
   return { columns: columns || [] };
 };

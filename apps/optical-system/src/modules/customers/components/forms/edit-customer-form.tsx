@@ -4,11 +4,9 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import Input from 'libs/ui/src/components/forms/input';
 import Textarea from 'libs/ui/src/components/forms/textarea';
 import Listbox, { ListboxOption } from 'libs/ui/src/components/list-box';
-import { useToastStore } from '@product-line/ui';
 import { State, City } from 'country-state-city';
-import { db } from '@optical-system-app/lib/db';
 import { useCustomerStore } from '../../hooks/use-customer-store';
-import useCustomerData from '../../hooks/use-customer-data';
+import { useCustomerMethods } from '@product-line/dexie';
 
 interface CustomerFormData {
   name: string;
@@ -25,13 +23,12 @@ interface CustomerFormData {
 }
 
 interface EditCustomerFormProps {
-  customerId: number;
+  customerId: string;
 }
 
 export const EditCustomerForm: FC<EditCustomerFormProps> = ({ customerId }) => {
-  const { getCustomer } = useCustomerData();
+  const { updateCustomer, getCustomerById } = useCustomerMethods();
   const { setOpenEditModal } = useCustomerStore();
-  const { addToast } = useToastStore();
   const {
     register,
     handleSubmit,
@@ -42,10 +39,10 @@ export const EditCustomerForm: FC<EditCustomerFormProps> = ({ customerId }) => {
     formState: { errors, isValid },
   } = useForm<CustomerFormData>();
 
-  const customer = getCustomer(customerId);
+  const customer = getCustomerById(customerId);
 
   useEffect(() => {
-    const subscription = watch((value, { name, type }) => {
+    const subscription = watch((_value, { name, type }) => {
       if (type === 'change') {
         trigger(name);
       }
@@ -110,35 +107,21 @@ export const EditCustomerForm: FC<EditCustomerFormProps> = ({ customerId }) => {
   }, [selectedProvince]);
 
   const onSubmit: SubmitHandler<CustomerFormData> = async (data) => {
-    try {
-      await db.customers.update(customer?.id as number, {
-        name: data.name,
-        lastName: data.lastName,
-        birthDate: data.birthDate,
-        address: data.address,
-        postalCode: data.postalCode,
-        province: selectedProvince?.name,
-        locality: selectedLocality?.name,
-        phone: data.phone,
-        mobile: data.mobile,
-        email: data.email,
-        comments: data.comments,
-      });
-      setOpenEditModal(false);
-      addToast({
-        id: 'customer-updated',
-        title: 'Cliente actualizado',
-        message: 'El cliente se ha actualizado correctamente.',
-        variant: 'success',
-      });
-    } catch {
-      addToast({
-        id: 'customer-error',
-        title: 'Error',
-        message: 'No se pudo crear el cliente.',
-        variant: 'destructive',
-      });
-    }
+    const update = await updateCustomer({
+      id: customer?.id,
+      name: data.name,
+      lastName: data.lastName,
+      birthDate: data.birthDate,
+      address: data.address,
+      postalCode: data.postalCode,
+      province: selectedProvince?.name,
+      locality: selectedLocality?.name,
+      phone: data.phone,
+      mobile: data.mobile,
+      email: data.email,
+      comments: data.comments,
+    });
+    if (update.isSuccess) setOpenEditModal(false);
   };
 
   return (

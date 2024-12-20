@@ -5,15 +5,16 @@ import { usePrescriptionStore } from '../../hooks/use-prescription-store';
 import { useWindowSize } from 'react-use';
 import PrescriptionForm from '../forms/prescription-form';
 import { FC, useCallback, useEffect } from 'react';
-import usePrescriptionData from '../../hooks/use-prescription-data';
-import useCustomerData from '@optical-system-app/modules/customers/hooks/use-customer-data';
-import { Customer } from '@optical-system-app/lib/db';
 import { useCustomerStore } from '@optical-system-app/modules/customers/hooks/use-customer-store';
 import { useNavigate } from 'react-router-dom';
+import {
+  useCustomerMethods,
+  usePrescriptionMethods,
+} from '@product-line/dexie';
 
 interface EditPrescriptionModalProps {
   showButton?: boolean;
-  prescriptionId?: number;
+  prescriptionId?: string;
   reloadPage?: boolean;
 }
 
@@ -23,21 +24,27 @@ const EditPrescriptionModal: FC<EditPrescriptionModalProps> = ({
   reloadPage = false,
 }) => {
   const navigate = useNavigate();
+  const { width } = useWindowSize();
+  const { setCurrentCustomer } = useCustomerStore();
+  const { getCustomerById } = useCustomerMethods();
+  const { getPrescriptionById } = usePrescriptionMethods();
+  const { currentCustomer } = useCustomerStore();
   const {
     openEditModal,
     currentPrescription,
     setOpenEditModal,
     setCurrentPrescription,
   } = usePrescriptionStore();
-  const { getCustomer } = useCustomerData();
-  const { setCurrentCustomer } = useCustomerStore();
-  const { getPrescriptionById } = usePrescriptionData();
-  const { width } = useWindowSize();
+
+  const prescription = getPrescriptionById(id as string);
+  const customer = currentCustomer?.id
+    ? currentCustomer
+    : getCustomerById(prescription?.customerId as string);
 
   const getPrescription = useCallback(() => {
     if (currentPrescription?.id) return currentPrescription;
-    if (id) return setCurrentPrescription(getPrescriptionById(id));
-  }, [currentPrescription, getPrescriptionById, id, setCurrentPrescription]);
+    if (prescription) return setCurrentPrescription(prescription);
+  }, [currentPrescription, prescription, setCurrentPrescription]);
 
   useEffect(() => {
     if (openEditModal) getPrescription();
@@ -82,9 +89,7 @@ const EditPrescriptionModal: FC<EditPrescriptionModalProps> = ({
           <PrescriptionForm
             type="update"
             prescriptionData={currentPrescription}
-            customerData={
-              getCustomer(currentPrescription.customerId) as Customer
-            }
+            customerData={customer}
           />
         )}
       </Modal>

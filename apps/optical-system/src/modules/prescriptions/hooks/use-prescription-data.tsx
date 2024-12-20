@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { db, Prescription } from '@optical-system-app/lib/db';
+import { db, Prescription } from '@product-line/dexie';
 import { ListboxOption } from '@product-line/ui';
 import { useLiveQuery } from 'dexie-react-hooks';
 //import * as XLSX from 'xlsx';
@@ -37,19 +37,24 @@ const usePrescriptionData = () => {
 
   const prescriptions = useLiveQuery(() => db.prescriptions?.toArray() || []);
 
-  const checkIsPrescription = (prescriptionId: number) =>
+  const checkIsPrescription = (prescriptionId: string) =>
     prescriptions?.find((p) => p.id === prescriptionId) ? true : false;
 
-  const getPrescriptionById = (id: number) =>
+  const getPrescriptionById = (id: string) =>
     prescriptions?.find(
       (prescription) => prescription.id === id
     ) as Prescription;
 
-  const useGetPrescriptionsByCustomerId = (customerId: number) =>
-    useLiveQuery(
-      () =>
-        db.prescriptions.where('customerId').equals(customerId).toArray() || []
-    );
+  const useGetPrescriptionsByCustomerId = (customerId: string | undefined) =>
+    useLiveQuery(() => {
+      if (customerId) {
+        return db.prescriptions
+          .where('customerId')
+          .equals(customerId)
+          .toArray();
+      }
+      return [];
+    });
 
   return {
     prescriptions,

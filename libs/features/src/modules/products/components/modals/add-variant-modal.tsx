@@ -14,6 +14,7 @@ export const AddVariantModal = () => {
         title: 'Nueva Variante',
       }}
       hideButtons
+      className="w-full md:w-1/2 "
     >
       <AddProductVariantInLineForm />
     </Modal>

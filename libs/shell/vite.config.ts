@@ -22,6 +22,9 @@ export default defineConfig({
     alias: {
       'libs/ui/src': path.resolve(__dirname, '../ui/src'),
       'libs/integrations/src': path.resolve(__dirname, '../integrations/src'),
+      'libs/datatable/src': path.resolve(__dirname, '../datatable/src'),
+      'libs/features/src': path.resolve(__dirname, '../features/src'),
+      'libs/dexie/src': path.resolve(__dirname, '../dexie/src'),
     },
   },
   // build: {

@@ -4,10 +4,9 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import Input from 'libs/ui/src/components/forms/input';
 import Textarea from 'libs/ui/src/components/forms/textarea';
 import Listbox, { ListboxOption } from 'libs/ui/src/components/list-box';
-import { useToastStore } from '@product-line/ui';
 import { State, City } from 'country-state-city';
-import { db } from '@optical-system-app/lib/db';
 import { useCustomerStore } from '../../hooks/use-customer-store';
+import { useCustomerMethods } from '@product-line/dexie';
 
 interface CustomerFormData {
   name: string;
@@ -25,7 +24,7 @@ interface CustomerFormData {
 
 export function AddCustomerForm() {
   const { setOpenCreateModal } = useCustomerStore();
-  const { addToast } = useToastStore();
+  const { addCustomer } = useCustomerMethods();
   const {
     register,
     handleSubmit,
@@ -74,37 +73,24 @@ export function AddCustomerForm() {
   }, [selectedProvinceValue]);
 
   const onSubmit: SubmitHandler<CustomerFormData> = async (data) => {
-    try {
-      await db.customers.add({
-        name: data.name,
-        lastName: data.lastName,
-        birthDate: data.birthDate,
-        address: data.address,
-        postalCode: data.postalCode,
-        province: selectedProvince?.name,
-        locality: selectedLocality?.name,
-        phone: data.phone,
-        mobile: data.mobile,
-        email: data.email,
-        comments: data.comments,
-      });
+    const add = await addCustomer({
+      name: data.name,
+      lastName: data.lastName,
+      birthDate: data.birthDate,
+      address: data.address,
+      postalCode: data.postalCode,
+      province: selectedProvince?.name,
+      locality: selectedLocality?.name,
+      phone: data.phone,
+      mobile: data.mobile,
+      email: data.email,
+      comments: data.comments,
+    });
+    if (add.isSuccess) {
       reset();
       setSelectedLocality(undefined);
       setSelectedProvince(undefined);
       setOpenCreateModal(false);
-      addToast({
-        id: 'customer-created',
-        title: 'Cliente creado',
-        message: 'El cliente se ha creado correctamente.',
-        variant: 'success',
-      });
-    } catch {
-      addToast({
-        id: 'customer-error',
-        title: 'Error',
-        message: 'No se pudo crear el cliente.',
-        variant: 'destructive',
-      });
     }
   };
 
@@ -156,6 +142,7 @@ export function AddCustomerForm() {
               message: 'La fecha no puede ser menor a 1900',
             },
             validate: (value) => {
+              if (!value) return true;
               const date = new Date(value as string);
               const isValidDate =
                 date instanceof Date && !isNaN(date.getTime());

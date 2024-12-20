@@ -1,28 +1,22 @@
 import React from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { db, Variant } from 'libs/features/src/data/product-db';
 import { DataTable } from '@product-line/datatable';
 import useProductVariantColumns from '../../hooks/use-product-variant-columns';
 import { useProductStore } from '../../hooks/use-product-store';
 import DeleteVariant from '../modals/delete-variant';
 import EditVariantModal from '../modals/edit-variant-modal';
+import { useProductMethods, Variant } from '@product-line/dexie';
 
 interface ProductVariantsDatatableProps {
-  productId?: number;
+  productId: string;
 }
 
 export const ProductVariantsDatatable: React.FC<
   ProductVariantsDatatableProps
 > = ({ productId }) => {
-  const {
-    setCurrentVariant,
-    setOpenDeleteVariantModal,
-    setOpenEditVariantModal,
-  } = useProductStore();
+  const { setCurrentVariant } = useProductStore();
   const { columns } = useProductVariantColumns();
-  const variants = useLiveQuery(() => db.variants.toArray())?.filter(
-    (v) => v.productId === Number(productId)
-  );
+  const { getProductVariantsById } = useProductMethods();
+  const variants = getProductVariantsById(productId);
 
   return (
     <>
@@ -31,10 +25,12 @@ export const ProductVariantsDatatable: React.FC<
         data={variants || []}
         columns={columns}
         pagination={{
-          showPagination: true,
-          pageSize: 5,
-          pageIndex: 0,
-          takeDefaultPagination: true,
+          showPagination: false,
+        }}
+        headerOptions={{
+          enableDragColumns: false,
+          enablePinLeftColumns: false,
+          enablePinRightColumns: false,
         }}
         setCurrentRow={(row) => setCurrentVariant(row?.original as Variant)}
         stateMessage={{
@@ -42,18 +38,6 @@ export const ProductVariantsDatatable: React.FC<
           noDataDescription:
             'No hay variantes disponibles para este producto. Puede agregar una nueva variante haciendo clic en el botón "Agregar".',
         }}
-        rowActions={[
-          {
-            action: 'edit',
-            label: () => 'Editar',
-            onClick: () => setOpenEditVariantModal(true),
-          },
-          {
-            action: 'delete',
-            label: () => 'Borrar',
-            onClick: () => setOpenDeleteVariantModal(true),
-          },
-        ]}
       />
       <DeleteVariant />
       <EditVariantModal />

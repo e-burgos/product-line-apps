@@ -12,6 +12,7 @@ import { IMenuItem } from '../../../types';
 import { motion } from 'framer-motion';
 import AuthorCard from '../../author-card';
 import AuthorImage from '../../../assets/images/author-dark.jpeg';
+import cn from 'classnames';
 
 const handleMenuItems = (layoutMenuItems: IMenuItem[]) =>
   layoutMenuItems.map((item) => ({
@@ -104,8 +105,8 @@ export function MenuItems({ menuItems }: { menuItems: IMenuItem[] }) {
                 <ActiveLink
                   to={item.href}
                   href={item.href}
-                  className="mx-2 text-[13px] font-medium uppercase text-gray-600 transition first:ml-0 last:mr-0 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white 2xl:mx-3 2xl:text-sm 3xl:mx-4"
-                  activeClassName="!text-gray-900 dark:!text-white"
+                  className="mx-2 text-[13px] font-medium uppercase  transition first:ml-0 last:mr-0 hover:text-brand dark:text-gray-300 dark:hover:text-brand 2xl:mx-3 2xl:text-sm 3xl:mx-4"
+                  activeClassName={cn('!text-brand dark:!text-brand')}
                 >
                   <span className="text-[14px]">{item.name}</span>
                 </ActiveLink>
@@ -181,7 +182,7 @@ export default function DrawerMenu({ menuItems }: DrawerMenuProps) {
         >
           <AuthorCard
             image={AuthorImage}
-            name="Esteban Burgos"
+            name="Contactar Soporte"
             authorRole="Necesitas ayuda?"
           />
         </motion.div>

@@ -59,6 +59,7 @@ export function generateViteConfigBase(
           modulePath,
           '../../libs/features/src'
         ),
+        'libs/dexie/src': path.resolve(modulePath, '../../libs/dexie/src'),
       },
     },
 

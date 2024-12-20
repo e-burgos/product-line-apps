@@ -1,8 +1,6 @@
 import Button from 'libs/ui/src/components/button/button';
 import { UserCog2, Download, Share2 } from 'lucide-react';
 import useCustomerData from '@optical-system-app/modules/customers/hooks/use-customer-data';
-import { DataTable } from '@product-line/datatable';
-import { Customer, Prescription } from '@optical-system-app/lib/db';
 import { useParams } from 'react-router-dom';
 import CardContainer from 'libs/ui/src/components/forms/card-container';
 import DetailCustomerForm from '@optical-system-app/modules/customers/components/forms/detail-customer-form';
@@ -11,10 +9,8 @@ import EditCustomerModal from '@optical-system-app/modules/customers/components/
 import CardTitle from 'libs/ui/src/components/forms/card-title';
 import DeleteCustomerModal from '@optical-system-app/modules/customers/components/modals/delete-customer-modal';
 import Layout from '@optical-system-app/components/layout';
-import usePrescriptionColumns from '@optical-system-app/modules/prescriptions/hooks/use-prescription-columns';
-import { usePrescriptionStore } from '@optical-system-app/modules/prescriptions/hooks/use-prescription-store';
-import usePrescriptionData from '@optical-system-app/modules/prescriptions/hooks/use-prescription-data';
-import AddPrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/add-prescription-modal';
+import CustomerPrescriptionsTable from '@optical-system-app/modules/customers/tables/customer-prescriptions-table';
+import { Customer } from '@product-line/dexie';
 
 function CustomerDetailPage() {
   const {
@@ -23,15 +19,10 @@ function CustomerDetailPage() {
     exportOneCustomerToExcel,
     checkIsCustomer,
   } = useCustomerData();
-  const { columns } = usePrescriptionColumns();
-  const { setCurrentPrescription, setOpenDeleteModal, setOpenEditModal } =
-    usePrescriptionStore();
-  const { useGetPrescriptionsByCustomerId } = usePrescriptionData();
 
   const { id } = useParams();
-  const customerId = Number(id);
+  const customerId = id;
   const [customer, setCustomer] = useState<Customer | null>();
-  const customerPrescriptions = useGetPrescriptionsByCustomerId(customerId);
 
   useEffect(() => {
     if (customerId) setCustomer(getCustomer(customerId));
@@ -89,54 +80,7 @@ function CustomerDetailPage() {
                 <DetailCustomerForm customer={customer} />
               </CardTitle>
               <CardTitle title="Fichas del Cliente" className="sm:p-4 p-4">
-                <DataTable
-                  tableId={'customer-detail'}
-                  data={customerPrescriptions || []}
-                  columns={columns}
-                  border
-                  pagination={{
-                    showPagination: true,
-                    pageSize: 5,
-                    pageIndex: 0,
-                    takeDefaultPagination: true,
-                  }}
-                  headerOptions={{
-                    enableDragColumns: false,
-                    headerContainer: (
-                      <div className="flex justify-end items-center w-full !h-20 max-h-20 p-4">
-                        <AddPrescriptionModal
-                          customerData={customer}
-                          type="update"
-                        />
-                      </div>
-                    ),
-                  }}
-                  stateMessage={{
-                    noData: 'No hay fichas registradas'.toLocaleUpperCase(),
-                    noDataDescription:
-                      'Para agregar una nueva ficha, haz clic en el botón "Agregar".',
-                  }}
-                  setCurrentRow={(row) =>
-                    setCurrentPrescription(row?.original as Prescription)
-                  }
-                  rowActions={[
-                    {
-                      action: 'view',
-                      label: () => 'Detalles',
-                      onClick: () => setOpenEditModal(true),
-                    },
-                    {
-                      action: 'edit',
-                      label: () => 'Editar',
-                      onClick: () => setOpenEditModal(true),
-                    },
-                    {
-                      action: 'delete',
-                      label: () => 'Eliminar',
-                      onClick: () => setOpenDeleteModal(true),
-                    },
-                  ]}
-                />
+                <CustomerPrescriptionsTable />
               </CardTitle>
             </CardContainer>
           )}

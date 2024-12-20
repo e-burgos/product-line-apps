@@ -14,11 +14,8 @@ export default function Logo({ className }: LogoPropTypes) {
   const isDarkMode = mode === 'dark';
   return (
     isMounted && (
-      <AnchorLink
-        to={path || '/'}
-        className={cn('flex outline-none', className)}
-      >
-        <span className="relative flex overflow-hidden">
+      <AnchorLink to={path || '/'}>
+        <span className={cn('relative flex', className)}>
           {isDarkMode && (
             <div className="flex items-end text-base font-medium text-gray-900 dark:text-white sm:text-xl lg:flex-wrap 2xl:flex-nowrap">
               <span className="text-2xl font-semibold xl:text-3xl">

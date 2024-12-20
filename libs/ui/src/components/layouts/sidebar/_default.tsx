@@ -64,7 +64,7 @@ export default function Sidebar({ className, menuItems }: SidebarProps) {
         >
           <AuthorCard
             image={AuthorImage}
-            name="Esteban Burgos"
+            name="Contactar Soporte"
             authorRole="Necesitas ayuda?"
           />
         </motion.div>

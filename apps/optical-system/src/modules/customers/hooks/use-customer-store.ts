@@ -1,4 +1,4 @@
-import { Customer } from '@optical-system-app/lib/db';
+import { Customer } from '@product-line/dexie';
 import { create } from 'zustand';
 
 export interface ICustomerStore {
