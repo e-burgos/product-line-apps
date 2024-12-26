@@ -14,7 +14,7 @@ export const useInitCloudDB = () => {
       addToast({
         id: 'authenticated',
         title: 'Autenticado',
-        message: 'Autenticado como usuario anónimo.',
+        message: 'Usuario autenticado correctamente.',
         variant: 'success',
       });
       return { isSuccess: true, isError: false };
