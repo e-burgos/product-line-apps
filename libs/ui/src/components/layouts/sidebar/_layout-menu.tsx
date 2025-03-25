@@ -141,13 +141,13 @@ export default function DrawerMenu({ menuItems }: DrawerMenuProps) {
     <div className="relative w-full max-w-full bg-white dark:bg-dark xs:w-80 pb-4">
       <div className="flex h-24 items-center justify-between overflow-hidden px-6 py-4">
         <Logo />
-        <div className="md:hidden">
+        <div className="2xl:hidden">
           <Button
             title="Close"
             color="white"
             shape="circle"
             variant="transparent"
-            size="small"
+            size="mini"
             onClick={closeDrawer}
           >
             <Close className="h-auto w-2.5" />

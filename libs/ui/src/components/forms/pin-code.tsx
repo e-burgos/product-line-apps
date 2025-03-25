@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import cn from 'classnames';
+import FieldError from './field-error-text';
 // import FieldError from '../field-error-text';
 
 const containerClasses = {
@@ -201,7 +202,7 @@ export default function PinCode({
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col items-center justify-center">
       <div
         className={cn(
           containerClasses.base,
@@ -240,13 +241,13 @@ export default function PinCode({
         ))}
       </div>
 
-      {/* {error && (
+      {error && (
         <FieldError
           size={size}
           error={error}
           className={cn(center && 'flex justify-center', errorClassName)}
         />
-      )} */}
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { Row } from '@tanstack/react-table';
 import { HoverType, TData } from '../../../../../common/types';
 import ArrowIndicator from '../../../../Assets/ArrowIndicator';
-import AssetButton from '../../../../Assets/AssetButton';
+import { IconButton } from '../../../../Common/IconButton';
 import styles from './expanded-row-cell.module.css';
 
 interface ExpandedRowCellProps {
@@ -15,18 +15,17 @@ const ExpandedRowCell: React.FC<ExpandedRowCellProps> = ({
 }) => {
   return (
     <div className={styles.container}>
-      <AssetButton
+      <IconButton
         data-id="expanded-row-cell"
-        //bgColor={hoverRow.hover ? 'paper' : 'actionBg'}
-        bgColor={'actionBg'}
         onClick={row.getToggleExpandedHandler()}
-      >
-        {row.getIsExpanded() ? (
-          <ArrowIndicator direction="up" size={20} />
-        ) : (
-          <ArrowIndicator direction="down" size={20} />
-        )}
-      </AssetButton>
+        icon={
+          row.getIsExpanded() ? (
+            <ArrowIndicator direction="up" size={18} />
+          ) : (
+            <ArrowIndicator direction="down" size={18} />
+          )
+        }
+      />
     </div>
   );
 };

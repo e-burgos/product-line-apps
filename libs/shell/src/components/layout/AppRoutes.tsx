@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import NotFoundPage from '../pages/not-found';
 import { commonRoutePaths } from '../../router/routes';
 import { IMenuItem } from 'libs/ui/src/types';
+import NotAuthorizedPage from '../pages/not-authorized';
 
 export type AppRouteType = { key: string; path: string; element: JSX.Element };
 
@@ -50,6 +51,11 @@ export const AppRoutes: FC<AppRoutesProps> = ({ menuItems }) => {
         key={'not-found-page'}
         path={commonRoutePaths.notFound}
         element={<NotFoundPage />}
+      />
+      <Route
+        key={'not-authorized-page'}
+        path={commonRoutePaths.noAuthorized}
+        element={<NotAuthorizedPage />}
       />
     </Routes>
   );

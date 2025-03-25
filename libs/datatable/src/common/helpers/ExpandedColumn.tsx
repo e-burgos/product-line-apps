@@ -7,9 +7,9 @@ export const ExpandedColumn: ColumnDef<any, any> = {
   enableSorting: false,
   enablePinning: false,
   enableHiding: false,
-  size: 0,
-  maxSize: 0,
-  minSize: 0,
+  size: 50,
+  maxSize: 50,
+  minSize: 50,
   header: () => null,
   cell: () => null,
 };

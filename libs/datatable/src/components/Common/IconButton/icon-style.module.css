@@ -1,0 +1,51 @@
+.iconButtonWrapper {
+  width: 28px;
+  height: 28px;
+  border-radius: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 0;
+  margin: 0;
+  border: none;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--table-secondaryText);
+  background-color: var(--table-buttonBg);
+  transition: background-color 0.2s ease-in-out;
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+
+  svg {
+    fill: currentColor;
+  }
+
+  &:hover {
+    background-color: var(--table-buttonBgHover);
+    color: var(--table-primaryText);
+
+    &:disabled {
+      background-color: var(--table-buttonBg);
+      cursor: not-allowed;
+    }
+  }
+
+  &:disabled {
+    color: var(--table-disabled);
+  }
+}
+
+
+.pinned {
+  color: var(--table-primaryText);
+
+  svg path {
+    fill: currentColor !important;
+  }
+}

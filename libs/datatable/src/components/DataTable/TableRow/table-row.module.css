@@ -1,0 +1,58 @@
+.draggable {
+  position: relative;
+}
+
+.hoverTd {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /*transition: all 0.2s ease-in;*/
+  display: none;
+}
+
+.tdPined {
+  background-color: var(--table-rowPinnedHover);
+}
+
+.tdExpanded {
+  background-color: var(--table-rowExpandedBg);
+}
+
+.tdDefaultColor {
+  background-color: var(--table-rowBg);
+}
+
+.trWrapper {
+  &:hover {
+    .hoverTd {
+      background-color: var(--table-rowHover);
+    }
+  }
+}
+
+.tdWrapper {
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+  padding: 0;
+}
+
+.tdDragged {
+  background-color: var(--table-draggedBg);
+}
+
+.tdContent {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  /*transition: all 0.2s ease-in;*/
+}

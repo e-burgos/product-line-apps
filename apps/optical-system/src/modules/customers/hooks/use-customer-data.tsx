@@ -6,12 +6,7 @@ import * as XLSX from 'xlsx';
 
 const useCustomerData = () => {
   const { addToast } = useToastStore();
-  const {
-    customers,
-    getCustomerById,
-    getPrescriptionsByCustomerId,
-    checkIsCustomer,
-  } = useCustomerMethods();
+  const { customers, getPrescriptionsByCustomerId } = useCustomerMethods();
 
   const exportToExcel = () => {
     const data: any[] = [];

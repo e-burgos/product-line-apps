@@ -6,32 +6,27 @@ import {
   RowActionsType,
   TData,
 } from '../../../../../common/types';
+import useComponentEventListener from '../../../../../hooks/useComponentEventListener';
 import useTableColors from '../../../../../hooks/useTableColors';
-import AssetButton from '../../../../Assets/AssetButton';
 import DeleteIndicator from '../../../../Assets/DeleteIndicator';
 import DownloadIndicator from '../../../../Assets/DownloadIndicator';
 import EditIndicator from '../../../../Assets/EditIndicator';
 import MoreIndicator from '../../../../Assets/MoreIndicator';
+import OpenNewTab from '../../../../Assets/OpenNewTab';
 import VisibilityIndicator from '../../../../Assets/VisibilityIndicator';
 import VoidIndicator from '../../../../Assets/VoidIndicator';
+import { IconButton } from '../../../../Common/IconButton';
+import { Tooltip } from '../../../../Common/Tooltip';
 import styles from './row-actions-cell.module.css';
 
-interface RowActionsCellProps {
+export interface RowActionsCellProps {
   tableId: string;
   row: Row<TData>;
   hoverRow: HoverType;
   rowActions?: IRowActions<TData>[];
   setHoverRow: (value: HoverType) => void;
   setOpenActions: (value: boolean) => void;
-}
-
-interface RowActionsCellProps {
-  tableId: string;
-  row: Row<TData>;
-  hoverRow: HoverType;
-  rowActions?: IRowActions<TData>[];
-  setHoverRow: (value: HoverType) => void;
-  setOpenActions: (value: boolean) => void;
+  forceShowMenuActions?: boolean;
 }
 
 const RowActionsCell: React.FC<RowActionsCellProps> = ({
@@ -41,7 +36,11 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
   rowActions,
   setOpenActions,
   setHoverRow,
+  forceShowMenuActions,
 }) => {
+  const { element: tableContainer } = useComponentEventListener(
+    `${tableId}-container`
+  );
   const { colors } = useTableColors();
   const [openOptions, setOpenOptions] = useState<boolean>(false);
   const [hoverOption, setHoverOption] = useState<HoverType>({
@@ -76,11 +75,26 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
     }
   };
 
-  const toggleMenu = () => {
-    setOpenActions(!openOptions);
-    setOpenOptions((prev) => !prev);
+  const closeMenu = useCallback(() => {
+    setOpenActions(false);
+    setOpenOptions(false);
     updateMenuPosition();
     updateOptionsContainerHeight();
+  }, [setOpenActions]);
+
+  const openMenu = () => {
+    const event = new CustomEvent('closeAllMenus');
+    window.dispatchEvent(event);
+
+    if (openOptions) {
+      setOpenActions(false);
+      setOpenOptions(false);
+    } else {
+      setOpenActions(true);
+      setOpenOptions(true);
+      updateMenuPosition();
+      updateOptionsContainerHeight();
+    }
   };
 
   useEffect(() => {
@@ -103,132 +117,202 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
   const handleAssetAction = (action: RowActionsType) => {
     switch (action) {
       case 'more':
-        return <MoreIndicator size={20} direction={'vertical'} />;
+        return <MoreIndicator size={18} direction={'vertical'} />;
       case 'view':
-        return <VisibilityIndicator size={20} visibility={'on'} />;
+        return <VisibilityIndicator size={18} visibility={'on'} />;
       case 'delete':
-        return <DeleteIndicator size={20} />;
+        return <DeleteIndicator size={18} />;
       case 'edit':
-        return <EditIndicator size={20} />;
+        return <EditIndicator size={18} />;
       case 'download':
-        return <DownloadIndicator size={20} />;
+        return <DownloadIndicator size={18} />;
       case 'void':
-        return <VoidIndicator size={20} />;
+        return <VoidIndicator size={18} />;
+      case 'open-new-tab':
+        return <OpenNewTab size={18} />;
       default:
-        return <MoreIndicator size={20} direction={'vertical'} />;
+        return <MoreIndicator size={18} direction={'vertical'} />;
     }
   };
 
-  const rowsLength = row
-    ?.getAllCells()[0]
-    ?.getContext()
-    ?.table?.getCenterRows()?.length;
-  const pagination = row
-    ?.getAllCells()[0]
-    ?.getContext()
-    ?.table?.getState()?.pagination;
-  const pageSize = pagination?.pageSize;
-  const rowIndexInPage = row.index % pageSize;
+  // const rowsLength = row
+  //   ?._getAllVisibleCells()[0]
+  //   ?.getContext()
+  //   ?.table?.getCenterRows()?.length;
+  // const pagination = row
+  //   ?.getAllCells()[0]
+  //   ?.getContext()
+  //   ?.table?.getState()?.pagination;
+  //const pageSize = pagination?.pageSize;
+  //const rowIndexInPage = row.index % pageSize;
 
   const handleOptionsContainerPosition = useCallback(
-    (containerHeight: number) => {
-      if (rowsLength > 1 && rowIndexInPage < rowsLength / 2 - 1)
-        return menuPosition.top;
-      return menuPosition.bottom - containerHeight;
+    (_containerHeight: number) => {
+      // NOT ACTIVATE - Condition to show the options on top or bottom
+      //if (rowIndexInPage < rowsLength / 2 - 1) return menuPosition.top;
+      //return menuPosition.bottom - _containerHeight;
+
+      // Always show the options on top
+      return menuPosition.top;
     },
-    [menuPosition.bottom, menuPosition.top, rowIndexInPage, rowsLength]
+    [menuPosition.top]
   );
 
+  const isRowActionDisabled = (action: IRowActions<TData>) => action?.disabled;
+
+  const toggleTableScroll = useCallback(() => {
+    if (tableContainer)
+      tableContainer.style.overflow = openOptions ? 'hidden' : 'auto';
+  }, [openOptions, tableContainer]);
+
   useEffect(() => {
+    toggleTableScroll();
     setOpenActions?.(openOptions);
-    if (!hoverRow.hover) setOpenOptions(false);
+    // if (!hoverRow.hover) setOpenOptions(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hoverRow.hover, openOptions, setOpenActions]);
+
+  useEffect(() => {
+    const onClickOutside = (event: MouseEvent) => {
+      if (
+        openOptions &&
+        optionsContainerRef.current &&
+        !optionsContainerRef.current.contains(event.target as Node)
+      ) {
+        setHoverOption({ hover: false, index: 0 });
+        setOpenOptions(false);
+        setOpenActions(false);
+      }
+    };
+
+    window.addEventListener('click', onClickOutside);
+
+    return () => window.removeEventListener('click', onClickOutside);
+  }, [openOptions, setOpenActions]);
+
+  useEffect(() => {
+    const handleCloseAllMenus = () => {
+      closeMenu();
+    };
+
+    window.addEventListener('closeAllMenus', handleCloseAllMenus);
+    return () => {
+      window.removeEventListener('closeAllMenus', handleCloseAllMenus);
+    };
+  }, [closeMenu]);
+
+  const firstActionRow = rowActions?.[0];
+  const showMoreMenu = rowActions?.length === 1 && !forceShowMenuActions;
+
+  const hideSingleAction = firstActionRow?.hidden?.(row);
+  const singleActionLabel =
+    firstActionRow?.showLabelInTooltip && firstActionRow?.label?.(row);
+  const isSingleActionDisabled = firstActionRow
+    ? Boolean(isRowActionDisabled(firstActionRow))
+    : false;
 
   return (
     <div
       style={{
-        visibility: hoverRow.hover || openOptions ? 'visible' : 'hidden',
+        visibility:
+          (hoverRow.hover || openOptions) && !hideSingleAction
+            ? 'visible'
+            : 'hidden',
         position: 'relative',
+        textAlign: 'center',
       }}
-      className={styles.buttonContainer}
     >
-      {rowActions?.length === 1 &&
-      (rowActions[0]?.showOptions?.(row) === undefined ||
-        rowActions[0]?.showOptions?.(row)) ? (
-        <AssetButton
-          bgColor="actionBg"
-          active
-          onClick={() => {
-            rowActions[0]?.onClick?.(row);
-          }}
-        >
-          {handleAssetAction(rowActions[0]?.action)}
-        </AssetButton>
+      {showMoreMenu &&
+      (firstActionRow?.showOptions?.(row) === undefined ||
+        !firstActionRow?.showOptions?.(row)) ? (
+        <Tooltip text={singleActionLabel || ''}>
+          <IconButton
+            isPinned
+            icon={handleAssetAction(firstActionRow?.action ?? 'more')}
+            onClick={(event) => {
+              // NO DELETE: stop event when send setRowClick in table
+              event?.stopPropagation?.();
+              firstActionRow?.onClick?.(row);
+            }}
+            disabled={isSingleActionDisabled}
+            style={{
+              margin: '0 auto',
+            }}
+          />
+        </Tooltip>
       ) : (
-        <button
+        <IconButton
+          icon={handleAssetAction('more')}
           ref={buttonRef as React.RefObject<HTMLButtonElement>}
-          onClick={() => toggleMenu()}
-          className={styles.optionButton}
-          style={{
-            backgroundColor: colors?.actionBg,
-            color: colors?.primaryText,
+          onClick={(event) => {
+            // NO DELETE: stop event when send setRowClick in table
+            event?.stopPropagation?.();
+            openMenu();
           }}
-        >
-          {handleAssetAction('more')}
-        </button>
+          style={{
+            margin: '0 auto',
+          }}
+        />
       )}
 
       <div
         ref={optionsContainerRef}
         style={{
           backgroundColor: colors?.paperBg,
-          visibility: openOptions ? 'visible' : 'hidden',
+          opacity: openOptions ? 1 : 0,
           border: `1px solid ${colors?.divider}`,
           position: 'fixed',
           zIndex: 1000,
-          top: handleOptionsContainerPosition(optionsContainerHeight as number),
+          top: handleOptionsContainerPosition(optionsContainerHeight ?? 0),
           left: menuPosition.left - 180,
+          transition: 'all 0.1s ease-in',
+          display: openOptions ? 'flex' : 'none',
         }}
         className={styles.optionsContainer}
-        onMouseLeave={() => {
-          setHoverOption({ hover: false, index: 0 });
-          setOpenOptions(false);
-          setOpenActions(false);
-        }}
+        // onMouseLeave={() => {
+        //   setHoverOption({ hover: false, index: 0 });
+        //   setOpenOptions(false);
+        //   setOpenActions(false);
+        // }}
       >
-        {rowActions?.map((action, index) => (
-          <div
-            key={`${tableId}-${action.label(row)}`}
-            className={styles.option}
-            onClick={() => {
-              action.onClick(row);
-              setOpenOptions(false);
-              setOpenActions(false);
-              setHoverRow({ hover: false, index: 0 });
-            }}
-            style={{
-              display:
-                action?.showOptions?.(row) === undefined ||
-                action?.showOptions?.(row)
-                  ? 'flex'
-                  : 'none',
-              backgroundColor:
-                hoverOption.hover && hoverOption.index === index
-                  ? colors?.rowHover
-                  : colors?.paperBg,
-            }}
-            onPointerEnter={() => setHoverOption({ hover: true, index })}
-            onPointerLeave={() => setHoverOption({ hover: false, index })}
-          >
-            <p
-              style={{
-                color: colors?.primaryText,
+        {rowActions?.map((action, index) => {
+          const disabled = isRowActionDisabled(action);
+          return (
+            <div
+              key={`${tableId}-${action.label(row)}`}
+              className={styles.option}
+              onClick={() => {
+                if (disabled) return;
+                action.onClick(row);
+                setOpenOptions(false);
+                setOpenActions(false);
+                setHoverRow({ hover: false, index: 0 });
               }}
+              style={{
+                display:
+                  action?.showOptions?.(row) === undefined ||
+                  action?.showOptions?.(row)
+                    ? 'flex'
+                    : 'none',
+                backgroundColor:
+                  !disabled && hoverOption.hover && hoverOption.index === index
+                    ? colors?.rowHover
+                    : colors?.paperBg,
+                cursor: disabled ? 'default' : 'pointer',
+              }}
+              onPointerEnter={() => setHoverOption({ hover: true, index })}
+              onPointerLeave={() => setHoverOption({ hover: false, index })}
             >
-              {action.label(row)}
-            </p>
-          </div>
-        ))}
+              <p
+                style={{
+                  color: disabled ? colors?.disabled : colors?.primaryText,
+                }}
+              >
+                {action.label(row)}
+              </p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

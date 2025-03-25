@@ -2,7 +2,7 @@ import React from 'react';
 import { IDataTableStateMessage } from '../../../common/types';
 import useTableColors from '../../../hooks/useTableColors';
 import styles from './state-table-handler.module.css';
-import { Spinner } from 'libs/ui/src/components/spinner';
+import Spinner from 'libs/ui/src/components/spinner';
 
 interface StateTableHandlerProps {
   containerWith: number;
@@ -21,7 +21,7 @@ const StateTableHandler: React.FC<StateTableHandlerProps> = ({
   isLoading,
   isEmpty,
   isError,
-  stateMessage,
+  stateMessage = { hideContactSupport: false },
 }) => {
   const { colors } = useTableColors();
 
@@ -46,15 +46,12 @@ const StateTableHandler: React.FC<StateTableHandlerProps> = ({
       className={`${styles.tbodyMessageContainer} ${stateMessage?.className}`}
     >
       <tr
-        className={styles.trMessageContainer}
         style={{
           position: 'absolute',
           width: containerWith,
           transform: isScrollable ? `translateX(${scrollX}px)` : 'none',
           transition: 'transform 0.2s',
           transitionBehavior: 'smooth',
-          maxHeight: '100%',
-          minHeight: '100%',
         }}
       >
         <td className={styles.messageContainer}>
@@ -67,17 +64,44 @@ const StateTableHandler: React.FC<StateTableHandlerProps> = ({
             <div className={styles.stateContainer}>
               <h6
                 className={styles.h6Title}
-                style={{ color: colors?.primaryText }}
+                style={{ color: colors.primaryText }}
               >
                 {defaultText.noData}
               </h6>
               <p
                 className={styles.body2}
-                style={{ color: colors?.secondaryText }}
+                style={{ color: colors.secondaryText }}
               >
                 {defaultText.noDataDescription}
               </p>
-              {stateMessage?.contactSupportLink && (
+              {!stateMessage?.hideContactSupport &&
+                stateMessage?.contactSupportLink && (
+                  <button
+                    className={styles.linkButton}
+                    onClick={() =>
+                      window.open(defaultText.contactSupportLink, 'blank')
+                    }
+                  >
+                    {'Contact Support'}
+                  </button>
+                )}
+            </div>
+          )}
+          {isError && !isLoading && (
+            <div className={styles.stateContainer}>
+              <h6
+                className={styles.h6Title}
+                style={{ color: colors.primaryText }}
+              >
+                {defaultText.errorData}
+              </h6>
+              <p
+                className={styles.body2}
+                style={{ color: colors.secondaryText }}
+              >
+                {defaultText.errorDataDescription}
+              </p>
+              {!stateMessage?.hideContactSupport && (
                 <button
                   className={styles.linkButton}
                   onClick={() =>
@@ -87,30 +111,6 @@ const StateTableHandler: React.FC<StateTableHandlerProps> = ({
                   {'Contact Support'}
                 </button>
               )}
-            </div>
-          )}
-          {isError && !isLoading && (
-            <div className={styles.stateContainer}>
-              <h6
-                className={styles.h6Title}
-                style={{ color: colors?.primaryText }}
-              >
-                {defaultText.errorData}
-              </h6>
-              <p
-                className={styles.body2}
-                style={{ color: colors?.secondaryText }}
-              >
-                {defaultText.errorDataDescription}
-              </p>
-              <button
-                className={styles.linkButton}
-                onClick={() =>
-                  window.open(defaultText.contactSupportLink, 'blank')
-                }
-              >
-                {'Contact Support'}
-              </button>
             </div>
           )}
         </td>

@@ -77,6 +77,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref: React.Ref<HTMLButtonElement | null>
   ) => {
+    const [hover, setHover] = useState<boolean>(false);
     const [dripShow, setDripShow] = useState<boolean>(false);
     const [dripX, setDripX] = useState<number>(0);
     const [dripY, setDripY] = useState<number>(0);
@@ -123,57 +124,63 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     return (
-      <button
-        ref={buttonRef}
-        onClick={clickHandler}
-        className={cn(
-          'relative group inline-flex shrink-0 items-center justify-center overflow-hidden text-center text-xs font-medium tracking-wider outline-none transition-all sm:text-sm',
-          !disabled
-            ? buttonColorClassNames
-            : 'cursor-not-allowed bg-gray-100 text-gray-400',
-          disabled || isLoading || variant === 'transparent'
-            ? 'bg-gray-100/25'
-            : 'hover:-translate-y-0.5 hover:shadow-large focus:-translate-y-0.5 focus:shadow-large focus:outline-none',
-          isLoading && 'pointer-events-auto cursor-default focus:outline-none',
-          fullWidth && 'w-full',
-          color === 'white' || color === 'gray'
-            ? 'text-gray-900 dark:text-white'
-            : variants[variant],
-          shapes[shape],
-          shape === 'circle' ? `${sizeClassNames[1]}` : `${sizeClassNames[0]}`,
-          className
-        )}
-        disabled={disabled}
-        {...buttonProps}
-      >
-        <span className={cn(isLoading && 'invisible opacity-0')}>
-          {children}
-        </span>
-
-        {tooltip && (
-          <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-max px-2 py-1 text-xs text-white bg-black rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <div className="relative">
+        {tooltip && hover && (
+          <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-max px-2 py-1 text-xs dark:bg-light-dark bg-white rounded">
             {tooltip}
           </span>
         )}
+        <button
+          onMouseEnter={() => setHover(true)}
+          onMouseLeave={() => setHover(false)}
+          ref={buttonRef}
+          onClick={clickHandler}
+          className={cn(
+            'group inline-flex shrink-0 items-center justify-center overflow-hidden text-center text-xs font-medium tracking-wider outline-none transition-all sm:text-sm',
+            !disabled
+              ? buttonColorClassNames
+              : 'cursor-not-allowed bg-gray-100 text-gray-400',
+            disabled || isLoading || variant === 'transparent'
+              ? 'bg-gray-100/25'
+              : 'hover:-translate-y-0.5 hover:shadow-large focus:-translate-y-0.5 focus:shadow-large focus:outline-none',
+            isLoading &&
+              'pointer-events-auto cursor-default focus:outline-none',
+            fullWidth && 'w-full',
+            color === 'white' || color === 'gray'
+              ? 'text-gray-900 dark:text-white'
+              : variants[variant],
+            shapes[shape],
+            shape === 'circle'
+              ? `${sizeClassNames[1]}`
+              : `${sizeClassNames[0]}`,
+            className
+          )}
+          disabled={disabled}
+          {...buttonProps}
+        >
+          <span className={cn(isLoading && 'invisible opacity-0')}>
+            {children}
+          </span>
 
-        {isLoading && (
-          <ButtonLoader size={loaderSize} variant={loaderVariant} />
-        )}
+          {isLoading && (
+            <ButtonLoader size={loaderSize} variant={loaderVariant} />
+          )}
 
-        {dripShow && (
-          <ButtonDrip
-            x={dripX}
-            y={dripY}
-            color={
-              ['white', 'gray'].indexOf(color) !== -1
-                ? 'rgba(0, 0, 0, 0.1)'
-                : buttonDripColor
-            }
-            fullWidth={fullWidth}
-            onCompleted={dripCompletedHandle}
-          />
-        )}
-      </button>
+          {dripShow && (
+            <ButtonDrip
+              x={dripX}
+              y={dripY}
+              color={
+                ['white', 'gray'].indexOf(color) !== -1
+                  ? 'rgba(0, 0, 0, 0.1)'
+                  : buttonDripColor
+              }
+              fullWidth={fullWidth}
+              onCompleted={dripCompletedHandle}
+            />
+          )}
+        </button>
+      </div>
     );
   }
 );

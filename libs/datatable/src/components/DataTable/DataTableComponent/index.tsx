@@ -1,37 +1,28 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable jsx-a11y/aria-role */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, {
   Dispatch,
   Fragment,
+  RefObject,
   SetStateAction,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import {
-  ColumnDef,
   ColumnOrderState,
-  Row,
-  RowData,
   Table,
   VisibilityState,
 } from '@tanstack/react-table';
+import { OffsetColumn } from '../../../common/helpers/OffsetColumn';
 import styles from '../../../common/styles/main.module.css';
 import {
-  IDataTableStateMessage,
-  IDataTableStyles,
-  IHeaderOptions,
-  IPaginationOptions,
-  IRenderSubDataTable,
-  IRowActions,
+  IOptionalDataTableProps,
   ManualPaginationState,
-  SubComponentProps,
-  TData,
 } from '../../../common/types';
+import { IScrollProps } from '../../../context/DataTableContext';
 import DragDropContentContext from '../../../context/DragDropContentContext';
 import DragDropTableContext from '../../../context/DragDropTableContext';
-import useScrollableTable from '../../../hooks/useScrollableTable';
 import useTableColors from '../../../hooks/useTableColors';
 import Footer from '../../Footer';
 import ManualPagination from '../../ManualPagination';
@@ -43,113 +34,72 @@ import TableRow from '../TableRow';
 import TableWrapper from '../TableWrapper';
 
 /**
- * `DataTableComponent` is a React component that displays a data table with sorting, pagination,
- * and optional subComponents. This component parameterized I expect by table of type Table<TData>
- * provided by TanStack Table, without this implementation I cannot work.
- * For more information, see the [React Table documentation](https://tanstack.com/react-table/).
+ * Props for the DataTableComponent.
  *
- * @component
- * @param {DataTableComponentProps<TData>} props The properties passed to the component.
+ * @category ui/datatable
+ * @subcategory Props
  *
- * Data
- * @param {string} props.tableId Table id.
- * @param {Table<TData>} props.table Table instance.
- * @param {ColumnDef<TData, TData>[]} props.columns Array of column definitions.
- * @param {TData[]} props.data Array of data to display.
- * @param {React.Dispatch<React.SetStateAction<TData[]>>} props.setData Set data.
+ * @template TData - The type of data used in the table.
+ * @extends IOptionalDataTableProps<TData> - Extends the optional properties for the data table.
  *
- * State
- * @param {boolean} props.isLoading Loading state.
- * @param {boolean} props.isError Error state.
- * @param {ColumnOrderState} props.columnOrder Column order state.
- * @param {UniqueIdentifier[]} props.dataIds Data ids.
- * @param {React.Dispatch<React.SetStateAction<ColumnOrderState>>} props.setColumnOrder Set column order.
- *
- * Pagination
- * @param {IPaginationOptions} props.pagination Pagination options.
- * @param {boolean} props.pagination.showPagination Show pagination.
- * @param {number} props.pagination.pageIndex Page number.
- * @param {number} props.pagination.pageSize Page size.
- * @param {boolean} props.pagination.rowsInfo Show rows info.
- *
- * Others
- * @param {Partial<ColumnDef<TData, unknown>>} props.initialConfig Initial column configuration.
- * @param {boolean} props.showFooter Show footer.
- * @param {React.FC<SubComponentProps<TData>>} props.renderSubComponent Render subcomponent.
- * @param {string} props.title Table title.
- * @param {boolean} props.border Show border.
- * @param {IRowActions<TData>} props.rowActions Row actions.
- * @param {boolean} props.smallAnatomy Small anatomy.
- * @param {IDataTableStateMessage} props.stateMessage State message.
- *
- *
- * Header Options
- * @param {IHeaderOptions} props.headerOptions Header options.
- * @param {boolean} props.headerOptions.headerSticky Header sticky.
- * @param {React.ReactNode} props.headerOptions.headerContainer Header container.
- * @param {boolean} props.headerOptions.enableHideColumns Enable hide columns.
- * @param {boolean} props.headerOptions.enablePinLeftColumns Enable pin left columns.
- * @param {boolean} props.headerOptions.enablePinRightColumns Enable pin right columns.
- * @param {boolean} props.headerOptions.enableSortColumns Enable sort columns.
- * @param {boolean} props.headerOptions.enableResizeColumns Enable resize columns.
- * @param {boolean} props.headerOptions.enableDragColumns Enable drag columns.
- *
- *  * Custom Styles
- * @param {IDataTableStyles} props.sx Custom styles.
- * @param {React.CSSProperties} props.sx.container Custom styles for the container.
- * @param {React.CSSProperties} props.sx.messageContainer Custom styles for the message container.
- * @param {React.CSSProperties} props.sx.table Custom styles for the table.
- * @param {React.CSSProperties} props.sx.thead Custom styles for the header.
- * @param {React.CSSProperties} props.sx.tbody Custom styles for the tbody.
- * @param {React.CSSProperties} props.sx.tfoot Custom styles for the footer.
- * @param {React.CSSProperties} props.sx.header Custom styles for the header.
- * @param {React.CSSProperties} props.sx.row Custom styles for the row.
- * @param {React.CSSProperties} props.sx.column Custom styles for the column.
- * @param {React.CSSProperties} props.sx.cell Custom styles for the cell.
- *
- * @returns {ReactElement} Returns the data table UI.
+ * @property {string} tableId - Unique identifier for the table.
+ * @property {Table<TData>} table - The table instance.
+ * @property {Array<TData>} data - The data to be displayed in the table.
+ * @property {boolean} [showHeader] - Whether to show the table header.
+ * @property {ColumnOrderState} columnOrder - The order of columns in the table.
+ * @property {VisibilityState} columnVisibility - The visibility state of columns.
+ * @property {Dispatch<SetStateAction<ColumnOrderState>>} setColumnOrder - Function to set the order of columns.
+ * @property {Dispatch<SetStateAction<VisibilityState>>} setColumnVisibility - Function to set the visibility of columns.
+ * @property {Dispatch<SetStateAction<ManualPaginationState>>} setManualPagination - Function to manage manual pagination state.
+ * @property {RefObject<HTMLDivElement>} [tableContainerRef] - Reference to the table container element.
+ * @property {IScrollProps} [scrollProps] - Scroll-related properties for the table.
  */
-
-declare module '@tanstack/table-core' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface TableMeta<TData extends RowData> {
-    noDraggable: boolean;
-  }
-}
-
-export interface IOptionalDataTableProps<TData> {
-  sx?: IDataTableStyles;
-  initialConfig?: Partial<ColumnDef<TData, unknown>>;
-  isLoading?: boolean;
-  isError?: boolean;
-  isFetching?: boolean;
-  pagination?: IPaginationOptions;
-  title?: string;
-  border?: boolean;
-  headerOptions?: IHeaderOptions;
-  smallAnatomy?: boolean;
-  showFooter?: boolean;
-  stateMessage?: IDataTableStateMessage;
-  rowActions?: IRowActions<TData>[];
-  renderSubComponent?: React.FC<SubComponentProps<TData>> | null;
-  renderSubDataTable?: IRenderSubDataTable;
-  setCurrentRow?: (row: Row<TData>) => void;
-}
-
 export interface DataTableComponentProps<TData>
   extends IOptionalDataTableProps<TData> {
   tableId: string;
   table: Table<TData>;
-  data: TData[];
+  data: Array<TData>;
+  showHeader?: boolean;
   columnOrder: ColumnOrderState;
   columnVisibility: VisibilityState;
   setColumnOrder: Dispatch<SetStateAction<ColumnOrderState>>;
   setColumnVisibility: Dispatch<SetStateAction<VisibilityState>>;
   setManualPagination: Dispatch<SetStateAction<ManualPaginationState>>;
+  tableContainerRef?: RefObject<HTMLDivElement>;
+  scrollProps?: IScrollProps;
 }
 
-// @ts-ignore
-const DataTableComponent: React.FC<DataTableComponentProps<TData>> = ({
+/**
+ * DataTableComponent is a React component that displays a data table with sorting, pagination,
+ * and optional subComponents, is a versatile and customizable table component designed to handle various data display needs.
+ * It supports features like pagination, row selection, column visibility, and sub-components rendering.
+ * This component is parameterized by a table of type `Table<TData>`
+ * provided by TanStack Table. Without this implementation, it cannot function.
+ * For more information, see the [React Table documentation](https://tanstack.com/react-table/).
+ *
+ * @category ui/datatable
+ * @subcategory Components
+ *
+ * @component
+ * @extends IOptionalDataTableProps<TData> - The data table properties.
+ * @template TData - The type of data being displayed in the table.
+ *
+ * @param {DataTableComponentProps<TData>} props - The properties object.
+ * @param {string} props.tableId - The unique identifier for the table.
+ * @param {Table<TData>} props.table - The table instance.
+ * @param {Array<TData>} props.data - The data to be displayed in the table.
+ * @param {ColumnOrderState} props.columnOrder - The state of the column order.
+ * @param {VisibilityState} props.columnVisibility - The state of the column visibility.
+ * @param {Dispatch<SetStateAction<ColumnOrderState>>} props.setColumnOrder - Function to set the column order state.
+ * @param {Dispatch<SetStateAction<VisibilityState>>} props.setColumnVisibility - Function to set the column visibility state.
+ * @param {Dispatch<SetStateAction<ManualPaginationState>>} props.setManualPagination - Function to set the manual pagination state.
+ * @param {RefObject<HTMLDivElement>} [props.tableContainerRef] - Optional reference to the table container element.
+ * @param {IScrollProps} [props.scrollProps] - Optional scroll properties for the table.
+ *
+ * @returns {JSX.Element | null} The rendered DataTableComponent or null if the table instance is not provided.
+ */
+
+function DataTableComponent<TData>({
   tableId,
   table,
   data,
@@ -174,11 +124,14 @@ const DataTableComponent: React.FC<DataTableComponentProps<TData>> = ({
   setColumnVisibility,
   setManualPagination,
   setCurrentRow,
-}) => {
+  forceShowMenuActions,
+  scrollProps,
+  tableContainerRef,
+  rowSelection,
+  showHeader = true,
+}: DataTableComponentProps<TData>): JSX.Element | null {
   // hooks
   const { colors } = useTableColors();
-  const { containerWith, isScrollable, scrollX, handleScroll } =
-    useScrollableTable(tableId);
 
   // states
   const [hoverColumns, setHoverColumns] = useState<boolean>(false);
@@ -187,17 +140,42 @@ const DataTableComponent: React.FC<DataTableComponentProps<TData>> = ({
   const isEmpty = !data || data?.length === 0;
   const checkState = isLoading || isError || isEmpty;
   const handleFetch = !isLoading && isFetching;
-  const headerSticky = (!checkState && headerOptions?.headerSticky) ?? true;
   const headerContainer = headerOptions?.headerContainer;
   const isSubComponent = !!renderSubComponent || !!renderSubDataTable;
   const isRowActions = !!rowActions?.length;
+  const isRowSelection =
+    rowSelection?.type === 'checkbox' || rowSelection?.type === 'radio';
   const isManualPagination = pagination?.manualPagination?.enabled;
+  const containerWidth = scrollProps?.containerWith || 0;
+
+  const columnsWidth: number = table.getAllColumns().reduce((acc, current) => {
+    if ([OffsetColumn.id].includes(current.id)) return acc;
+    if (
+      // @ts-ignore
+      current?.columnDef?.enableVisible === false ||
+      !current.getIsVisible()
+    ) {
+      return acc;
+    }
+    return acc + current.getSize();
+  }, 0);
+
+  const columnOffset = useMemo(() => {
+    const offset = containerWidth - columnsWidth;
+
+    if (offset < 0) return 0;
+
+    return offset;
+  }, [columnsWidth, containerWidth]);
 
   // internal columns
-  const checkInternalColumns = isSubComponent || isRowActions;
+  const checkInternalColumns = isSubComponent || isRowActions || isRowSelection;
   const checkInternalColumnsStorage =
-    columnVisibility?.Expanded || columnVisibility?.RowActionsColumn;
-  const hideInternalColumns = !isSubComponent && !isRowActions;
+    columnVisibility?.Expanded ||
+    columnVisibility?.RowActionsColumn ||
+    columnVisibility?.RowSelectionColumn;
+  const hideInternalColumns =
+    !isSubComponent && !isRowActions && !isRowSelection;
 
   const handleColumnVisibility = useCallback(
     (show?: boolean) => {
@@ -205,15 +183,17 @@ const DataTableComponent: React.FC<DataTableComponentProps<TData>> = ({
         ...prev,
         Expanded: show ?? isSubComponent,
         RowActionsColumn: show ?? isRowActions,
+        RowSelectionColumn: show ?? isRowSelection,
       }));
       setColumnVisibility((prev) => ({
         ...prev,
         Expanded: show ?? isSubComponent,
         RowActionsColumn: show ?? isRowActions,
+        RowSelectionColumn: show ?? isRowSelection,
       }));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isRowActions, isSubComponent, table]
+    [isRowActions, isSubComponent, isRowSelection, table]
   );
 
   // filters
@@ -238,33 +218,38 @@ const DataTableComponent: React.FC<DataTableComponentProps<TData>> = ({
     if (isManualPagination) {
       setManualPagination({
         enabled: true,
-        rowCount: pagination?.manualPagination?.rowCount,
+        rowCount: pagination?.manualPagination?.rowCount || 0,
       });
     }
     if (!isManualPagination) {
-      setManualPagination({ enabled: false, rowCount: undefined });
+      setManualPagination({ enabled: false, rowCount: 0 });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [table, pagination, isManualPagination]);
+
+  if (!table) return null;
 
   return (
     <TableWrapper
       tableId={tableId}
       title={title}
       border={border}
+      isEmpty={isEmpty}
       isFetching={handleFetch}
       headerContainer={headerContainer}
       sx={sx}
     >
       <div
         id={`${tableId}-container`}
-        onScroll={handleScroll}
-        className={styles.container}
+        onScroll={scrollProps?.handleScroll}
+        ref={tableContainerRef}
+        className={styles.tableContainer}
         style={{
           borderRadius:
             border && !title && !headerContainer ? '4px 4px 0px 0px' : '0px',
-          backgroundColor: colors?.boxBg,
-          ...sx?.container,
+          backgroundColor: colors.boxBg,
+          maxHeight: sx?.tableContainer?.maxHeight || '585px', // valid for 10 rows
+          ...sx?.tableContainer,
         }}
       >
         <DragDropTableContext
@@ -275,30 +260,32 @@ const DataTableComponent: React.FC<DataTableComponentProps<TData>> = ({
             id={`${tableId}-table`}
             className={styles.table}
             style={{
-              width: table.getCenterTotalSize(),
+              width: table.getCenterTotalSize() || 0,
               ...sx?.table,
             }}
           >
-            <TableHead
-              sx={sx}
-              tableId={tableId}
-              table={table}
-              data={data}
-              disabled={checkState}
-              headerOptions={headerOptions}
-              headerSticky={headerSticky}
-              smallAnatomy={smallAnatomy}
-              columnOrder={columnOrder}
-              setHoverColumns={setHoverColumns}
-            />
-            {checkState && (
+            {showHeader && (
+              <TableHead
+                sx={sx}
+                tableId={tableId}
+                table={table}
+                data={data}
+                disabled={checkState}
+                headerOptions={headerOptions}
+                smallAnatomy={smallAnatomy}
+                columnOrder={columnOrder}
+                setHoverColumns={setHoverColumns}
+                columnOffset={columnOffset}
+              />
+            )}
+            {checkState && showHeader && (
               <StateTableHandler
                 isLoading={isLoading}
                 isError={isError}
                 isEmpty={isEmpty}
-                containerWith={containerWith || 0}
-                isScrollable={isScrollable}
-                scrollX={scrollX}
+                containerWith={containerWidth}
+                isScrollable={scrollProps?.isScrollable || false}
+                scrollX={scrollProps?.scrollX || 0}
                 stateMessage={stateMessage}
               />
             )}
@@ -315,7 +302,6 @@ const DataTableComponent: React.FC<DataTableComponentProps<TData>> = ({
                   {table.getRowModel().rows.map((row, index) => {
                     return (
                       <Fragment key={row.id}>
-                        {/* @ts-ignore */}
                         <TableRow
                           tableId={tableId}
                           table={table}
@@ -324,6 +310,10 @@ const DataTableComponent: React.FC<DataTableComponentProps<TData>> = ({
                           columnOrder={columnOrder}
                           isColumn={hoverColumns}
                           rowActions={rowActions}
+                          rowSelection={rowSelection}
+                          columnOffset={columnOffset}
+                          smallAnatomy={smallAnatomy}
+                          forceShowMenuActions={forceShowMenuActions}
                           style={{
                             row: sx?.row,
                             cell: sx?.cell,
@@ -331,16 +321,18 @@ const DataTableComponent: React.FC<DataTableComponentProps<TData>> = ({
                           {...(setCurrentRow && {
                             onClick: (e) => {
                               e.preventDefault();
-                              setCurrentRow && setCurrentRow(row);
+                              setCurrentRow(row);
                             },
                           })}
                         />
                         {isSubComponent && row.getIsExpanded() && (
                           <tr
+                            className="datatable-expanded-row"
                             style={{
-                              width: containerWith,
+                              width: containerWidth,
                               position: 'relative',
-                              borderBottom: `1px solid ${colors?.divider}`,
+                              borderBottom: `1px solid ${colors.divider}`,
+                              ...sx?.rowExpanded,
                             }}
                           >
                             <td
@@ -350,14 +342,14 @@ const DataTableComponent: React.FC<DataTableComponentProps<TData>> = ({
                                 height: '100%',
                                 padding: 0,
                                 position: 'relative',
-                                backgroundColor: colors?.boxBg,
+                                backgroundColor: colors.rowExpandedBg,
                               }}
                             >
                               <div
                                 style={{
-                                  width: containerWith,
-                                  transform: isScrollable
-                                    ? `translateX(${scrollX}px)`
+                                  width: containerWidth,
+                                  transform: scrollProps?.isScrollable
+                                    ? `translateX(${scrollProps?.scrollX}px)`
                                     : 'none',
                                   transition: 'transform 0.2s',
                                   transitionBehavior: 'smooth',
@@ -368,13 +360,14 @@ const DataTableComponent: React.FC<DataTableComponentProps<TData>> = ({
                                   <SubComponentDataTable
                                     row={row}
                                     tableId={tableId}
-                                    data={renderSubDataTable.data}
-                                    columns={renderSubDataTable.columns}
-                                    expandedColumnSize={50}
+                                    renderSubDataTable={renderSubDataTable}
                                   />
                                 ) : (
                                   renderSubComponent &&
-                                  renderSubComponent({ row })
+                                  renderSubComponent({
+                                    row,
+                                    columns: table.getAllColumns(),
+                                  })
                                 )}
                               </div>
                             </td>
@@ -392,8 +385,8 @@ const DataTableComponent: React.FC<DataTableComponentProps<TData>> = ({
                   smallAnatomy && styles.smallFooter
                 }`}
                 sx={{
-                  backgroundColor: colors?.headerBg,
-                  color: colors?.secondaryText,
+                  backgroundColor: colors.headerBg,
+                  color: colors.secondaryText,
                   ...sx?.tfoot,
                 }}
                 table={table}
@@ -402,24 +395,28 @@ const DataTableComponent: React.FC<DataTableComponentProps<TData>> = ({
           </table>
         </DragDropTableContext>
       </div>
-      {!checkState && !isManualPagination && pagination?.showPagination && (
-        <Pagination
-          tableId={tableId}
-          table={table}
-          pagination={pagination}
-          style={sx?.pagination}
-        />
-      )}
-      {isManualPagination && pagination?.showPagination && (
-        <ManualPagination
-          manualPagination={pagination.manualPagination}
-          rowsInfo={pagination.rowsInfo}
-          hideRecordsSelector={pagination.hideRecordsSelector}
-          style={sx?.pagination}
-        />
+      {!isEmpty && (
+        <>
+          {!checkState && !isManualPagination && pagination?.showPagination && (
+            <Pagination
+              tableId={tableId}
+              table={table}
+              pagination={pagination}
+              style={sx?.pagination}
+            />
+          )}
+          {isManualPagination && pagination?.showPagination && (
+            <ManualPagination
+              manualPagination={pagination.manualPagination}
+              rowsInfo={pagination.rowsInfo}
+              hideRecordsSelector={pagination.hideRecordsSelector}
+              style={sx?.pagination}
+            />
+          )}
+        </>
       )}
     </TableWrapper>
   );
-};
+}
 
 export default DataTableComponent;

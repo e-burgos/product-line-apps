@@ -1,8 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { MODE, useTheme } from 'libs/ui/src/themes/index';
+
 /**
  * useTableColors hook.
  * This hook is used to get the colors used in the table.
- * The propuse of this hook is to have a single source of truth for the colors used in the table without opacity.
+ * The function of this hook is to have a single source of truth for the colors used in the table without opacity.
+ *
+ * @category ui/datatable
+ * @subcategory Hooks
  *
  * @property {string} primary is used as the primary color for the table, reference MUI palette color: theme.palette.primary.main.
  * @property {string} defaultBg is used as the default background color for the table, reference MUI palette color: theme.palette.background.default.
@@ -18,7 +23,7 @@
  * @property {string} headerExpandedBg is used as the header expanded background color for the table, custom color.
  * @property {string} rowBg is used as the row background color for the table, custom color.
  * @property {string} dividerColumns is used as the divider columns color for the table, custom color.
- * @property {Object} palleteColors is used to get the colors used in the table.
+ * @property {Object} paletteColors is used to get the colors used in the table.
  * @property {Object} darkColors is used to get the dark colors used in the table.
  * @property {Object} lightColors is used to get the light colors used in the table.
  * @property {Object} colors is used to get the colors used in the table.
@@ -26,10 +31,10 @@
  * @returns {Object} The colors used in the table.
  */
 
-import { MODE, useTheme } from 'libs/ui/src/themes/index';
+export type PaletteModeType = MODE;
 
 export const useTableColors = () => {
-  const { mode } = useTheme();
+  const { mode, preset } = useTheme();
   const themeMode = mode;
 
   const lightTableTheme = {
@@ -128,7 +133,7 @@ export const useTableColors = () => {
     },
   };
 
-  const handleColors = (mode: MODE) => {
+  const handleColors = (mode: PaletteModeType) => {
     if (mode === 'light') {
       return {
         primary: '#2F6BE4',
@@ -162,10 +167,10 @@ export const useTableColors = () => {
         paperBg: '#16191F',
         defaultBg: '#101217',
         boxBg: 'rgba(245, 248, 255, 0.02)',
-        headerBg: 'rgba(255, 255, 255, 0.04)',
-        headerExpandedBg: 'rgba(245, 248, 255, 0.02)',
+        headerBg: '#2A2D31',
+        headerExpandedBg: '#2B2E32',
         headerPinned: 'rgb(44,46,49)',
-        rowBg: 'transparent',
+        rowBg: '#1A1C20',
         rowHover: 'rgba(255, 255, 255, 0.08)',
         rowExpandedBg: 'rgba(245, 248, 255, 0.02)',
         rowPinned: 'rgb(29, 32, 37)',
@@ -181,42 +186,91 @@ export const useTableColors = () => {
 
   const darkColors = handleColors('dark');
   const lightColors = handleColors('light');
-  const colors = handleColors(themeMode);
-  const tableTheme =
+  const colorsV1 = handleColors(themeMode);
+
+  const colors = {
+    primary: preset.value,
+    secondary: handleColors(themeMode)?.secondary,
+    primaryText: handleColors(themeMode)?.primaryText,
+    secondaryText: handleColors(themeMode)?.secondaryText,
+    paperBg: handleColors(themeMode)?.paperBg,
+    defaultBg: handleColors(themeMode)?.defaultBg,
+    // background for background and show dividers for rows
+    boxBg: 'rgba(245, 248, 255, 0.02)',
+    // background for header
+    headerBg: themeMode === 'dark' ? '#1E2025' : '#EBEEF6',
+    // background for button actions
+    buttonBg: 'transparent',
+    // background for button actions on hover
+    buttonBgHover:
+      themeMode === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+    // table header background in subComponent table
+    headerExpandedBg: themeMode === 'dark' ? '#222529' : '#EBEEF6',
+    // header background when is pinned
+    headerPinned: themeMode === 'dark' ? '#1E2025' : '#EBEEF6',
+    // header background when is pinned solid for not have trasnparency
+    // headerSolidBg: themeMode === 'dark' ? '#1E2025' : '#EBEEF6',
+    // default row background
+    rowBg: handleColors(themeMode)?.rowBg,
+    // default row background hover
+    rowHover:
+      themeMode === 'dark'
+        ? 'rgba(255, 255, 255, 0.08)'
+        : 'rgba(100,100,100,.08)',
+    // row expanded background
+    rowExpandedBg: themeMode === 'dark' ? '#191B20' : '#EBEEF6',
+    // row pinned background
+    rowPinned: handleColors(themeMode)?.rowPinned,
+    // row pinned background hover
+    rowPinnedHover:
+      themeMode === 'dark'
+        ? 'rgba(255, 255, 255, 0.08)'
+        : 'rgba(100,100,100,.08)',
+    // background when row is dragged
+    draggedBg:
+      themeMode === 'dark' ? darkTableTheme.palette.table.box : '#E5EBF7',
+    // background to action button(UNUSED: replaced for buttonBg)
+    actionBg: 'rgb(27, 29, 34)',
+    // background to action button hover(UNUSED: replaced for buttonBgHover)
+    actionHover: 'transparent',
+    // color disabled for text and icons
+    disabled: handleColors(themeMode)?.disabled,
+    // color for divider resize columns
+    divider: handleColors(themeMode)?.divider,
+    // color for divider columns pinned
+    dividerColumns: handleColors(themeMode)?.dividerColumns,
+  };
+
+  const membraneTableTheme =
     themeMode === 'light'
       ? lightTableTheme.palette.table
       : darkTableTheme.palette.table;
 
-  const palleteColors =
-    colors &&
-    Object.keys(colors).map((key) => {
-      // @ts-ignore
-      return { name: key, dark: darkColors[key], light: lightColors[key] };
-    });
+  const paletteColors = Object.keys(colors).map((key) => {
+    // @ts-ignore
+    return { name: key, dark: darkColors[key], light: lightColors[key] };
+  });
 
-  const palleteLightColors =
-    lightColors &&
-    Object.keys(lightColors).map((key) => {
-      // @ts-ignore
-      return { name: key, color: lightColors[key] };
-    });
+  const paletteLightColors = Object.keys(lightTableTheme).map((key) => {
+    // @ts-ignore
+    return { name: key, color: lightColors[key] };
+  });
 
-  const palleteDarkColors =
-    darkColors &&
-    Object.keys(darkColors).map((key) => {
-      // @ts-ignore
-      return { name: key, color: darkColors[key] };
-    });
+  const paletteDarkColors = Object.keys(darkTableTheme).map((key) => {
+    // @ts-ignore
+    return { name: key, color: darkColors[key] };
+  });
 
   return {
     themeMode,
+    colorsV1,
     colors,
-    palleteColors,
-    palleteLightColors,
-    palleteDarkColors,
+    paletteColors,
+    paletteLightColors,
+    paletteDarkColors,
     darkColors,
     lightColors,
-    tableTheme,
+    membraneTableTheme,
     darkTableTheme,
     lightTableTheme,
   };

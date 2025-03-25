@@ -1,12 +1,9 @@
-/* eslint-disable jsx-a11y/aria-role */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react';
 import { ColumnOrderState, Table } from '@tanstack/react-table';
+import { cn } from '../../../common/helpers/cn';
 import styles from '../../../common/styles/main.module.css';
 import { IDataTableStyles, IHeaderOptions } from '../../../common/types';
 import DragDropContentContext from '../../../context/DragDropContentContext';
-import useHeaderSticky from '../../../hooks/useHeaderSticky';
-import useScrollableTable from '../../../hooks/useScrollableTable';
 import useTableColors from '../../../hooks/useTableColors';
 import TableHeader from '../TableHeader';
 
@@ -16,120 +13,78 @@ export interface TableHeadProps<TData> {
   table: Table<TData>;
   data: TData[];
   columnOrder: ColumnOrderState;
-  headerSticky: boolean;
   smallAnatomy?: boolean;
   headerOptions?: IHeaderOptions;
   disabled?: boolean;
   setHoverColumns: (value: boolean) => void;
+  columnOffset: number;
 }
 
-// @ts-ignore
-const TableHead: React.FC<TableHeadProps<TData>> = ({
+function TableHead<TData>({
   sx,
   tableId,
   table,
   columnOrder,
-  headerSticky,
   smallAnatomy,
   headerOptions,
   disabled,
   setHoverColumns,
-}) => {
+  columnOffset,
+}: TableHeadProps<TData>) {
   // hooks
   const { colors } = useTableColors();
-  const { headerAnimation, headerFixed } = useHeaderSticky(tableId);
-  const { containerWith, isScrollable, handleScroll } =
-    useScrollableTable(tableId);
 
   return (
-    <>
-      {headerSticky && headerFixed && (
-        <thead
-          id={`${tableId}-header-fixed`}
-          role="rowheader-fixed"
-          onScroll={handleScroll}
-          onMouseEnter={() => setHoverColumns(true)}
-          onMouseLeave={() => setHoverColumns(false)}
-          className={`
-            ${styles.header} 
-            ${styles.headerFixed} 
-            ${headerAnimation} 
-            ${headerOptions?.stickyClassName}
-            `}
-          style={{
-            display: isScrollable ? 'block' : 'table',
-            width: containerWith,
-            backgroundColor: colors?.headerPinned,
-            color: colors?.primaryText,
-            borderBottom: `1px solid ${colors?.divider}`,
-            ...sx?.thead,
-          }}
-        >
-          <DragDropContentContext columnOrder={columnOrder}>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr
-                key={headerGroup.id}
-                style={{
-                  ...sx?.header,
-                }}
-              >
-                {headerGroup.headers.map((header, index) => {
-                  return (
-                    <TableHeader
-                      key={header.id}
-                      index={index}
-                      header={header}
-                      headerGroup={headerGroup}
-                      headerOptions={headerOptions}
-                      disabled={disabled}
-                      isHeaderFixed={headerFixed}
-                      style={sx?.header}
-                    />
-                  );
-                })}
-              </tr>
-            ))}
-          </DragDropContentContext>
-        </thead>
-      )}
-      <thead
-        id={`${tableId}-header`}
-        role="rowheader"
-        onMouseEnter={() => setHoverColumns(true)}
-        onMouseLeave={() => setHoverColumns(false)}
-        className={`
-          ${styles.header} 
-          ${smallAnatomy && styles.smallHeader}
-          ${headerOptions?.className}`}
-        style={{
-          visibility: headerSticky && headerFixed ? 'hidden' : 'visible',
-          backgroundColor: colors?.headerBg,
-          color: colors?.primaryText,
-          ...sx?.thead,
-        }}
-      >
-        <DragDropContentContext columnOrder={columnOrder}>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id} style={{ ...sx?.header }}>
-              {headerGroup.headers.map((header, index) => {
+    <thead
+      id={`${tableId}-header`}
+      role="rowheader"
+      onMouseEnter={() => setHoverColumns(true)}
+      onMouseLeave={() => setHoverColumns(false)}
+      className={cn([
+        styles.header,
+        smallAnatomy && styles.smallHeader,
+        headerOptions?.className,
+      ])}
+      style={{
+        color: colors.primaryText,
+        position: 'sticky',
+        top: 0,
+        zIndex: 1,
+        ...sx?.thead,
+      }}
+    >
+      <DragDropContentContext key={'drag-context'} columnOrder={columnOrder}>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <tr
+            key={headerGroup.id}
+            style={{
+              backgroundColor: colors.headerBg,
+              borderBottom: `1px solid ${colors.divider}`,
+              ...sx?.header,
+            }}
+          >
+            {headerGroup.headers
+              .filter((header) => header.column.getIsVisible()) // filter only visible columns
+              .map((header, index) => {
                 return (
                   <TableHeader
-                    key={header.id}
+                    key={`${header.id}-${index}`}
                     index={index}
                     header={header}
                     headerGroup={headerGroup}
                     headerOptions={headerOptions}
                     disabled={disabled}
                     style={sx?.header}
+                    columnOffset={columnOffset}
+                    tableId={tableId}
                   />
                 );
               })}
-            </tr>
-          ))}
-        </DragDropContentContext>
-      </thead>
-    </>
+          </tr>
+        ))}
+      </DragDropContentContext>
+    </thead>
   );
-};
+}
 
 export default TableHead;

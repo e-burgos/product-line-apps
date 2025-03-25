@@ -71,7 +71,7 @@ export const LayoutType: FC<LayoutTypeProps> = ({
             <Toast />
           </RetroLayout>
         );
-      default:
+      case LAYOUT_OPTIONS.MODERN:
         return (
           <ModernLayout
             menuItems={menuItems}
@@ -82,6 +82,8 @@ export const LayoutType: FC<LayoutTypeProps> = ({
             <Toast />
           </ModernLayout>
         );
+      default:
+        return null;
     }
   };
 

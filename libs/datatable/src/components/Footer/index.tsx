@@ -13,7 +13,7 @@ const Footer: React.FC<FooterProps> = ({ className, sx, table }) => {
   return (
     <tfoot
       className={className}
-      style={{ borderTop: `1px solid ${colors?.divider}`, ...sx }}
+      style={{ borderTop: `1px solid ${colors.divider}`, ...sx }}
     >
       {table.getFooterGroups().map((footerGroup) => (
         <tr key={footerGroup.id}>
@@ -23,14 +23,14 @@ const Footer: React.FC<FooterProps> = ({ className, sx, table }) => {
                 style={{
                   borderRight:
                     index !== footerGroup.headers?.length - 1 &&
-                    `2px solid ${colors?.divider}`,
+                    `2px solid ${colors.divider}`,
                 }}
               >
                 {header.isPlaceholder
                   ? null
                   : flexRender(
                       header.column.columnDef.footer,
-                      header.getContext()
+                      header.getContext(),
                     )}
               </div>
             </th>

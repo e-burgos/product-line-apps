@@ -53,12 +53,6 @@ export default function Sidebar({
       </div>
       <div className="custom-scrollbar h-[calc(100%-98px)] overflow-hidden overflow-y-auto">
         <div className="px-6 pb-2 2xl:px-8">
-          <AuthorCard
-            image={AuthorImage}
-            name="Contactar Soporte"
-            authorRole="Necesitas ayuda?"
-          />
-
           <div className="mt-8">
             {retroMenu.map((item, index) => (
               <MenuItem
@@ -72,6 +66,11 @@ export default function Sidebar({
             ))}
           </div>
         </div>
+        <AuthorCard
+          image={AuthorImage}
+          name="Contactar Soporte"
+          authorRole="Necesitas ayuda?"
+        />
       </div>
     </aside>
   );

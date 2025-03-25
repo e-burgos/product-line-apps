@@ -46,7 +46,7 @@ export function BudgetsDatatable() {
             columns={columns}
             border
             headerOptions={{
-              enableDragColumns: false,
+              enableDragColumns: true,
               enablePinLeftColumns: false,
               enablePinRightColumns: false,
               headerContainer: (
@@ -100,7 +100,7 @@ export function BudgetsDatatable() {
               {
                 action: 'download',
                 label: () => 'Compartir',
-                onClick: (row) => shareOneBudget(row?.original?.id),
+                onClick: (row) => shareOneBudget(Number(row?.original?.id)),
               },
               {
                 action: 'download',

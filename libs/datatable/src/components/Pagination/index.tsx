@@ -5,7 +5,7 @@ import { useDataTableStore } from '../../hooks';
 import useTableColors from '../../hooks/useTableColors';
 import ArrowIndicator from '../Assets/ArrowIndicator';
 import ArrowPaginationIndicator from '../Assets/ArrowPaginationIndicator';
-import AssetButton from '../Assets/AssetButton';
+import { IconButton } from '../Common/IconButton';
 import styles from './pagination.module.css';
 
 interface PaginationProps {
@@ -14,6 +14,7 @@ interface PaginationProps {
   pagination?: IPaginationOptions;
   style?: React.CSSProperties;
 }
+
 const Pagination: React.FC<PaginationProps> = ({
   tableId,
   table,
@@ -68,11 +69,9 @@ const Pagination: React.FC<PaginationProps> = ({
         {pagination?.rowsInfo && (
           <p
             className={styles.captionText}
-            style={{ color: colors?.primaryText }}
+            style={{ color: colors.primaryText }}
           >
-            {`Showing ${
-              table.getCanNextPage() ? initialRows : preFinalRows
-            } of ${table.getRowCount()} Rows`}
+            {`Showing ${table.getCanNextPage() ? initialRows : preFinalRows} of ${table.getRowCount()} Rows`}
           </p>
         )}
       </div>
@@ -81,18 +80,21 @@ const Pagination: React.FC<PaginationProps> = ({
           <div className={styles.records}>
             <p
               className={styles.captionText}
-              style={{ color: colors?.primaryText }}
+              style={{ color: colors.primaryText }}
             >{`per page:`}</p>
             <select
               value={table.getState().pagination.pageSize}
               onChange={(e) => {
                 table.setPageSize(Number(e.target.value));
               }}
-              style={{ color: colors?.primaryText }}
+              style={{ color: colors.primaryText }}
             >
               {options.map((pageSize) => (
                 <option
-                  style={{ color: colors?.primaryText }}
+                  style={{
+                    color: colors.primaryText,
+                    background: colors.rowExpandedBg,
+                  }}
                   key={pageSize}
                   value={pageSize}
                 >
@@ -106,55 +108,41 @@ const Pagination: React.FC<PaginationProps> = ({
         <div className={styles.pageInfo}>
           <p
             className={styles.captionText}
-            style={{ color: colors?.primaryText }}
+            style={{ color: colors.primaryText }}
           >
-            {`${table.getCanNextPage() ? initialRows : preFinalRows}-${
-              table.getCanNextPage() ? finalRows : table.getRowCount()
-            } 
+            {`${table.getCanNextPage() ? initialRows : preFinalRows}-${table.getCanNextPage() ? finalRows : table.getRowCount()}
             of ${table.getRowCount()} Rows`}
           </p>
         </div>
         <div className={styles.buttons}>
-          <AssetButton
+          <IconButton
+            size="xl"
+            isPinned
             onClick={() => table.firstPage()}
             disabled={!table.getCanPreviousPage()}
-          >
-            <ArrowPaginationIndicator
-              direction="first"
-              size={20}
-              color={!table.getCanPreviousPage() ? colors?.disabled : undefined}
-            />
-          </AssetButton>
-          <AssetButton
+            icon={<ArrowPaginationIndicator direction="first" />}
+          />
+          <IconButton
+            size="xl"
+            isPinned
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-          >
-            <ArrowIndicator
-              direction="left"
-              size={20}
-              color={!table.getCanPreviousPage() ? colors?.disabled : undefined}
-            />
-          </AssetButton>
-          <AssetButton
+            icon={<ArrowIndicator direction="left" />}
+          />
+          <IconButton
+            size="xl"
+            isPinned
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-          >
-            <ArrowIndicator
-              direction="right"
-              size={20}
-              color={!table.getCanNextPage() ? colors?.disabled : ''}
-            />
-          </AssetButton>
-          <AssetButton
+            icon={<ArrowIndicator direction="right" />}
+          />
+          <IconButton
+            size="xl"
+            isPinned
             onClick={() => table.lastPage()}
             disabled={!table.getCanNextPage()}
-          >
-            <ArrowPaginationIndicator
-              direction="last"
-              size={20}
-              color={!table.getCanNextPage() ? colors?.disabled : undefined}
-            />
-          </AssetButton>
+            icon={<ArrowPaginationIndicator direction="last" />}
+          />
         </div>
       </div>
     </div>

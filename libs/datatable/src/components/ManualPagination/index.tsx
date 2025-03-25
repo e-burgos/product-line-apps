@@ -3,7 +3,7 @@ import { IManualPaginationOptions } from '../../common/types';
 import useTableColors from '../../hooks/useTableColors';
 import ArrowIndicator from '../Assets/ArrowIndicator';
 import ArrowPaginationIndicator from '../Assets/ArrowPaginationIndicator';
-import AssetButton from '../Assets/AssetButton';
+import { IconButton } from '../Common/IconButton';
 import styles from './pagination.module.css';
 
 interface ManualPaginationProps {
@@ -12,9 +12,10 @@ interface ManualPaginationProps {
   rowsInfo?: boolean;
   style?: React.CSSProperties;
 }
+
 const ManualPagination: React.FC<ManualPaginationProps> = ({
   manualPagination,
-  rowsInfo,
+  rowsInfo = false,
   hideRecordsSelector,
   style,
 }) => {
@@ -25,12 +26,13 @@ const ManualPagination: React.FC<ManualPaginationProps> = ({
   const setPagination = manualPagination?.setPagination;
   const pageIndex = pagination?.pageIndex || 0;
   const pageSize = pagination?.pageSize || 10;
-  const paginationRowCount = manualPagination?.rowCount || 0;
+  const paginationRowCount = manualPagination?.rowCount;
   const paginationPageCount = Math.ceil(paginationRowCount / pageSize) - 1;
 
   // Pagination controls
   const previousPageDisabled = pageIndex === 0;
-  const nextPageDisabled = pageIndex === paginationPageCount;
+  const nextPageDisabled =
+    pageIndex === paginationPageCount || !paginationRowCount;
   const initialRows = pageSize * pageIndex + 1;
   const finalRows = pageSize * (pageIndex + 1);
   const preFinalRows = pageSize * pageIndex + 1;
@@ -46,11 +48,9 @@ const ManualPagination: React.FC<ManualPaginationProps> = ({
         {rowsInfo && (
           <p
             className={styles.captionText}
-            style={{ color: colors?.primaryText }}
+            style={{ color: colors.primaryText }}
           >
-            {`Showing ${
-              !nextPageDisabled ? initialRows : preFinalRows
-            } of ${paginationRowCount} Rows`}
+            {`Showing ${!nextPageDisabled ? initialRows : preFinalRows} of ${paginationRowCount} Rows`}
           </p>
         )}
       </div>
@@ -59,21 +59,24 @@ const ManualPagination: React.FC<ManualPaginationProps> = ({
           <div className={styles.records}>
             <p
               className={styles.captionText}
-              style={{ color: colors?.primaryText }}
+              style={{ color: colors.primaryText }}
             >{`per page:`}</p>
             <select
               value={pageSize}
               onChange={(e) => {
-                setPagination?.({
+                setPagination({
                   pageIndex: 0,
                   pageSize: Number(e.target.value),
                 });
               }}
-              style={{ color: colors?.primaryText }}
+              style={{ color: colors.primaryText }}
             >
               {options.map((pageSize) => (
                 <option
-                  style={{ color: colors?.primaryText }}
+                  style={{
+                    color: colors.primaryText,
+                    background: colors.rowExpandedBg,
+                  }}
                   key={pageSize}
                   value={pageSize}
                 >
@@ -87,75 +90,61 @@ const ManualPagination: React.FC<ManualPaginationProps> = ({
         <div className={styles.pageInfo}>
           <p
             className={styles.captionText}
-            style={{ color: colors?.primaryText }}
+            style={{ color: colors.primaryText }}
           >
-            {`${!nextPageDisabled ? initialRows : preFinalRows}-${
-              !nextPageDisabled ? finalRows : paginationRowCount
-            } 
+            {`${!nextPageDisabled ? initialRows : preFinalRows}-${!nextPageDisabled ? finalRows : paginationRowCount}
             of ${paginationRowCount} Rows`}
           </p>
         </div>
         <div className={styles.buttons}>
-          <AssetButton
+          <IconButton
+            size="xl"
+            isPinned
             onClick={() => {
-              setPagination?.({
+              setPagination({
                 pageIndex: 0,
-                pageSize: pagination?.pageSize || 10,
+                pageSize: pagination.pageSize,
               });
             }}
             disabled={previousPageDisabled}
-          >
-            <ArrowPaginationIndicator
-              direction="first"
-              size={20}
-              color={previousPageDisabled ? colors?.disabled : undefined}
-            />
-          </AssetButton>
-          <AssetButton
+            icon={<ArrowPaginationIndicator direction="first" />}
+          />
+          <IconButton
+            size="xl"
+            isPinned
             onClick={() => {
-              setPagination?.({
+              setPagination({
                 pageIndex: pageIndex - 1,
                 pageSize: pageSize,
               });
             }}
             disabled={previousPageDisabled}
-          >
-            <ArrowIndicator
-              direction="left"
-              size={20}
-              color={previousPageDisabled ? colors?.disabled : undefined}
-            />
-          </AssetButton>
-          <AssetButton
+            icon={<ArrowIndicator direction="left" />}
+          />
+          <IconButton
+            size="xl"
+            isPinned
             onClick={() => {
-              setPagination?.({
+              setPagination({
                 pageIndex: pageIndex + 1,
                 pageSize: pageSize,
               });
             }}
             disabled={nextPageDisabled}
-          >
-            <ArrowIndicator
-              direction="right"
-              size={20}
-              color={nextPageDisabled ? colors?.disabled : ''}
-            />
-          </AssetButton>
-          <AssetButton
+            icon={<ArrowIndicator direction="right" />}
+          />
+          <IconButton
+            size="xl"
+            isPinned
             onClick={() => {
-              setPagination?.({
+              setPagination({
                 pageIndex: paginationPageCount,
                 pageSize: pageSize,
               });
             }}
             disabled={nextPageDisabled}
-          >
-            <ArrowPaginationIndicator
-              direction="last"
-              size={20}
-              color={nextPageDisabled ? colors?.disabled : undefined}
-            />
-          </AssetButton>
+            icon={<ArrowPaginationIndicator direction="last" />}
+          />
         </div>
       </div>
     </div>

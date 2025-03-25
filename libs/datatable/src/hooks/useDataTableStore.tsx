@@ -7,8 +7,8 @@ import {
   VisibilityState,
 } from '@tanstack/react-table';
 import { create } from 'zustand';
+import { storage } from '../../../../libs/integrations/src/local-storage';
 import { ManualPaginationState } from '../common/types';
-import { storage } from 'libs/ui/src/libs/local-storage';
 
 export interface ITableData {
   id: string;

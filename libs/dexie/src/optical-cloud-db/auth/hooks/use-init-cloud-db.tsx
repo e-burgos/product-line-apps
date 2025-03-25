@@ -3,6 +3,12 @@ import { db } from '../../db';
 import { useToastStore } from 'libs/ui/src/hooks';
 import { useCallback } from 'react';
 import { useAuthStore } from './use-auth-store';
+import { adminEmail } from '../../const';
+import { SyncState } from 'dexie-cloud-addon';
+
+export interface IDbStatus extends SyncState {
+  license: 'deactivated' | 'ok' | 'expired';
+}
 
 export const useInitCloudDB = () => {
   const { addToast } = useToastStore();
@@ -57,11 +63,15 @@ export const useInitCloudDB = () => {
   }, [addToast]);
 
   const ui = useObservable(db.cloud.userInteraction);
-  const dbStatus = useObservable(db.cloud.syncState);
+  const dbStatus = useObservable(db.cloud.syncState) as IDbStatus;
 
   const currentUser = useObservable(db.cloud.currentUser);
 
   const isUserAuthorized = currentUser?.userId !== 'unauthorized';
+
+  const isUserDeactivated = dbStatus?.license === 'deactivated';
+
+  const isAdmin = currentUser?.email === adminEmail;
 
   const getUserLogged = useCallback(() => {
     try {
@@ -77,10 +87,12 @@ export const useInitCloudDB = () => {
     login,
     logout,
     getUserLogged,
-    currentUser,
-    isUserAuthorized,
     ui,
     dbStatus,
+    isAdmin,
+    currentUser,
+    isUserAuthorized,
+    isUserDeactivated,
   };
 };
 

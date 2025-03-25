@@ -10,23 +10,19 @@ import CardTitle from 'libs/ui/src/components/forms/card-title';
 import DeleteCustomerModal from '@optical-system-app/modules/customers/components/modals/delete-customer-modal';
 import Layout from '@optical-system-app/components/layout';
 import CustomerPrescriptionsTable from '@optical-system-app/modules/customers/tables/customer-prescriptions-table';
-import { Customer } from '@product-line/dexie';
+import { Customer, useCustomerMethods } from '@product-line/dexie';
 
 function CustomerDetailPage() {
-  const {
-    getCustomer,
-    shareOneCustomer,
-    exportOneCustomerToExcel,
-    checkIsCustomer,
-  } = useCustomerData();
+  const { shareOneCustomer, exportOneCustomerToExcel } = useCustomerData();
+  const { getCustomerById, checkIsCustomer } = useCustomerMethods();
 
   const { id } = useParams();
   const customerId = id;
   const [customer, setCustomer] = useState<Customer | null>();
 
   useEffect(() => {
-    if (customerId) setCustomer(getCustomer(customerId));
-  }, [customerId, getCustomer]);
+    if (customerId) setCustomer(getCustomerById(customerId));
+  }, [customerId, getCustomerById]);
 
   return (
     <Layout
@@ -61,7 +57,11 @@ function CustomerDetailPage() {
               customerId={customerId}
               backToCustomers
             />
-            <EditCustomerModal showButton customerId={customerId} />
+            <EditCustomerModal
+              showButton
+              customerId={customerId}
+              customer={customer}
+            />
           </>
         ),
       }}

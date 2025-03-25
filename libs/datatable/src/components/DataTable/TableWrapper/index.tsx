@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { cn } from '../../../common/helpers/cn';
+import { getCSSColorName } from '../../../common/helpers/theme';
 import styles from '../../../common/styles/main.module.css';
 import { IDataTableStyles } from '../../../common/types';
 import useTableColors from '../../../hooks/useTableColors';
-import { Spinner } from 'libs/ui/src/components/spinner';
+import { Spinner } from '@product-line/ui';
 
 export interface TableWrapperProps {
   tableId: string;
   title?: string;
   border?: boolean;
   isFetching?: boolean;
+  isEmpty?: boolean;
   headerContainer?: React.ReactNode;
   children: React.ReactNode;
   sx?: IDataTableStyles;
@@ -21,39 +24,56 @@ const TableWrapper: React.FC<TableWrapperProps> = ({
   isFetching,
   headerContainer,
   children,
+  isEmpty,
   sx,
 }) => {
   const { colors } = useTableColors();
 
   const handleBorder = () => {
-    if (border) return `1px solid ${colors?.divider}`;
+    if (border) return `1px solid ${colors.divider}`;
     if (!border && border !== undefined) return 'none';
-    if (title && border === undefined) return `1px solid ${colors?.divider}`;
+    if (title && border === undefined) return `1px solid ${colors.divider}`;
     if (headerContainer && border === undefined)
-      return `1px solid ${colors?.divider}`;
+      return `1px solid ${colors.divider}`;
     return 'none';
   };
+
+  const colorsInject = useMemo(() => {
+    return Object.entries(colors).reduce((acc, [colorName, colorValue]) => {
+      const finalColor =
+        typeof colorValue === 'string'
+          ? colorValue
+          : colorValue && 'default' in colorValue
+          ? colorValue.default
+          : '';
+      acc[getCSSColorName(colorName)] = finalColor;
+
+      return acc;
+    }, {} as Record<string, string>);
+  }, [colors]);
 
   return (
     <div
       id={`${tableId}-wrapper`}
-      className={`
-      ${styles.wrapper} 
-      ${title || headerContainer ? styles.borderWrapper : undefined} 
-      ${border || border === undefined ? styles.border : undefined}`}
+      className={cn([
+        styles.wrapper,
+        (title || headerContainer) && styles.borderWrapper,
+        (border || border === undefined) && styles.border,
+      ])}
       style={{
-        backgroundColor: colors?.defaultBg,
+        backgroundColor: isEmpty ? undefined : colors.defaultBg,
         border: handleBorder(),
         borderRadius: border || title || headerContainer ? '4px' : '0px',
+        ...colorsInject,
         ...sx?.wrapper,
       }}
     >
       <div
         id={`${tableId}-wrapper-container`}
-        className={`${styles.wrapper}`}
+        className={cn([styles.wrapperContainer])}
         style={{
-          backgroundColor: colors?.boxBg,
-          position: 'relative',
+          backgroundColor: isEmpty ? undefined : colors.boxBg,
+          ...sx?.wrapperContainer,
         }}
       >
         {isFetching && (
@@ -61,10 +81,10 @@ const TableWrapper: React.FC<TableWrapperProps> = ({
             id={`${tableId}-fetching-container`}
             className={styles.fetchingContainer}
             style={{
-              backgroundColor: `${colors?.defaultBg}50`,
+              backgroundColor: `${colors.defaultBg}50`,
             }}
           >
-            <Spinner />
+            <Spinner size="lg" />
           </div>
         )}
         {headerContainer && (

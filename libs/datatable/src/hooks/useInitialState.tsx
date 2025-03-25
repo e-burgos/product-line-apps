@@ -7,13 +7,15 @@ import {
   VisibilityState,
 } from '@tanstack/react-table';
 import { ExpandedColumn } from '../common/helpers/ExpandedColumn';
+import { OffsetColumn } from '../common/helpers/OffsetColumn';
 import { RowActionsColumn } from '../common/helpers/RowActionsColumn';
+import { RowSelectionColumn } from '../common/helpers/RowSelectionColumn';
 import { ManualPaginationState, TData } from '../common/types';
 import useDataTableStore from './useDataTableStore';
 
 export const useInitialState = (
   tableId: string,
-  defaultColumns: ColumnDef<TData, TData>[]
+  defaultColumns: ColumnDef<TData, TData>[],
 ) => {
   const {
     pagination: paginationStore,
@@ -25,8 +27,14 @@ export const useInitialState = (
   } = useDataTableStore(tableId);
 
   const columns = React.useMemo<typeof defaultColumns>(
-    () => [ExpandedColumn, ...defaultColumns, RowActionsColumn],
-    [defaultColumns]
+    () => [
+      ExpandedColumn,
+      RowSelectionColumn,
+      ...defaultColumns,
+      RowActionsColumn,
+      OffsetColumn,
+    ],
+    [defaultColumns],
   );
 
   const initialPagination = React.useMemo<PaginationState>(() => {
@@ -53,39 +61,22 @@ export const useInitialState = (
   }, []);
 
   const initialColumnOrder = React.useMemo<string[]>(() => {
-    if (columnOrderStore?.length !== 0)
-      return columnOrderStore.filter((id): id is string => id !== undefined);
-    const initialState = columns
-      .map((c) => c.id)
-      .filter((id): id is string => id !== undefined);
+    if (columnOrderStore?.length !== 0) return columnOrderStore;
+    const initialState = columns.map((c) => c.id);
     return initialState;
   }, [columnOrderStore, columns]);
 
   const defaultColumnOrder = React.useMemo<string[]>(() => {
-    return columns
-      .map((c) => c.id)
-      .filter((id): id is string => id !== undefined);
+    return columns.map((c) => c.id);
   }, [columns]);
 
   const initialColumnVisibility = React.useMemo<VisibilityState>(() => {
     if (columnVisibilityStore !== undefined) return columnVisibilityStore;
-    const initialState = columns.reduce<VisibilityState>((acc, c) => {
-      if (c.id !== undefined) {
-        acc[c.id] = true;
-      }
-      return acc;
-    }, {});
-    return initialState;
-  }, [columnVisibilityStore, columns]);
-
-  const defaultColumnVisibility = React.useMemo<VisibilityState>(() => {
     return columns.reduce<VisibilityState>((acc, c) => {
-      if (c.id !== undefined) {
-        acc[c.id] = true;
-      }
+      acc[c.id] = c?.enableVisible ?? true;
       return acc;
     }, {});
-  }, [columns]);
+  }, [columnVisibilityStore, columns]);
 
   const initialColumnPinning = React.useMemo<ColumnPinningState>(() => {
     if (columnPinningStore !== undefined) return columnPinningStore;
@@ -128,7 +119,6 @@ export const useInitialState = (
     defaultPagination,
     defaultSorting,
     defaultColumnOrder,
-    defaultColumnVisibility,
     defaultColumnPinning,
     defaultManualPagination,
   };

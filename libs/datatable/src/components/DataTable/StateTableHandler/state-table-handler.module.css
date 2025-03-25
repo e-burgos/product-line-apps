@@ -1,11 +1,8 @@
 .tbodyMessageContainer {
   height: 160px !important;
   position: relative;
-}
-
-.trMessageContainer {
-  position: absolute;
-  height: 160px !important;
+  display: flex;
+  align-items: center;
 }
 
 .messageContainer {
@@ -32,7 +29,7 @@
   height: 100%;
   box-sizing: border-box;
   z-index: 0;
-  gap: 8px;
+  gap: 16px;
 }
 
 .linkButton {

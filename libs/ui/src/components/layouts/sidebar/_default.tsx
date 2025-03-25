@@ -39,35 +39,16 @@ export default function Sidebar({ className, menuItems }: SidebarProps) {
     >
       <div className="relative flex h-24 items-center justify-between overflow-hidden px-6 py-4 2xl:px-8">
         <Logo />
-        <div className="md:hidden">
-          <Button
-            title="Close"
-            color="white"
-            shape="circle"
-            variant="transparent"
-            size="small"
-            onClick={closeDrawer}
-          >
-            <Close className="h-auto w-2.5" />
-          </Button>
-        </div>
-      </div>
-      <div className="sticky mb-6 px-6">
-        <motion.div
-          initial={{ y: '80%' }}
-          animate={{
-            y: 0,
-            transition: {
-              delay: 0.1,
-            },
-          }}
+        <Button
+          title="Close"
+          color="white"
+          shape="circle"
+          variant="transparent"
+          size="small"
+          onClick={closeDrawer}
         >
-          <AuthorCard
-            image={AuthorImage}
-            name="Contactar Soporte"
-            authorRole="Necesitas ayuda?"
-          />
-        </motion.div>
+          <Close className="h-auto w-2.5" />
+        </Button>
       </div>
       <div className="custom-scrollbar h-[calc(100%-98px)] overflow-hidden overflow-y-auto">
         <div className="px-6 pb-5 2xl:px-8">
@@ -84,6 +65,23 @@ export default function Sidebar({ className, menuItems }: SidebarProps) {
             ))}
           </div>
         </div>
+      </div>
+      <div className="sticky mb-1 px-6">
+        <motion.div
+          initial={{ y: '80%' }}
+          animate={{
+            y: 0,
+            transition: {
+              delay: 0.1,
+            },
+          }}
+        >
+          <AuthorCard
+            image={AuthorImage}
+            name="Contactar Soporte"
+            authorRole="Necesitas ayuda?"
+          />
+        </motion.div>
       </div>
     </aside>
   );

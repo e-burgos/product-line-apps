@@ -26,7 +26,9 @@ export function SignInPage() {
           </p>
           <p className="text-sm tracking-[0.5px] text-center text-[#4B5563] dark:text-gray-300">
             <AnchorLink
-              to={'#'}
+              to={'https://www.estebanburgos.com.ar/'}
+              target="_blank"
+              rel="noopener noreferrer"
               className="font-medium underline hover:text-black/80 dark:text-gray-300"
             >
               Contactar soporte

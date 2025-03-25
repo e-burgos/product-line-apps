@@ -12,13 +12,14 @@ import DetailPrescriptionForm from '@optical-system-app/modules/prescriptions/co
 import {
   Customer,
   Prescription,
+  useCustomerMethods,
   usePrescriptionMethods,
 } from '@product-line/dexie';
 
 function PrescriptionDetailPage() {
-  const { getCustomer, shareOneCustomer, exportOneCustomerToExcel } =
-    useCustomerData();
+  const { shareOneCustomer, exportOneCustomerToExcel } = useCustomerData();
   const { getPrescriptionById, checkIsPrescription } = usePrescriptionMethods();
+  const { getCustomerById } = useCustomerMethods();
 
   const { id } = useParams();
   const prescriptionId = id?.toString() as string;
@@ -27,7 +28,7 @@ function PrescriptionDetailPage() {
 
   useEffect(() => {
     if (prescription?.customerId)
-      setCustomer(getCustomer(prescription?.customerId));
+      setCustomer(getCustomerById(prescription?.customerId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prescription?.customerId]);
 

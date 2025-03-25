@@ -172,6 +172,7 @@ export const EditCustomerForm: FC<EditCustomerFormProps> = ({ customerId }) => {
               message: 'La fecha no puede ser menor a 1900',
             },
             validate: (value) => {
+              if (!value) return true;
               const date = new Date(value as string);
               const isValidDate =
                 date instanceof Date && !isNaN(date.getTime());

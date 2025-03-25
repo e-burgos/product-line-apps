@@ -18,8 +18,9 @@ export const LoginButton = () => {
       <Button
         variant="solid"
         shape="rounded"
-        size="medium"
+        size="large"
         onClick={handleLogin}
+        className="w-full"
       >
         <div className="flex items-center">
           <LogIn className={'h-4 w-4 mr-2'} />

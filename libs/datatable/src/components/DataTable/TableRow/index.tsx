@@ -2,8 +2,16 @@ import { FC, CSSProperties, useState, Fragment } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Row, Table } from '@tanstack/react-table';
-import { HoverType, IRowActions, TData } from '../../../common/types';
+import { cn } from '../../../common/helpers/cn';
+import generalStyles from '../../../common/styles/main.module.css';
+import {
+  HoverType,
+  IRowActions,
+  IRowSelection,
+  TData,
+} from '../../../common/types';
 import useTableColors from '../../../hooks/useTableColors';
+import styles from './table-row.module.css';
 import TableCell from './TableCell';
 
 interface RowProps {
@@ -18,17 +26,26 @@ interface RowProps {
   };
   isColumn: boolean;
   rowActions?: IRowActions<TData>[];
-  onClick: React.MouseEventHandler<HTMLTableRowElement> | undefined;
+  onClick: React.MouseEventHandler<HTMLTableRowElement>;
+  forceShowMenuActions?: boolean;
+  columnOffset: number;
+  rowSelection: IRowSelection<TData>;
+  smallAnatomy?: boolean;
 }
 
 const TableRow: FC<RowProps> = ({
   tableId,
+  table,
   row,
   index,
   style,
   isColumn,
   rowActions,
   onClick,
+  forceShowMenuActions,
+  columnOffset,
+  rowSelection,
+  smallAnatomy,
 }) => {
   const [openActions, setOpenActions] = useState<boolean>(false);
   const [hoverRow, setHoverRow] = useState<HoverType>({
@@ -41,23 +58,22 @@ const TableRow: FC<RowProps> = ({
     id: index.toString(),
   });
 
-  const cssTrasform = CSS.Transform.toString(transform);
+  const cssTransform = CSS.Transform.toString(transform);
 
   const handleRowBg = () => {
     if (row.getIsExpanded())
-      return hoverRow.hover ? colors?.rowHover : colors?.rowExpandedBg;
-    if (isDragging) return colors?.paperBg;
-    if (hoverRow.hover) return colors?.rowHover;
-    return style?.row?.backgroundColor || colors?.rowBg;
+      return hoverRow.hover ? colors.rowHover : colors.rowExpandedBg;
+    if (isDragging) return colors.paperBg;
+    if (hoverRow.hover) return colors.rowHover;
+    return style?.row?.backgroundColor || colors.rowBg;
   };
 
   const dragStyles: CSSProperties = {
-    position: 'relative',
-    transform: cssTrasform,
+    transform: cssTransform,
     transition: transition,
     zIndex: isDragging ? 10 : openActions ? 1 : 0,
     opacity: isDragging ? 0.8 : 1,
-    color: colors?.primaryText,
+    color: colors.primaryText,
   };
 
   return (
@@ -68,10 +84,17 @@ const TableRow: FC<RowProps> = ({
         setHoverRow({ hover: true, index });
       }}
       onMouseLeave={() => setHoverRow({ hover: false, index })}
+      className={cn([
+        styles.draggable,
+        styles.trWrapper,
+        smallAnatomy ? generalStyles.smallRow : generalStyles.row,
+        // class for row expanded
+        row.getIsExpanded() ? 'data-table-expanded-principal-row' : '',
+      ])}
       style={{
         ...style?.row,
         ...dragStyles,
-        zIndex: hoverRow.hover ? 10 : 0,
+        zIndex: openActions ? 11 : hoverRow.hover ? 10 : 0,
         backgroundColor: handleRowBg(),
       }}
     >
@@ -80,6 +103,7 @@ const TableRow: FC<RowProps> = ({
           <Fragment key={cell.id}>
             <TableCell
               tableId={tableId}
+              table={table}
               key={cell.id}
               cell={cell}
               row={row}
@@ -88,6 +112,9 @@ const TableRow: FC<RowProps> = ({
               setOpenActions={setOpenActions}
               style={style?.cell}
               rowActions={rowActions}
+              forceShowMenuActions={forceShowMenuActions}
+              columnOffset={columnOffset}
+              rowSelection={rowSelection}
             />
           </Fragment>
         );

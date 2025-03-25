@@ -7,9 +7,10 @@ export const RowActionsColumn: ColumnDef<any, any> = {
   enableSorting: false,
   enablePinning: false,
   enableHiding: false,
-  size: 24,
-  maxSize: 24,
-  minSize: 24,
+  enableDraggable: false,
+  size: 50,
+  maxSize: 50,
+  minSize: 50,
   header: () => null,
   cell: () => null,
 };

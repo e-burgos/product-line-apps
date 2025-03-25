@@ -10,14 +10,41 @@ import {
 } from '@dnd-kit/core';
 import { DndContext } from '@dnd-kit/core';
 import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
-import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { arrayMove } from '@dnd-kit/sortable';
 import { ColumnOrderState } from '@tanstack/react-table';
 
+/**
+ * Props for the DragDropTableContext component.
+ *
+ * @category ui/datatable
+ * @subcategory Context
+ *
+ * @property {React.ReactNode} children - The child nodes to render within the context.
+ * @property {ColumnOrderState} columnOrder - The current order of columns in the table.
+ * @property {Dispatch<SetStateAction<ColumnOrderState>>} setColumnOrder - Function to update the column order.
+ */
 interface DragDropTableContextProps {
   children: React.ReactNode;
   columnOrder: ColumnOrderState;
   setColumnOrder: Dispatch<SetStateAction<ColumnOrderState>>;
 }
+
+/**
+ * DragDropTableContext is a React component that provides a drag and drop context for reordering table columns.
+ * It utilizes the DndContext and Sortable functionalities from the '@dnd-kit' library to update the column order
+ * when a drag operation ends.
+ *
+ * @category ui/datatable
+ * @subcategory Context
+ *
+ * @component
+ * @param {DragDropTableContextProps} props - The properties for the DragDropTableContext component.
+ * @param {React.ReactNode} props.children - The child nodes to render within the context.
+ * @param {ColumnOrderState} props.columnOrder - The current order of columns in the table.
+ * @param {Dispatch<SetStateAction<ColumnOrderState>>} props.setColumnOrder - Function to update the column order.
+ *
+ * @returns {React.ReactElement} A React element representing the drag and drop table context.
+ */
 
 const DragDropTableContext: React.FC<DragDropTableContextProps> = ({
   children,
@@ -26,9 +53,9 @@ const DragDropTableContext: React.FC<DragDropTableContextProps> = ({
 }) => {
   function handleColumnDragEnd(event: DragEndEvent) {
     const { active, over } = event;
-    if (active && over && active?.id !== over?.id) {
-      const oldIndex = columnOrder?.indexOf(active?.id as string);
-      const newIndex = columnOrder?.indexOf(over?.id as string);
+    if (active && over && active.id !== over.id) {
+      const oldIndex = columnOrder.indexOf(active.id as string);
+      const newIndex = columnOrder.indexOf(over.id as string);
       const newState = arrayMove(columnOrder, oldIndex, newIndex);
       setColumnOrder(newState);
       return newState;
@@ -36,25 +63,9 @@ const DragDropTableContext: React.FC<DragDropTableContextProps> = ({
   }
 
   const sensors = useSensors(
-    useSensor(MouseSensor, {
-      activationConstraint: {
-        delay: 150,
-        tolerance: 5,
-      },
-    }),
-    useSensor(TouchSensor, {
-      activationConstraint: {
-        delay: 150,
-        tolerance: 5,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-      activationConstraint: {
-        delay: 150,
-        tolerance: 5,
-      },
-    })
+    useSensor(MouseSensor, {}),
+    useSensor(TouchSensor, {}),
+    useSensor(KeyboardSensor, {}),
   );
 
   return (

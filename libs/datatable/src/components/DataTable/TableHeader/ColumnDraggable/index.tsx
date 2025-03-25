@@ -29,7 +29,7 @@ const ColumnDraggable: React.FC<ColumnDraggableProps> = ({
       <ArrowDoubleIndicator
         size={20}
         direction="horizontal"
-        color={hover ? colors?.primaryText : color}
+        color={hover ? colors.primaryText : color}
       />
     </button>
   );

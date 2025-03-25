@@ -8,7 +8,7 @@ import {
   Product,
   Variant,
 } from './types/db-types';
-import { dexieDbUrl } from '@optical-system-app/utils/const';
+import { dexieDbUrl } from './const';
 
 export class OpticalCloudDB extends Dexie {
   products!: DexieCloudTable<Product, 'id'>;
@@ -28,6 +28,9 @@ export class OpticalCloudDB extends Dexie {
       budgetVariants: 'id, budgetId, productId, variantId, title',
       customers: 'id, name, lastName',
       prescriptions: 'id, receiptNumber, customerId',
+      realms: '@realmId',
+      members: '@id,[realmId+email]',
+      roles: '[realmId+name]',
     });
 
     this.cloud.configure({
@@ -35,6 +38,8 @@ export class OpticalCloudDB extends Dexie {
       tryUseServiceWorker: true,
       requireAuth: true,
       customLoginGui: true,
+      disableEagerSync: true,
+      disableWebSocket: true,
       periodicSync: {
         minInterval: 60000 * 5,
       },

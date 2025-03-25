@@ -9,7 +9,8 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const navigate = useNavigate();
-  const { isUserAuthorized, getUserLogged } = useInitCloudDB();
+  const { isUserAuthorized, isUserDeactivated, getUserLogged } =
+    useInitCloudDB();
 
   useEffect(() => {
     getUserLogged();
@@ -18,7 +19,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   useEffect(() => {
     if (!isUserAuthorized) navigate(commonRoutePaths.signIn);
-  }, [isUserAuthorized, navigate]);
+    if (isUserDeactivated) navigate(commonRoutePaths.noAuthorized);
+  }, [isUserDeactivated, isUserAuthorized, navigate]);
 
   return <>{children}</>;
 };

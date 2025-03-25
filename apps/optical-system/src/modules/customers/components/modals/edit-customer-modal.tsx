@@ -4,18 +4,22 @@ import Modal from 'libs/ui/src/components/modal';
 import Button from 'libs/ui/src/components/button';
 import { useCustomerStore } from '../../hooks/use-customer-store';
 import EditCustomerForm from '../forms/edit-customer-form';
+import { Customer } from '@product-line/dexie';
 
 interface EditCustomerModalProps {
   showButton?: boolean;
   customerId?: string;
+  customer?: Customer | null | undefined;
 }
 
 const EditCustomerModal: FC<EditCustomerModalProps> = ({
   showButton = false,
   customerId,
+  customer,
 }) => {
   const { openEditModal, setOpenEditModal, currentCustomer } =
     useCustomerStore();
+
   return (
     <>
       {showButton && (
@@ -35,9 +39,9 @@ const EditCustomerModal: FC<EditCustomerModalProps> = ({
         isOpen={openEditModal}
         setIsOpen={setOpenEditModal}
         text={{
-          title: `Editar Cliente ${currentCustomer?.name || ''} ${
-            currentCustomer?.lastName || ''
-          }`,
+          title: `Editar Cliente ${
+            customer?.name || currentCustomer?.name || ''
+          } ${customer?.lastName || currentCustomer?.lastName || ''}`,
         }}
         hideButtons
       >

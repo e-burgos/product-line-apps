@@ -11,8 +11,6 @@ export const useBudgetColumns = () => {
       {
         id: 'title',
         header: 'Presupuesto',
-        enablePinning: false,
-        size: 150,
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -26,9 +24,7 @@ export const useBudgetColumns = () => {
       {
         id: 'description',
         header: 'Descripción',
-        enablePinning: false,
         enableSorting: false,
-        size: 300,
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -43,7 +39,6 @@ export const useBudgetColumns = () => {
         header: 'Monto Total',
         enablePinning: false,
         enableSorting: false,
-        maxSize: 100,
         accessorFn: (row) => row,
         cell: (info) => {
           const amount = getBudgetVariants(

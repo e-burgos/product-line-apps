@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Header } from '@tanstack/react-table';
-import { HoverType, TData } from '../../../../common/types';
-import useTableColors from '../../../../hooks/useTableColors';
+import { TData } from '../../../../common/types';
 import PinIndicator from '../../../Assets/PinIndicator';
+import { IconButton } from '../../../Common/IconButton';
 import styles from './column-pin.module.css';
 
 interface ColumnPinProps {
   header: Header<TData, unknown>;
+  disabled?: boolean;
   color?: string;
   enablePinLeftColumns?: boolean;
   enablePinRightColumns?: boolean;
@@ -15,70 +16,46 @@ interface ColumnPinProps {
 const ColumnPin: React.FC<ColumnPinProps> = ({
   header,
   color,
+  disabled,
   enablePinLeftColumns,
   enablePinRightColumns,
 }) => {
-  const { colors } = useTableColors();
-  const [hover, setHover] = useState<HoverType>({ hover: false, index: 0 });
   return (
     <div className={styles.container}>
       {enablePinLeftColumns &&
         !header.column.getIsPinned() &&
         header.column.getIsPinned() !== 'left' && (
-          <button
-            className={styles.pinButton}
-            onMouseEnter={() => setHover({ hover: true, index: 0 })}
-            onMouseLeave={() => setHover({ hover: false, index: 0 })}
+          <IconButton
+            color={color}
+            disabled={disabled}
+            icon={<PinIndicator direction="down" />}
             onClick={() => {
               header.column.pin('left');
             }}
-          >
-            <PinIndicator
-              direction="down"
-              size={20}
-              color={
-                hover.hover && hover.index === 0 ? colors?.primaryText : color
-              }
-            />
-          </button>
+          />
         )}
       {header.column.getIsPinned() && (
-        <button
-          className={styles.pinButton}
-          onMouseEnter={() => setHover({ hover: true, index: 1 })}
-          onMouseLeave={() => setHover({ hover: false, index: 1 })}
+        <IconButton
+          color={color}
+          isPinned
+          disabled={disabled}
+          icon={<PinIndicator direction="down" />}
           onClick={() => {
             header.column.pin(false);
           }}
-        >
-          <PinIndicator
-            direction="down"
-            size={20}
-            color={
-              hover.hover && hover.index === 1 ? colors?.primaryText : color
-            }
-          />
-        </button>
+        />
       )}
       {enablePinRightColumns &&
         !header.column.getIsPinned() &&
         header.column.getIsPinned() !== 'right' && (
-          <button
-            className={styles.pinButton}
-            onMouseEnter={() => setHover({ hover: true, index: 2 })}
-            onMouseLeave={() => setHover({ hover: false, index: 2 })}
+          <IconButton
+            color={color}
+            disabled={disabled}
+            icon={<PinIndicator direction="right" />}
             onClick={() => {
               header.column.pin('right');
             }}
-          >
-            <PinIndicator
-              direction="right"
-              size={20}
-              color={
-                hover.hover && hover.index === 2 ? colors?.primaryText : color
-              }
-            />
-          </button>
+          />
         )}
     </div>
   );

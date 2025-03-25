@@ -30,7 +30,7 @@ function CustomersPage() {
               size="small"
               shape="rounded"
               onClick={() => shareCustomersData()}
-              title="Compartir"
+              tooltip="Compartir Datos"
               className="p-2"
             >
               <Share2 className="h-4 w-4" />

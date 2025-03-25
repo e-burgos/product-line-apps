@@ -1,7 +1,87 @@
-.resizer {
-  cursor: col-resize;
+.th {
+  min-width: 0;
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0;
+}
+
+.resizerWrapper {
+  border-radius: 5px;
+  height: 100%;
+  width: 12px;
+  right: 0;
+  top: 0;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   user-select: none;
   touch-action: none;
+  z-index: 100;
+}
+
+.resizerWrapper:hover,
+.hoverResize {
+  .resizer {
+    width: 3px;
+    height: 20px;
+    background-color: var(--table-primaryText);
+  }
+}
+
+.enabledResizer {
+  cursor: col-resize;
+}
+
+.resizer {
+  width: 2px;
+  height: 14px;
+  border-radius: 5px;
+  background-color: var(--table-divider);
+  transition:
+    background-color,
+    height 0.15s ease-in-out;
+}
+
+.pinColumn {
+  .resizerWrapper {
+    right: -5px;
+  }
+}
+
+.headerLeftContent {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: transparent;
+  width: inherit;
+  max-width: 100%;
+  padding: 0 0;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.paddingWidth {
+  width: 12px;
+  height: 100%;
+}
+
+.headerLeftContentOverflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  align-items: center;
+  color: var(--table-secondaryText);
+}
+
+.allAnimationEaseInOut {
+  transition: all 0.2s ease-in-out;
+
+  svg {
+    transition: all 0.2s ease-in-out;
+  }
 }
 
 .headerRightContent {
@@ -11,7 +91,7 @@
   justify-content: flex-end;
   background: transparent;
   width: fit-content;
-  padding: 0 10px;
+  padding: 0 12px 0 0;
   height: 100%;
   right: 0;
   top: 0;
@@ -19,13 +99,18 @@
   gap: 2px;
 }
 
-.headerLeftContent {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  background: transparent;
-  width: inherit;
-  height: 100%;
+.pinned {
+  position: absolute;
+  left: 0px;
+  top: 0;
+  bottom: 0;
+  height: fit-content;
+  transform: translate(-2px, 3px);
+  margin: auto 0;
+
+  path {
+    transition: fill 0.2s ease-in-out;
+  }
 }
 
 .columnDivider {
@@ -41,6 +126,10 @@
   justify-content: center;
   width: 100% !important;
   height: 100%;
+}
+
+.cursorPointer {
+  cursor: pointer;
 }
 
 .draggableButton {

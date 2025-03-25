@@ -30,10 +30,12 @@ import 'libs/ui/src/assets/css/scrollbar.css';
 import 'libs/ui/src/assets/css/globals.css';
 import 'libs/ui/src/assets/css/range-slider.css';
 import 'libs/ui/src/assets/css/fonts.css';
+import { QueryClient } from '@tanstack/react-query';
 
 interface MainLayoutProps {
   menuItems: IMenuItem[];
   layout?: LAYOUT_OPTIONS;
+  queryClient?: QueryClient;
   isNotificationButton?: boolean;
   rightButton?: React.ReactNode;
   logo?: LogoType;
@@ -46,6 +48,7 @@ interface MainLayoutProps {
 export function MainLayout({
   menuItems: appMenuItems,
   layout,
+  queryClient,
   isNotificationButton,
   rightButton,
   logo,
@@ -132,7 +135,7 @@ export function MainLayout({
 
   return (
     <BrowserRouter>
-      <QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
         <SettingsButton />
         <SettingsDrawer />
         <Suspense fallback={null}>

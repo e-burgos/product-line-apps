@@ -1,31 +1,34 @@
 import { useEffect, useState } from 'react';
-import useComponentEventListener from './useComponentEventListener';
+import debounce from 'lodash/debounce';
 
-export const useScrollableTable = (tableId: string) => {
-  const { element: containerElement } = useComponentEventListener(
-    `${tableId}-container`
-  );
-
-  const { element: headerElement } = useComponentEventListener(
-    `${tableId}-header-fixed`
-  );
-
+export const useScrollableTable = (
+  tableContainerRef: React.MutableRefObject<HTMLDivElement>,
+) => {
   const [scrollX, setScrollX] = useState<number>(0);
-
-  const containerWith = containerElement?.clientWidth;
-
+  const containerElement = tableContainerRef.current;
+  const [containerWith, setContainerWidth] = useState(
+    containerElement?.clientWidth,
+  );
   const isScrollable =
-    (containerElement?.scrollWidth ?? 0) > (containerElement?.clientWidth ?? 0);
+    containerElement?.scrollWidth > containerElement?.clientWidth;
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+  const handleScroll = debounce((e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    e.preventDefault();
     const target = e.target as HTMLDivElement;
-    setScrollX(target.scrollLeft);
-  };
+    const scrollLeft = target.scrollLeft;
+    setScrollX(scrollLeft);
+  }, 50);
 
   useEffect(() => {
-    headerElement?.scrollTo(scrollX, 0);
-    containerElement?.scrollTo(scrollX, 0);
-  }, [scrollX, headerElement, containerElement]);
+    function updateSize() {
+      const containerElement = tableContainerRef.current;
+      setContainerWidth(containerElement?.clientWidth || 0);
+    }
+
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, [tableContainerRef]);
 
   return {
     containerWith,
