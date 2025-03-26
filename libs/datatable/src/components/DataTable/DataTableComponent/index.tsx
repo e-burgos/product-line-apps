@@ -19,6 +19,7 @@ import styles from '../../../common/styles/main.module.css';
 import {
   IOptionalDataTableProps,
   ManualPaginationState,
+  TData,
 } from '../../../common/types';
 import { IScrollProps } from '../../../context/DataTableContext';
 import DragDropContentContext from '../../../context/DragDropContentContext';
@@ -39,7 +40,6 @@ import TableWrapper from '../TableWrapper';
  * @category ui/datatable
  * @subcategory Props
  *
- * @template TData - The type of data used in the table.
  * @extends IOptionalDataTableProps<TData> - Extends the optional properties for the data table.
  *
  * @property {string} tableId - Unique identifier for the table.
@@ -54,7 +54,7 @@ import TableWrapper from '../TableWrapper';
  * @property {RefObject<HTMLDivElement>} [tableContainerRef] - Reference to the table container element.
  * @property {IScrollProps} [scrollProps] - Scroll-related properties for the table.
  */
-export interface DataTableComponentProps<TData>
+export interface DataTableComponentProps
   extends IOptionalDataTableProps<TData> {
   tableId: string;
   table: Table<TData>;
@@ -82,9 +82,8 @@ export interface DataTableComponentProps<TData>
  *
  * @component
  * @extends IOptionalDataTableProps<TData> - The data table properties.
- * @template TData - The type of data being displayed in the table.
  *
- * @param {DataTableComponentProps<TData>} props - The properties object.
+ * @param {DataTableComponentProps} props - The properties object.
  * @param {string} props.tableId - The unique identifier for the table.
  * @param {Table<TData>} props.table - The table instance.
  * @param {Array<TData>} props.data - The data to be displayed in the table.
@@ -99,7 +98,7 @@ export interface DataTableComponentProps<TData>
  * @returns {JSX.Element | null} The rendered DataTableComponent or null if the table instance is not provided.
  */
 
-function DataTableComponent<TData>({
+function DataTableComponent({
   tableId,
   table,
   data,
@@ -129,7 +128,7 @@ function DataTableComponent<TData>({
   tableContainerRef,
   rowSelection,
   showHeader = true,
-}: DataTableComponentProps<TData>): JSX.Element | null {
+}: DataTableComponentProps): JSX.Element | null {
   // hooks
   const { colors } = useTableColors();
 

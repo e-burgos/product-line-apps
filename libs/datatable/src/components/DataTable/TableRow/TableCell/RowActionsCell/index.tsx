@@ -25,7 +25,7 @@ export interface RowActionsCellProps {
   hoverRow: HoverType;
   rowActions?: IRowActions<TData>[];
   setHoverRow: (value: HoverType) => void;
-  setOpenActions: (value: boolean) => void;
+  setOpenActions?: (value: boolean) => void;
   forceShowMenuActions?: boolean;
 }
 
@@ -76,7 +76,7 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
   };
 
   const closeMenu = useCallback(() => {
-    setOpenActions(false);
+    setOpenActions?.(false);
     setOpenOptions(false);
     updateMenuPosition();
     updateOptionsContainerHeight();
@@ -87,10 +87,10 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
     window.dispatchEvent(event);
 
     if (openOptions) {
-      setOpenActions(false);
+      setOpenActions?.(false);
       setOpenOptions(false);
     } else {
-      setOpenActions(true);
+      setOpenActions?.(true);
       setOpenOptions(true);
       updateMenuPosition();
       updateOptionsContainerHeight();
@@ -181,7 +181,7 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
       ) {
         setHoverOption({ hover: false, index: 0 });
         setOpenOptions(false);
-        setOpenActions(false);
+        setOpenActions?.(false);
       }
     };
 
@@ -285,7 +285,7 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
                 if (disabled) return;
                 action.onClick(row);
                 setOpenOptions(false);
-                setOpenActions(false);
+                setOpenActions?.(false);
                 setHoverRow({ hover: false, index: 0 });
               }}
               style={{

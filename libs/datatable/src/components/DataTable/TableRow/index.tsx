@@ -26,10 +26,10 @@ interface RowProps {
   };
   isColumn: boolean;
   rowActions?: IRowActions<TData>[];
-  onClick: React.MouseEventHandler<HTMLTableRowElement>;
+  onClick?: React.MouseEventHandler<HTMLTableRowElement>;
   forceShowMenuActions?: boolean;
   columnOffset: number;
-  rowSelection: IRowSelection<TData>;
+  rowSelection?: IRowSelection<TData>;
   smallAnatomy?: boolean;
 }
 
@@ -96,6 +96,8 @@ const TableRow: FC<RowProps> = ({
         ...dragStyles,
         zIndex: openActions ? 11 : hoverRow.hover ? 10 : 0,
         backgroundColor: handleRowBg(),
+        outline: hoverRow.hover ? `1px solid transparent` : 'none',
+        outlineOffset: '-1px',
       }}
     >
       {row.getVisibleCells().map((cell) => {
@@ -110,7 +112,10 @@ const TableRow: FC<RowProps> = ({
               hoverRow={hoverRow}
               setHoverRow={setHoverRow}
               setOpenActions={setOpenActions}
-              style={style?.cell}
+              style={{
+                ...style?.cell,
+                backgroundColor: hoverRow.hover ? colors.rowHover : undefined,
+              }}
               rowActions={rowActions}
               forceShowMenuActions={forceShowMenuActions}
               columnOffset={columnOffset}

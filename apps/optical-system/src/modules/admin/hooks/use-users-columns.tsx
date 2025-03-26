@@ -10,7 +10,7 @@ const useUsersColumns = () => {
       {
         id: 'userId',
         header: 'ID',
-        enablePinning: false,
+
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -24,7 +24,7 @@ const useUsersColumns = () => {
       {
         id: 'type',
         header: 'Type',
-        enablePinning: false,
+
         accessorFn: (row) => row,
         cell: (info) => {
           return <span>{info?.getValue()?.type || '-'}</span>;
@@ -33,7 +33,7 @@ const useUsersColumns = () => {
       {
         id: 'displayName',
         header: 'Display Name',
-        enablePinning: false,
+
         accessorFn: (row) => row,
         cell: (info) => {
           return <span>{info?.getValue()?.data?.displayName || '-'}</span>;
@@ -42,7 +42,7 @@ const useUsersColumns = () => {
       {
         id: 'deactivated',
         header: 'Deactivated',
-        enablePinning: false,
+
         accessorFn: (row) => row,
         cell: (info) => {
           return <span>{info?.getValue()?.deactivated ? 'Yes' : 'No'}</span>;
@@ -51,7 +51,7 @@ const useUsersColumns = () => {
       {
         id: 'created',
         header: 'Created',
-        enablePinning: false,
+
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -64,7 +64,7 @@ const useUsersColumns = () => {
       {
         id: 'updated',
         header: 'Updated',
-        enablePinning: false,
+
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -77,7 +77,7 @@ const useUsersColumns = () => {
       {
         id: 'lastLogin',
         header: 'Last Login',
-        enablePinning: false,
+
         size: 200,
         accessorFn: (row) => row,
         cell: (info) => {

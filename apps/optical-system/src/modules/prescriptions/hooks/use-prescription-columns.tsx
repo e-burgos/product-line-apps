@@ -11,7 +11,7 @@ const usePrescriptionColumns = () => {
       {
         id: 'receiptNumber',
         header: 'Número de Ficha',
-        enablePinning: false,
+
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -25,7 +25,7 @@ const usePrescriptionColumns = () => {
       {
         id: 'date',
         header: 'Fecha',
-        enablePinning: false,
+
         accessorFn: (row) => row,
         cell: (info) => {
           const date = info?.getValue()?.date;
@@ -40,7 +40,7 @@ const usePrescriptionColumns = () => {
       {
         id: 'customer',
         header: 'Cliente',
-        enablePinning: false,
+
         size: 200,
         accessorFn: (row) => row,
         cell: (info) => {
@@ -56,7 +56,7 @@ const usePrescriptionColumns = () => {
       {
         id: 'paymentMethod',
         header: 'Método de Pago',
-        enablePinning: false,
+
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -69,7 +69,7 @@ const usePrescriptionColumns = () => {
       {
         id: 'balanceAmount',
         header: 'Saldo',
-        enablePinning: false,
+
         enableSorting: false,
         maxSize: 100,
         accessorFn: (row) => row,
@@ -87,9 +87,8 @@ const usePrescriptionColumns = () => {
       {
         id: 'totalAmount',
         header: 'Monto Total',
-        enablePinning: false,
+
         enableSorting: false,
-        maxSize: 100,
         accessorFn: (row) => row,
         cell: (info) => {
           const amount = parseFloat(

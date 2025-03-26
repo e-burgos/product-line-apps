@@ -208,15 +208,18 @@ export const useTableColors = () => {
     headerExpandedBg: themeMode === 'dark' ? '#222529' : '#EBEEF6',
     // header background when is pinned
     headerPinned: themeMode === 'dark' ? '#1E2025' : '#EBEEF6',
-    // header background when is pinned solid for not have trasnparency
+    // header background when is pinned solid for not have transparency
     // headerSolidBg: themeMode === 'dark' ? '#1E2025' : '#EBEEF6',
     // default row background
     rowBg: handleColors(themeMode)?.rowBg,
     // default row background hover
     rowHover:
+      // solid color for hover row
       themeMode === 'dark'
-        ? 'rgba(255, 255, 255, 0.08)'
-        : 'rgba(100,100,100,.08)',
+        ? // color calculated for hover row between #1E2025 (bg row) and rgba(255,255,255,.08) (bg hover)
+          '#292B31'
+        : // color calculated for hover row between #E5EBF7 (bg row) and rgba(100,100,100,.08) (bg hover)
+          '#DBE0EB',
     // row expanded background
     rowExpandedBg: themeMode === 'dark' ? '#191B20' : '#EBEEF6',
     // row pinned background

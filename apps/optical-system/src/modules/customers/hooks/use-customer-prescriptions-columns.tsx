@@ -10,7 +10,7 @@ const useCustomerPrescriptionsColumns = () => {
       {
         id: 'receiptNumber',
         header: 'Número de Ficha',
-        enablePinning: false,
+
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -24,7 +24,7 @@ const useCustomerPrescriptionsColumns = () => {
       {
         id: 'date',
         header: 'Fecha',
-        enablePinning: false,
+
         accessorFn: (row) => row,
         cell: (info) => {
           const date = info?.getValue()?.date;
@@ -39,7 +39,7 @@ const useCustomerPrescriptionsColumns = () => {
       {
         id: 'paymentMethod',
         header: 'Método de Pago',
-        enablePinning: false,
+
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -52,7 +52,7 @@ const useCustomerPrescriptionsColumns = () => {
       {
         id: 'balanceAmount',
         header: 'Saldo',
-        enablePinning: false,
+
         enableSorting: false,
         maxSize: 100,
         accessorFn: (row) => row,
@@ -70,7 +70,7 @@ const useCustomerPrescriptionsColumns = () => {
       {
         id: 'totalAmount',
         header: 'Monto Total',
-        enablePinning: false,
+
         enableSorting: false,
         maxSize: 100,
         accessorFn: (row) => row,

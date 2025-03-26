@@ -2,16 +2,6 @@
   position: relative;
 }
 
-.hoverTd {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /*transition: all 0.2s ease-in;*/
-  display: none;
-}
-
 .tdPined {
   background-color: var(--table-rowPinnedHover);
 }
@@ -25,11 +15,7 @@
 }
 
 .trWrapper {
-  &:hover {
-    .hoverTd {
-      background-color: var(--table-rowHover);
-    }
-  }
+  transition: background-color 0.2s ease;
 }
 
 .tdWrapper {
@@ -39,6 +25,7 @@
   text-overflow: ellipsis;
   min-width: 0;
   padding: 0;
+  transition: background-color 0.2s ease;
 }
 
 .tdDragged {
@@ -54,5 +41,5 @@
   position: relative;
   height: 100%;
   width: 100%;
-  /*transition: all 0.2s ease-in;*/
+  transition: background-color 0.2s ease;
 }

@@ -3,8 +3,7 @@ import Logo from 'libs/ui/src/components/logo';
 import ResetPinForm from 'libs/ui/src/components/auth/reset-pin-form';
 
 export function ResetPinPage({ signInPath }: { signInPath: string }) {
-  const [value, setValue] = useState<string>('');
-  console.log(value);
+  const [_value, setValue] = useState<string>('');
 
   return (
     <div className="grid flex-grow grid-cols-1 gap-0 lg:grid-cols-[1fr_0%] 3xl:grid-cols-1">

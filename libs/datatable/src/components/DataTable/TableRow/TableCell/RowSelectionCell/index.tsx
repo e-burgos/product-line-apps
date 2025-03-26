@@ -6,7 +6,7 @@ import styles from './row-selection-cell.module.css';
 
 interface RowSelectionCellProps {
   row: Row<TData>;
-  rowSelection: IRowSelection<TData>;
+  rowSelection?: IRowSelection<TData>;
   table: Table<TData>;
 }
 
@@ -17,23 +17,27 @@ const RowSelectionCell: React.FC<RowSelectionCellProps> = ({
 }) => {
   const rowSelectionState = table?.getState()?.rowSelection;
   const setRowSelectionState = table?.setRowSelection;
-  const isSomeSelected = Object.keys(rowSelectionState).length !== 0;
+  const isSomeSelected = Object.keys(rowSelectionState || {}).length !== 0;
 
   const handleRowSelectionIdToRowData = useCallback(() => {
-    rowSelection?.getSelection?.([]);
+    if (!rowSelection) return [];
+    rowSelection.getSelection?.([]);
     const selectedRowData: Row<TData>[] = [];
-    Object.keys(rowSelectionState).forEach((key) => {
+    Object.keys(rowSelectionState || {}).forEach((key) => {
       const row = table?.getRow(key);
-      selectedRowData.push(row);
+      if (row) selectedRowData.push(row);
     });
     return selectedRowData;
   }, [rowSelection, rowSelectionState, table]);
 
   useEffect(() => {
-    if (rowSelection?.type === 'checkbox' && isSomeSelected)
-      rowSelection?.getSelection?.(handleRowSelectionIdToRowData());
-    if (!isSomeSelected) rowSelection?.getSelection?.([]);
+    if (!rowSelection) return;
+    if (rowSelection.type === 'checkbox' && isSomeSelected)
+      rowSelection.getSelection?.(handleRowSelectionIdToRowData());
+    if (!isSomeSelected) rowSelection.getSelection?.([]);
   }, [handleRowSelectionIdToRowData, isSomeSelected, rowSelection]);
+
+  if (!rowSelection) return null;
 
   const key = row.getIsSelected().toString();
 
@@ -46,7 +50,7 @@ const RowSelectionCell: React.FC<RowSelectionCellProps> = ({
         e?.stopPropagation?.();
       }}
     >
-      {rowSelection?.type === 'checkbox' && (
+      {rowSelection.type === 'checkbox' && (
         <RowSelection
           {...{
             type: 'checkbox',
@@ -57,7 +61,7 @@ const RowSelectionCell: React.FC<RowSelectionCellProps> = ({
           }}
         />
       )}
-      {rowSelection?.type === 'radio' && (
+      {rowSelection.type === 'radio' && (
         <RowSelection
           {...{
             type: 'radio',
@@ -66,7 +70,7 @@ const RowSelectionCell: React.FC<RowSelectionCellProps> = ({
             disabled: !row.getCanSelect(),
             onClick: () => {
               setRowSelectionState({ [row.id]: true });
-              rowSelection?.getSelection?.([row]);
+              rowSelection.getSelection?.([row]);
             },
           }}
         />

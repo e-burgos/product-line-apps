@@ -56,11 +56,12 @@ export const useDataTable = ({
 
   useEffect(() => {
     setResolveColumns(
-      getColumns(defaultColumns, scrollProps?.containerWith, offset),
+      getColumns(defaultColumns, scrollProps?.containerWith, offset)
     );
   }, [defaultColumns, offset, scrollProps?.containerWith]);
 
   const {
+    columnOrder: columnOrderStore,
     setPagination: setPaginationStore,
     setSorting: setSortingStore,
     setColumnOrder: setColumnOrderStore,
@@ -74,7 +75,6 @@ export const useDataTable = ({
     columns,
     initialPagination,
     initialSorting,
-    initialColumnOrder,
     initialColumnPinning,
     initialColumnVisibility,
     initialManualPagination,
@@ -90,11 +90,14 @@ export const useDataTable = ({
   const [pagination, setPagination] =
     useState<PaginationState>(initialPagination);
   const [sorting, setInternalSorting] = useState<SortingState>(initialSorting);
-  const [columnOrder, setColumnOrder] =
-    useState<ColumnOrderState>(initialColumnOrder);
+  const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
+    columnOrderStore.length > 0
+      ? columnOrderStore
+      : (defaultColumns.map((c) => c.id) as ColumnOrderState)
+  );
   // TODO: state unnecessary use columnVisibility of table state
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-    initialColumnVisibility,
+    initialColumnVisibility
   );
   const [columnPinning, setColumnPinning] =
     useState<ColumnPinningState>(initialColumnPinning);
@@ -115,7 +118,7 @@ export const useDataTable = ({
         return newSortVal;
       });
     },
-    [onSortModelChange],
+    [onSortModelChange]
   );
 
   const table = useReactTable({
@@ -129,8 +132,15 @@ export const useDataTable = ({
       rowSelection,
       columnPinning: {
         ...columnPinning,
-        left: [ExpandedColumn.id, RowSelectionColumn.id, ...columnPinning.left],
-        right: [...columnPinning.right, RowActionsColumn.id],
+        left: [
+          ExpandedColumn.id as string,
+          RowSelectionColumn.id as string,
+          ...(columnPinning.left as string[]),
+        ],
+        right: [
+          ...(columnPinning.right as string[]),
+          RowActionsColumn.id as string,
+        ],
       },
     },
     onPaginationChange: (updater) => {
@@ -220,7 +230,7 @@ export const useDataTable = ({
           }
         });
         setResolveColumns(
-          getColumns(newColumns, scrollProps?.containerWith, offset),
+          getColumns(newColumns, scrollProps?.containerWith, offset)
         );
       }
     }

@@ -3,29 +3,20 @@ import useCustomerColumns from '@optical-system-app/modules/customers/hooks/use-
 import useCustomerData from '@optical-system-app/modules/customers/hooks/use-customer-data';
 import { DataTable } from '@product-line/datatable';
 import DeleteCustomerModal from '@optical-system-app/modules/customers/components/modals/delete-customer-modal';
-import { useNavigate } from 'react-router-dom';
 import EditCustomerModal from '@optical-system-app/modules/customers/components/modals/edit-customer-modal';
 import CardContainer from 'libs/ui/src/components/forms/card-container';
 import InputSearcher from 'libs/ui/src/components/forms/input-searcher';
 import { useState } from 'react';
 import CardTitle from 'libs/ui/src/components/forms/card-title';
 import AddPrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/add-prescription-modal';
-import { usePrescriptionStore } from '@optical-system-app/modules/prescriptions/hooks/use-prescription-store';
 import { Customer } from '@product-line/dexie';
+import useCustomerTableActions from '../hooks/use-customer-table-actions';
 
 function CustomersTable() {
-  const navigate = useNavigate();
   const { columns } = useCustomerColumns();
   const { customers } = useCustomerData();
-  const {
-    currentCustomer,
-    setCurrentCustomer,
-    setOpenDeleteModal,
-    setOpenEditModal,
-  } = useCustomerStore();
-
-  const { setOpenCreateModal: setOpenCreatePrescriptionModal } =
-    usePrescriptionStore();
+  const { setCurrentCustomer } = useCustomerStore();
+  const { rowActions } = useCustomerTableActions();
 
   const [search, setSearch] = useState<string>('');
 
@@ -60,7 +51,9 @@ function CustomersTable() {
               takeDefaultPagination: true,
             }}
             headerOptions={{
-              enableDragColumns: false,
+              enableDragColumns: true,
+              enableHideColumns: false,
+              enablePinLeftColumns: true,
               headerContainer: (
                 <div className="flex justify-between items-center w-full !h-20 max-h-20 p-4">
                   <InputSearcher
@@ -85,28 +78,7 @@ function CustomersTable() {
             setCurrentRow={(row) =>
               setCurrentCustomer(row?.original as Customer)
             }
-            rowActions={[
-              {
-                action: 'edit',
-                label: () => 'Editar',
-                onClick: () => setOpenEditModal(true),
-              },
-              {
-                action: 'delete',
-                label: () => 'Eliminar',
-                onClick: () => setOpenDeleteModal(true),
-              },
-              {
-                action: 'view',
-                label: () => 'Detalles',
-                onClick: () => navigate(`/customers/${currentCustomer?.id}`),
-              },
-              {
-                action: 'more',
-                label: () => 'Agregar Ficha',
-                onClick: () => setOpenCreatePrescriptionModal(true),
-              },
-            ]}
+            rowActions={rowActions}
           />
         </CardTitle>
       </CardContainer>

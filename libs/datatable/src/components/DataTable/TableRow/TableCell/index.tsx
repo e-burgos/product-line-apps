@@ -33,7 +33,7 @@ interface TableCellProps {
   setOpenActions?: (value: boolean) => void;
   forceShowMenuActions?: boolean;
   columnOffset: number;
-  rowSelection: IRowSelection<TData>;
+  rowSelection?: IRowSelection<TData>;
 }
 
 const TableCell: React.FC<TableCellProps> = ({
@@ -63,14 +63,6 @@ const TableCell: React.FC<TableCellProps> = ({
   const isRowActionsColumn = cell.column.id === RowActionsColumn.id;
   const isRowSelectionColumn = cell.column.id === RowSelectionColumn.id;
 
-  const widthPaddings =
-    isExpandedColumn || isRowSelectionColumn
-      ? { left: 0, right: 0 }
-      : {
-          left: 12,
-          right: 2,
-        };
-
   const customStyles: CSSProperties = {
     transform: CSS.Translate.toString(transform),
     width: cell.column.getSize(),
@@ -93,7 +85,7 @@ const TableCell: React.FC<TableCellProps> = ({
       );
     if (isExpandedColumn)
       return <ExpandedRowCell row={row} hoverRow={hoverRow} />;
-    if (isRowSelectionColumn)
+    if (isRowSelectionColumn && rowSelection)
       return (
         <RowSelectionCell row={row} rowSelection={rowSelection} table={table} />
       );
@@ -103,8 +95,6 @@ const TableCell: React.FC<TableCellProps> = ({
 
   const width = useMemo(() => {
     const value = isOffsetCell ? columnOffset : pinStyles?.width;
-
-    console.log('value', value);
 
     if (Number.isNaN(value)) {
       return 0;
@@ -132,32 +122,21 @@ const TableCell: React.FC<TableCellProps> = ({
         zIndex: isDragging || isPinned ? 10 : 0,
         borderBottom: isExpanded ? 'none' : `1px solid ${colors.divider}`,
         flexShrink: 0,
+        padding: 0,
       }}
     >
-      {/* Content for row */}
       <div
-        className={cn([styles.tdContent, styles.hoverTd])}
+        className={styles.tdContent}
         style={{
           zIndex: 1,
           width: 'inherit',
-          justifyContent: isRowActionsColumn ? 'center' : undefined,
+          height: '100%',
+          justifyContent: isRowActionsColumn ? 'center' : 'flex-start',
+          padding: isRowActionsColumn ? '0' : '0 12px',
+          boxSizing: 'border-box',
         }}
       >
-        <div
-          style={{
-            width: !isRowActionsColumn && widthPaddings?.left,
-            height: '100%',
-            flexShrink: 0,
-          }}
-        />
         {handleCellComponents()}
-        <div
-          style={{
-            width: !isRowActionsColumn && widthPaddings?.right,
-            height: '100%',
-            flexShrink: 0,
-          }}
-        />
       </div>
     </td>
   );

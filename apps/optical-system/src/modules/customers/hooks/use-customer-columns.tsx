@@ -9,7 +9,7 @@ const useCustomerColumns = () => {
       {
         id: 'name',
         header: 'Nombre',
-        enablePinning: false,
+        accessorKey: 'name',
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -23,7 +23,7 @@ const useCustomerColumns = () => {
       {
         id: 'lastName',
         header: 'Apellido',
-        enablePinning: false,
+        accessorKey: 'lastName',
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -36,7 +36,7 @@ const useCustomerColumns = () => {
       {
         id: 'address',
         header: 'Dirección',
-        enablePinning: false,
+        accessorKey: 'address',
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -49,7 +49,7 @@ const useCustomerColumns = () => {
       {
         id: 'mobile',
         header: 'Celular',
-        enablePinning: false,
+        accessorKey: 'mobile',
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -62,7 +62,7 @@ const useCustomerColumns = () => {
       {
         id: 'email',
         header: 'Correo',
-        enablePinning: false,
+        accessorKey: 'email',
         accessorFn: (row) => row,
         cell: (info) => {
           return (
