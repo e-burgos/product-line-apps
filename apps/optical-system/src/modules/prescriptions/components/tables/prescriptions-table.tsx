@@ -1,13 +1,11 @@
-import DeletePrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/delete-customer-modal';
+import DeletePrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/delete-prescription-modal';
 import EditPrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/edit-prescription-modal';
 import usePrescriptionColumns from '@optical-system-app/modules/prescriptions/hooks/use-prescription-columns';
 import { usePrescriptionStore } from '@optical-system-app/modules/prescriptions/hooks/use-prescription-store';
 import { DataTable } from '@product-line/datatable';
 import { Prescription, usePrescriptionMethods } from '@product-line/dexie';
-import CardContainer from 'libs/ui/src/components/forms/card-container';
-import CardTitle from 'libs/ui/src/components/forms/card-title';
-import InputSearcher from 'libs/ui/src/components/forms/input-searcher';
-import { useState } from 'react';
+import { CardContainer, CardTitle, InputSearcher } from '@product-line/ui';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function PrescriptionsTable() {
@@ -23,16 +21,15 @@ function PrescriptionsTable() {
 
   const [search, setSearch] = useState<string>('');
 
-  const filterData = () => {
-    if (!search) return prescriptions;
-    if (prescriptions)
-      return prescriptions?.filter((prescription) => {
-        return prescription?.receiptNumber
-          ?.toString()
-          .includes(search.toLowerCase());
-      });
-    return [];
-  };
+  const filteredData = useMemo(() => {
+    if (!search) return prescriptions || [];
+    return (prescriptions || []).filter((prescription) =>
+      prescription?.receiptNumber
+        ?.toString()
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    );
+  }, [prescriptions, search]);
 
   return (
     <>
@@ -40,7 +37,7 @@ function PrescriptionsTable() {
         <CardTitle title="Buscador" className="mt-6">
           <DataTable
             tableId={'prescriptions'}
-            data={filterData() || []}
+            data={filteredData}
             columns={columns}
             border
             pagination={{
@@ -64,11 +61,11 @@ function PrescriptionsTable() {
             }}
             stateMessage={{
               noData:
-                search && filterData()
+                search && filteredData.length === 0
                   ? 'No se encontraron resultados'.toLocaleUpperCase()
                   : 'No hay fichas registradas'.toLocaleUpperCase(),
               noDataDescription:
-                search && filterData()
+                search && filteredData.length === 0
                   ? 'Intenta con otra búsqueda.'
                   : 'Registra una ficha para comenzar. Para agregar una ficha, haz clic en el botón "Agregar". Tips: Puedes exportar tus fichas a Excel o compartirlas con otras personas.',
             }}
@@ -89,8 +86,8 @@ function PrescriptionsTable() {
               {
                 action: 'view',
                 label: () => 'Detalles',
-                onClick: () =>
-                  navigate(`/prescriptions/${currentPrescription?.id}`),
+                onClick: (row) =>
+                  navigate(`/prescriptions/${row?.original?.id}`),
               },
             ]}
           />

@@ -10,7 +10,7 @@ const useCustomerPrescriptionsColumns = () => {
       {
         id: 'receiptNumber',
         header: 'Número de Ficha',
-
+        accessorKey: 'receiptNumber',
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -24,7 +24,7 @@ const useCustomerPrescriptionsColumns = () => {
       {
         id: 'date',
         header: 'Fecha',
-
+        accessorKey: 'date',
         accessorFn: (row) => row,
         cell: (info) => {
           const date = info?.getValue()?.date;
@@ -39,12 +39,14 @@ const useCustomerPrescriptionsColumns = () => {
       {
         id: 'paymentMethod',
         header: 'Método de Pago',
-
+        accessorKey: 'prescriptionPayment.paymentMethod',
         accessorFn: (row) => row,
         cell: (info) => {
           return (
             <div className="flex items-center gap-2">
-              <span>{info?.getValue()?.paymentMethod || '-'}</span>
+              <span>
+                {info?.getValue()?.prescriptionPayment?.paymentMethod || '-'}
+              </span>
             </div>
           );
         },
@@ -52,9 +54,8 @@ const useCustomerPrescriptionsColumns = () => {
       {
         id: 'balanceAmount',
         header: 'Saldo',
-
+        accessorKey: 'balanceAmount',
         enableSorting: false,
-        maxSize: 100,
         accessorFn: (row) => row,
         cell: (info) => {
           const amount = parseFloat(
@@ -70,9 +71,8 @@ const useCustomerPrescriptionsColumns = () => {
       {
         id: 'totalAmount',
         header: 'Monto Total',
-
+        accessorKey: 'totalAmount',
         enableSorting: false,
-        maxSize: 100,
         accessorFn: (row) => row,
         cell: (info) => {
           const amount = parseFloat(

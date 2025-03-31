@@ -10,7 +10,7 @@ function AdminPage() {
     <Layout
       header={{
         title: 'Adminstrador',
-        titleIcon: <Settings className="h-6 w-6" />,
+        titleIcon: <Settings className="h-6 w-6 text-brand" />,
       }}
     >
       {tokenData?.accessToken && <UsersTable />}

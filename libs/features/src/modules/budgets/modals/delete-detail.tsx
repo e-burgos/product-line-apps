@@ -4,14 +4,14 @@ import Modal from 'libs/ui/src/components/modal';
 import { useBudgetMethods } from '@product-line/dexie';
 
 export const DeleteDetail: React.FC = () => {
-  const { deleteBudgetVariant } = useBudgetMethods();
+  const { deleteBudgetDetail } = useBudgetMethods();
   const { openDeleteDetailModal, currentDetail, setOpenDeleteDetailModal } =
     useBudgetStore();
   const detail = currentDetail;
 
   const handleDelete = async () => {
     if (detail?.id) {
-      const deleted = await deleteBudgetVariant(detail.id);
+      const deleted = await deleteBudgetDetail(detail.id);
       if (deleted) {
         setOpenDeleteDetailModal(false);
       }

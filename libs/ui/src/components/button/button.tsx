@@ -14,7 +14,7 @@ type ColorNames =
   | 'info'
   | 'warning'
   | 'danger';
-type SizeNames = 'large' | 'medium' | 'small' | 'mini';
+type SizeNames = 'large' | 'medium' | 'small' | 'mini' | 'tiny';
 
 const shapes: Record<ShapeNames, string[]> = {
   rounded: ['rounded-md sm:rounded-lg'],
@@ -40,6 +40,7 @@ const sizes: Record<SizeNames, string[]> = {
   medium: ['px-5 sm:px-8 h-10 sm:h-12', 'h-10 w-10 sm:w-12 sm:h-12'],
   small: ['px-7 h-10', 'w-10 h-10'],
   mini: ['px-4 h-8', 'w-8 h-8'],
+  tiny: ['px-2 h-6', 'w-6 h-6'],
 };
 
 export interface ButtonProps
@@ -111,7 +112,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       case 'transparent':
         buttonColorClassNames = `${colorClassNames[0]} ${
           disabled || isLoading
-            ? 'bg-gray-100/25'
+            ? 'bg-gray-100 dark:bg-gray-800/25'
             : 'hover:bg-gray-100 dark:hover:bg-gray-800 focus:bg-gray-100 dark:focus:bg-gray-800'
         } `;
         buttonDripColor = 'rgba(0, 0, 0, 0.1)';
@@ -139,7 +140,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             'group inline-flex shrink-0 items-center justify-center overflow-hidden text-center text-xs font-medium tracking-wider outline-none transition-all sm:text-sm',
             !disabled
               ? buttonColorClassNames
-              : 'cursor-not-allowed bg-gray-100 text-gray-400',
+              : 'cursor-not-allowed dark:bg-gray-700 dark:text-gray-500 bg-gray-300 text-gray-600',
             disabled || isLoading || variant === 'transparent'
               ? 'bg-gray-100/25'
               : 'hover:-translate-y-0.5 hover:shadow-large focus:-translate-y-0.5 focus:shadow-large focus:outline-none',

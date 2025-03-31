@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db';
-import { Budget, BudgetVariant, BudgetWithVariants } from '../types/db-types';
+import { Budget, BudgetDetail } from '../types/db-types';
 import { useToastStore } from 'libs/ui/src/hooks';
 import { v4 as uuidv4 } from 'uuid';
 import { useCallback } from 'react';
@@ -60,7 +60,7 @@ export const useBudgetMethods = () => {
   const deleteBudget = async (budgetId: string) => {
     try {
       await db.budgets.delete(budgetId);
-      await db.budgetVariants.where('budgetId').equals(budgetId).delete();
+      await db.budgetDetails.where('budgetId').equals(budgetId).delete();
       addToast({
         id: 'budget-deleted',
         title: 'Presupuesto eliminado',
@@ -87,19 +87,31 @@ export const useBudgetMethods = () => {
     [budgets]
   );
 
-  const addBudgetVariant = async (budgetVariant: BudgetVariant) => {
+  const addBudgetDetail = async (budgetDetail: BudgetDetail) => {
     try {
-      await db.budgetVariants.add({
-        ...budgetVariant,
+      await db.budgetDetails.add({
+        ...budgetDetail,
         id: uuidv4(),
       });
+
+      const details = await db.budgetDetails
+        .where('budgetId')
+        .equals(budgetDetail.budgetId)
+        .toArray();
+
+      await db.budgets.update(budgetDetail.budgetId, {
+        details: details,
+        detailsCount: details.length,
+        totalAmount: details.reduce((sum, detail) => sum + detail.amount, 0),
+      });
+
       addToast({
         id: 'detail-created',
         title: 'Detalle creado',
         message: 'El detalle se ha creado correctamente.',
         variant: 'success',
       });
-      return { isSuccess: true, isError: false, budgetVariant };
+      return { isSuccess: true, isError: false, budgetDetail };
     } catch (error) {
       console.error(error);
       addToast({
@@ -108,22 +120,34 @@ export const useBudgetMethods = () => {
         message: 'No se pudo crear el detalle.',
         variant: 'destructive',
       });
-      return { isSuccess: false, isError: true, budgetVariant: null };
+      return { isSuccess: false, isError: true, budgetDetail: null };
     }
   };
 
-  const updateBudgetVariant = async (budgetVariant: BudgetVariant) => {
+  const updateBudgetDetail = async (budgetDetail: BudgetDetail) => {
     try {
-      await db.budgetVariants.update(budgetVariant.id, {
-        ...budgetVariant,
+      await db.budgetDetails.update(budgetDetail.id, {
+        ...budgetDetail,
       });
+
+      const details = await db.budgetDetails
+        .where('budgetId')
+        .equals(budgetDetail.budgetId)
+        .toArray();
+
+      await db.budgets.update(budgetDetail.budgetId, {
+        details: details,
+        detailsCount: details.length,
+        totalAmount: details.reduce((sum, detail) => sum + detail.amount, 0),
+      });
+
       addToast({
         id: 'update-detail',
         title: 'Detalle actualizado',
         message: 'El detalle se actualizó correctamente.',
         variant: 'success',
       });
-      return { isSuccess: true, isError: false, budgetVariant };
+      return { isSuccess: true, isError: false, budgetDetail };
     } catch (error) {
       console.error(error);
       addToast({
@@ -132,13 +156,25 @@ export const useBudgetMethods = () => {
         message: 'No se pudo actualizar el detalle.',
         variant: 'destructive',
       });
-      return { isSuccess: false, isError: true, budgetVariant: null };
+      return { isSuccess: false, isError: true, budgetDetail: null };
     }
   };
 
-  const deleteBudgetVariant = async (budgetVariantId: string) => {
+  const deleteBudgetDetail = async (budgetDetailId: string) => {
+    const budgetDetail = getBudgetDetailById(budgetDetailId);
     try {
-      await db.budgetVariants.delete(budgetVariantId);
+      await db.budgetDetails.delete(budgetDetailId);
+
+      const details = budgetDetails?.filter(
+        (detail) => detail?.id !== budgetDetailId
+      );
+
+      await db.budgets.update(budgetDetail?.budgetId as string, {
+        details: details,
+        detailsCount: details?.length || 0,
+        totalAmount: details?.reduce((sum, detail) => sum + detail.amount, 0),
+      });
+
       addToast({
         id: 'detail-deleted',
         title: 'Detalle eliminado',
@@ -158,36 +194,33 @@ export const useBudgetMethods = () => {
     }
   };
 
-  const budgetVariants = useLiveQuery(() =>
-    db.budgetVariants.orderBy('budgetId').toArray()
+  const budgetDetails = useLiveQuery(() =>
+    db.budgetDetails.orderBy('budgetId').toArray()
   );
 
-  const getBudgetVariantById = useCallback(
-    (budgetVariantId: string) =>
-      budgetVariants?.find(
-        (budgetVariant) => budgetVariant.id === budgetVariantId
-      ),
-    [budgetVariants]
+  const getBudgetDetailById = useCallback(
+    (budgetDetailId: string) =>
+      budgetDetails?.find((budgetDetail) => budgetDetail.id === budgetDetailId),
+    [budgetDetails]
   );
 
-  const getBudgetVariants = useCallback(
-    (budgetId: string) =>
-      budgetVariants?.filter((v) => v.budgetId === budgetId),
-    [budgetVariants]
+  const getBudgetDetails = useCallback(
+    (budgetId: string) => budgetDetails?.filter((d) => d.budgetId === budgetId),
+    [budgetDetails]
   );
 
-  const getBudgetsWithVariants = useCallback(
-    (): BudgetWithVariants[] =>
+  const getBudgetsWithDetails = useCallback(
+    () =>
       budgets?.map((budget) => ({
         ...budget,
-        totalAmount: getBudgetVariants(budget.id as string)?.reduce(
-          (sum, variant) => sum + variant.amount,
+        totalAmount: getBudgetDetails(budget.id as string)?.reduce(
+          (sum, detail) => sum + detail.amount,
           0
         ),
-        count: getBudgetVariants(budget.id as string)?.length || 0,
-        variants: getBudgetVariants(budget.id as string) || [],
+        detailsCount: getBudgetDetails(budget.id as string)?.length || 0,
+        details: getBudgetDetails(budget.id as string) || [],
       })) || [],
-    [budgets, getBudgetVariants]
+    [budgets, getBudgetDetails]
   );
 
   return {
@@ -195,14 +228,14 @@ export const useBudgetMethods = () => {
     updateBudget,
     deleteBudget,
     getBudgetById,
-    addBudgetVariant,
-    updateBudgetVariant,
-    deleteBudgetVariant,
-    getBudgetVariantById,
-    getBudgetVariants,
-    getBudgetsWithVariants,
+    addBudgetDetail,
+    updateBudgetDetail,
+    deleteBudgetDetail,
+    getBudgetDetailById,
+    getBudgetDetails,
+    getBudgetsWithDetails,
     budgets,
-    budgetVariants,
+    budgetDetails,
   };
 };
 

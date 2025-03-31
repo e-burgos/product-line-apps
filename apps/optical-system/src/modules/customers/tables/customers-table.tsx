@@ -1,5 +1,5 @@
 import { useCustomerStore } from '@optical-system-app/modules/customers/hooks/use-customer-store';
-import useCustomerColumns from '@optical-system-app/modules/customers/hooks/use-customer-columns';
+import { useCustomerColumns } from '@optical-system-app/modules/customers/hooks/use-customer-columns';
 import useCustomerData from '@optical-system-app/modules/customers/hooks/use-customer-data';
 import { DataTable } from '@product-line/datatable';
 import DeleteCustomerModal from '@optical-system-app/modules/customers/components/modals/delete-customer-modal';
@@ -13,9 +13,9 @@ import { Customer } from '@product-line/dexie';
 import useCustomerTableActions from '../hooks/use-customer-table-actions';
 
 function CustomersTable() {
+  const { setCurrentCustomer } = useCustomerStore();
   const { columns } = useCustomerColumns();
   const { customers } = useCustomerData();
-  const { setCurrentCustomer } = useCustomerStore();
   const { rowActions } = useCustomerTableActions();
 
   const [search, setSearch] = useState<string>('');

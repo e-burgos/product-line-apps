@@ -1,79 +1,80 @@
 import { FC, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
 import {
   Budget,
-  BudgetVariant,
+  BudgetDetail,
   useBudgetMethods,
   useProductMethods,
-  Variant,
   type Product,
 } from '@product-line/dexie';
-import { Input } from 'libs/ui/src/components';
+import { CardTitle, Input } from 'libs/ui/src/components';
 import { formatCurrency } from 'libs/features/src/utils/utils';
 import Button from 'libs/ui/src/components/button';
 import InputLabel from 'libs/ui/src/components/input-label';
 import Listbox, { ListboxOption } from 'libs/ui/src/components/list-box';
 import { useBudgetStore } from '../hooks/use-budget-store';
-
-export type EditBudgetDetailsFormData = {
-  budgetId: string;
-  productId: string;
-  variantId: string;
-  quantity: string;
-};
-
+import { BudgetDetailsFormData } from './validations';
+import { DollarSign } from 'lucide-react';
 interface EditBudgetDetailsFormProps {
-  budgetDetail: BudgetVariant;
+  budgetDetail: BudgetDetail;
 }
 
 export const EditBudgetDetailsForm: FC<EditBudgetDetailsFormProps> = ({
   budgetDetail,
 }) => {
-  const { updateBudgetVariant, budgets } = useBudgetMethods();
-  const { products, getProductVariantById, getProductVariantsById } =
-    useProductMethods();
+  const { updateBudgetDetail, budgets } = useBudgetMethods();
+  const { products, getProductById } = useProductMethods();
   const { setOpenEditDetailModal } = useBudgetStore();
-  const [selectedVariant, setSelectedVariant] = useState<Variant>();
+
   const {
     register,
     handleSubmit,
     reset,
     watch,
     setValue,
+    trigger,
     formState: { errors, isValid },
-  } = useForm<EditBudgetDetailsFormData>();
+  } = useForm<BudgetDetailsFormData>();
 
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      if (type === 'change') {
+        trigger(name);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, trigger]);
+
+  const title = watch('title');
+  const description = watch('description');
+  const amount = watch('amount');
   const quantity = watch('quantity');
-  const productVariant = getProductVariantById(
-    budgetDetail?.variantId as string
-  );
+  const product = getProductById(budgetDetail.productId);
 
   useEffect(() => {
     function loadBudgetDetail() {
       if (budgetDetail) {
-        setValue('quantity', budgetDetail?.quantity.toString());
-        setValue('variantId', budgetDetail.variantId.toString());
-        setValue('productId', budgetDetail.productId.toString());
-        setValue('budgetId', budgetDetail.budgetId.toString());
-      }
-      if (productVariant?.id) {
-        setSelectedVariant(productVariant);
+        setValue('title', budgetDetail.title);
+        setValue('description', budgetDetail.description);
+        setValue('amount', budgetDetail.amount);
+        setValue('quantity', budgetDetail?.quantity);
+        setValue('productId', budgetDetail.productId);
+        setValue('budgetId', budgetDetail.budgetId);
       }
     }
     loadBudgetDetail();
-  }, [budgetDetail, productVariant, setValue]);
+  }, [budgetDetail, setValue]);
 
-  async function onSubmit(values: EditBudgetDetailsFormData) {
-    if (selectedVariant?.id && budgetDetail?.id) {
-      const update = await updateBudgetVariant({
+  async function onSubmit(values: BudgetDetailsFormData) {
+    if (product?.id && budgetDetail?.id) {
+      const update = await updateBudgetDetail({
         id: budgetDetail.id,
         budgetId: budgetDetail.budgetId,
-        variantId: selectedVariant?.id,
-        title: selectedVariant?.title,
-        description: selectedVariant?.description,
-        quantity: Number(values.quantity),
-        amount: Number(selectedVariant?.amount) * Number(values.quantity),
         productId: budgetDetail.productId,
+        title: title,
+        description: description,
+        quantity: Number(values.quantity),
+        amount: Number(amount),
       });
       if (update.isSuccess) {
         reset();
@@ -94,14 +95,6 @@ export const EditBudgetDetailsForm: FC<EditBudgetDetailsFormProps> = ({
       value: product.id?.toString() || '',
     })) || [];
 
-  const variantOptions: ListboxOption[] =
-    getProductVariantsById(budgetDetail?.productId)?.map(
-      (variant: Variant) => ({
-        name: variant.title,
-        value: variant.id?.toString() || '',
-      })
-    ) || [];
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-4">
       <Listbox
@@ -109,7 +102,7 @@ export const EditBudgetDetailsForm: FC<EditBudgetDetailsFormProps> = ({
         label="Presupuestos"
         className="w-full"
         options={budgetOptions}
-        selectedOption={budgetOptions.find(
+        selectedOption={budgetOptions?.find(
           (option) => option.value === budgetDetail?.budgetId.toString()
         )}
       />
@@ -118,19 +111,12 @@ export const EditBudgetDetailsForm: FC<EditBudgetDetailsFormProps> = ({
         label="Productos"
         className="w-full"
         options={productOptions}
-        selectedOption={productOptions.find(
+        selectedOption={productOptions?.find(
           (option) => option.value === budgetDetail?.productId.toString()
         )}
+        onSelect={(value) => setValue('productId', value)}
       />
-      <Listbox
-        disabled
-        label="Variantes"
-        className="w-full"
-        options={variantOptions}
-        selectedOption={variantOptions.find(
-          (option) => option.value === budgetDetail?.variantId.toString()
-        )}
-      />
+
       <Input
         className="w-full mb-4"
         required
@@ -146,23 +132,66 @@ export const EditBudgetDetailsForm: FC<EditBudgetDetailsFormProps> = ({
       />
 
       {quantity && (
-        <div className="">
-          <InputLabel className="p-2" title={'Detalle'} />
-          <Input
-            className="mt-2"
-            value={`Nombre: ${selectedVariant?.title}`}
-            disabled
-          />
-          <Input
-            value={`Descripción: ${selectedVariant?.description}`}
-            disabled
-          />
-          <Input
-            value={`Monto Total: ${formatCurrency(
-              Number(selectedVariant?.amount) * Number(quantity)
-            )}`}
-            disabled
-          />
+        <div className="flex gap-4 md:flex-row flex-col pt-4">
+          <CardTitle title="Producto">
+            <Input
+              label="Nombre"
+              className="w-full mb-4"
+              value={product?.title}
+              disabled
+            />
+            <Input
+              label="Descripción"
+              className="w-full mb-4"
+              value={product?.description}
+              disabled
+            />
+            <Input
+              label="Monto Total"
+              className="w-full mb-4"
+              icon={<DollarSign className="h-4 w-4" />}
+              value={`${Number(product?.amount) * Number(quantity)}`}
+              disabled
+            />
+          </CardTitle>
+
+          <CardTitle title="Editar Detalle">
+            <Input
+              required
+              className="w-full mb-4"
+              label="Título Detalle"
+              id="title"
+              error={errors?.title?.message}
+              {...register('title', {
+                required: 'El título es obligatorio',
+              })}
+            />
+            <Input
+              className="w-full mb-4"
+              label="Descripción Detalle"
+              id="description"
+              error={errors?.description?.message}
+              {...register('description', {
+                required: 'La descripción es obligatoria',
+              })}
+            />
+            <Input
+              id="amount"
+              label="Monto Total"
+              type="number"
+              step="0.01"
+              placeholder="0.00"
+              icon={<DollarSign className="h-4 w-4" />}
+              {...register('amount', {
+                required: 'El precio es requerido',
+                pattern: {
+                  value: /^[0-9]+[.,]?[0-9]*$/,
+                  message: 'El precio debe ser un número válido',
+                },
+              })}
+              error={errors.amount?.message}
+            />
+          </CardTitle>
         </div>
       )}
       <div className="flex justify-end gap-2 pt-4">

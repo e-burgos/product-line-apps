@@ -6,9 +6,9 @@ import { formatCurrency } from 'libs/features/src/utils/utils';
 
 export const useBudgetData = () => {
   const { addToast } = useToastStore();
-  const { getBudgetsWithVariants, getBudgetVariants } = useBudgetMethods();
+  const { getBudgetsWithDetails, getBudgetDetails } = useBudgetMethods();
 
-  const budgets = getBudgetsWithVariants();
+  const budgets = getBudgetsWithDetails();
 
   const exportToExcel = () => {
     const data: any[] = [];
@@ -21,7 +21,7 @@ export const useBudgetData = () => {
         'Monto Total': formatCurrency(budget.totalAmount || 0),
       });
 
-      getBudgetVariants(budget.id as string)?.forEach((detail) => {
+      getBudgetDetails(budget.id as string)?.forEach((detail) => {
         data.push({
           Presupuesto: '',
           Descripción: '',
@@ -52,7 +52,7 @@ export const useBudgetData = () => {
       'Monto Total': formatCurrency(budget.totalAmount || 0),
     });
 
-    getBudgetVariants(budget?.id as string)?.forEach((detail) => {
+    getBudgetDetails(budget?.id as string)?.forEach((detail) => {
       data.push({
         Presupuesto: '',
         Descripción: '',
@@ -85,17 +85,17 @@ export const useBudgetData = () => {
           }\nTotal: ${new Intl.NumberFormat('es-AR', {
             style: 'currency',
             currency: 'ARS',
-          }).format(budget.totalAmount || 0)}\n\nDetalles:\n${getBudgetVariants(
+          }).format(budget.totalAmount || 0)}\n\nDetalles:\n${getBudgetDetails(
             budget?.id as string
           )
             ?.map(
-              (v) =>
-                `- Producto: ${v.title} (${
-                  v.quantity
+              (detail) =>
+                `- Producto: ${detail.title} (${
+                  detail.quantity
                 } unidades): ${new Intl.NumberFormat('es-AR', {
                   style: 'currency',
                   currency: 'ARS',
-                }).format(v.amount)}`
+                }).format(detail.amount)}`
             )
             .join('\n')}\n\n`
       )
@@ -127,17 +127,17 @@ export const useBudgetData = () => {
     }\nTotal: ${new Intl.NumberFormat('es-AR', {
       style: 'currency',
       currency: 'ARS',
-    }).format(budget.totalAmount || 0)}\n\nDetalles:\n${getBudgetVariants(
+    }).format(budget.totalAmount || 0)}\n\nDetalles:\n${getBudgetDetails(
       budget?.id as string
     )
       ?.map(
-        (v) =>
-          `- Producto: ${v.title} (${
-            v.quantity
+        (detail) =>
+          `- Producto: ${detail.title} (${
+            detail.quantity
           } unidades): ${new Intl.NumberFormat('es-AR', {
             style: 'currency',
             currency: 'ARS',
-          }).format(v.amount)}`
+          }).format(detail.amount)}`
       )
       .join('\n')}`;
 

@@ -11,7 +11,7 @@ const usePrescriptionColumns = () => {
       {
         id: 'receiptNumber',
         header: 'Número de Ficha',
-
+        accessorKey: 'receiptNumber',
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -25,7 +25,7 @@ const usePrescriptionColumns = () => {
       {
         id: 'date',
         header: 'Fecha',
-
+        accessorKey: 'date',
         accessorFn: (row) => row,
         cell: (info) => {
           const date = info?.getValue()?.date;
@@ -40,28 +40,19 @@ const usePrescriptionColumns = () => {
       {
         id: 'customer',
         header: 'Cliente',
-
-        size: 200,
+        accessorKey: 'customer',
         accessorFn: (row) => row,
+        size: 250,
         cell: (info) => {
-          const customer = getCustomerById(info?.getValue()?.customerId);
+          const customer = getCustomerById(
+            info?.getValue()?.customer?.id as string
+          );
           return (
             <div className="flex items-center gap-2">
               <User className="h-4 w-4 text-muted-foreground" />
-              <span>{`${customer?.name} ${customer?.lastName}` || '-'}</span>
-            </div>
-          );
-        },
-      },
-      {
-        id: 'paymentMethod',
-        header: 'Método de Pago',
-
-        accessorFn: (row) => row,
-        cell: (info) => {
-          return (
-            <div className="flex items-center gap-2">
-              <span>{info?.getValue()?.paymentMethod || '-'}</span>
+              <span>
+                {`${customer?.name || '-'} ${customer?.lastName || ''}`}
+              </span>
             </div>
           );
         },
@@ -69,9 +60,8 @@ const usePrescriptionColumns = () => {
       {
         id: 'balanceAmount',
         header: 'Saldo',
-
+        accessorKey: 'balanceAmount',
         enableSorting: false,
-        maxSize: 100,
         accessorFn: (row) => row,
         cell: (info) => {
           const amount = parseFloat(
@@ -87,7 +77,7 @@ const usePrescriptionColumns = () => {
       {
         id: 'totalAmount',
         header: 'Monto Total',
-
+        accessorKey: 'totalAmount',
         enableSorting: false,
         accessorFn: (row) => row,
         cell: (info) => {

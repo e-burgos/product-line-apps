@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Table2 } from 'lucide-react';
-import { Budget, useBudgetMethods } from '@product-line/dexie';
+import { Budget } from '@product-line/dexie';
 import { formatCurrency } from 'libs/features/src/utils/utils';
+import Badge from 'libs/ui/src/components/badge';
 
 export const useBudgetColumns = () => {
-  const { getBudgetVariants } = useBudgetMethods();
   const columns: ColumnDef<Budget, Budget>[] = useMemo(
     () => [
       {
@@ -35,24 +35,47 @@ export const useBudgetColumns = () => {
         },
       },
       {
+        id: 'detailsCount',
+        header: 'Detalles',
+        enablePinning: false,
+        enableSorting: false,
+        accessorKey: 'detailsCount',
+        size: 120,
+        accessorFn: (row) => row,
+        cell: (info) => {
+          return (
+            <Badge
+              variant="outline"
+              status={
+                info?.getValue()?.detailsCount !== 0 &&
+                info?.getValue()?.detailsCount !== undefined
+                  ? 'active'
+                  : 'inactive'
+              }
+            >
+              {info?.getValue()?.detailsCount || '0'}
+            </Badge>
+          );
+        },
+      },
+      {
         id: 'totalAmount',
         header: 'Monto Total',
         enablePinning: false,
         enableSorting: false,
+        size: 150,
+        accessorKey: 'totalAmount',
         accessorFn: (row) => row,
         cell: (info) => {
-          const amount = getBudgetVariants(
-            info?.getValue()?.id as string
-          )?.reduce((acc, variant) => acc + variant.amount, 0);
           return (
             <div className="flex items-center gap-2">
-              <span>{formatCurrency(amount || 0)}</span>
+              <span>{formatCurrency(info?.getValue()?.totalAmount || 0)}</span>
             </div>
           );
         },
       },
     ],
-    [getBudgetVariants]
+    []
   );
   return { columns: columns || [] };
 };

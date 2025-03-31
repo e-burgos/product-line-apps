@@ -85,6 +85,7 @@ export function AddCustomerForm() {
       mobile: data.mobile,
       email: data.email,
       comments: data.comments,
+      prescriptions: [],
     });
     if (add.isSuccess) {
       reset();

@@ -1,27 +1,29 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { Edit2, ListIcon, X } from 'lucide-react';
+import { ListIcon, PencilIcon, TrashIcon } from 'lucide-react';
 import { formatCurrency } from 'libs/features/src/utils/utils';
-import { BudgetVariant } from '@product-line/dexie';
-import Button from 'libs/ui/src/components/button/button';
-import { useBudgetStore } from './use-budget-store';
+import { BudgetDetail } from '@product-line/dexie';
 import {
   sortingCompareNumberFn,
   sortingCompareStringFn,
 } from '@product-line/datatable';
+import useBudgetDetailTableActions from '../hooks/use-budget-detail-table-actions';
+import Button from 'libs/ui/src/components/button';
 
 export const useBudgetDetailsColumns = () => {
-  const { setOpenDeleteDetailModal, setOpenEditDetailModal } = useBudgetStore();
-  const columns: ColumnDef<BudgetVariant, BudgetVariant>[] = useMemo(
+  const { rowActions } = useBudgetDetailTableActions();
+  const columns: ColumnDef<BudgetDetail, BudgetDetail>[] = useMemo(
     () => [
       {
         id: 'title',
-        header: 'Producto',
+        header: 'Detalle',
         sortingFn: (rowA, rowB) =>
           sortingCompareStringFn(rowA.original?.title, rowB.original?.title),
         meta: {
           filterVariant: 'text',
         },
+        accessorKey: 'title',
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -35,8 +37,7 @@ export const useBudgetDetailsColumns = () => {
       {
         id: 'description',
         header: 'Descripción',
-        enablePinning: false,
-        enableSorting: false,
+        accessorKey: 'description',
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -47,10 +48,27 @@ export const useBudgetDetailsColumns = () => {
         },
       },
       {
+        id: 'product',
+        header: 'Producto',
+        accessorKey: 'product',
+        accessorFn: (row) => row,
+        cell: (info) => {
+          return (
+            <div className="flex items-center gap-2">
+              <span>{info?.getValue()?.product?.title || '-'}</span>
+            </div>
+          );
+        },
+      },
+      {
         id: 'quantity',
         header: 'Cantidad',
-        enablePinning: false,
-        enableSorting: false,
+        accessorKey: 'quantity',
+        sortingFn: (rowA, rowB) =>
+          sortingCompareNumberFn(
+            Number(rowA.original?.quantity),
+            Number(rowB.original?.quantity)
+          ),
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -63,6 +81,7 @@ export const useBudgetDetailsColumns = () => {
       {
         id: 'amount',
         header: 'Subtotal',
+        accessorKey: 'amount',
         sortingFn: (rowA, rowB) =>
           sortingCompareNumberFn(
             Number(rowA.original?.amount),
@@ -81,45 +100,35 @@ export const useBudgetDetailsColumns = () => {
         },
       },
       {
-        id: 'actions',
+        id: 'ActionsColumn',
         header: 'Acciones',
-        size: 50,
-        maxSize: 50,
-        minSize: 50,
-        enablePinning: false,
-        enableResizing: false,
-        enableSorting: false,
-        enableHiding: false,
-        accessorFn: (row) => row,
+        size: 120,
         cell: () => {
           return (
             <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="mini"
-                shape="circle"
-                onClick={() => {
-                  setOpenEditDetailModal(true);
-                }}
-              >
-                <Edit2 size={16} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="mini"
-                shape="circle"
-                onClick={() => {
-                  setOpenDeleteDetailModal(true);
-                }}
-              >
-                <X size={16} />
-              </Button>
+              {rowActions.map((action) => (
+                <Button
+                  key={action.action}
+                  variant="transparent"
+                  size="tiny"
+                  shape="rounded"
+                  // @ts-ignore
+                  onClick={action.onClick}
+                >
+                  {action.action === 'edit' && (
+                    <PencilIcon className="h-4 w-4" />
+                  )}
+                  {action.action === 'delete' && (
+                    <TrashIcon className="h-4 w-4" />
+                  )}
+                </Button>
+              ))}
             </div>
           );
         },
       },
     ],
-    [setOpenDeleteDetailModal, setOpenEditDetailModal]
+    [rowActions]
   );
   return { columns: columns || [] };
 };

@@ -2,18 +2,17 @@ import Input from 'libs/ui/src/components/forms/input';
 import React, { useEffect, useState } from 'react';
 import Listbox, { ListboxOption } from 'libs/ui/src/components/list-box';
 import { CardTitle } from '@product-line/ui';
-import { Customer, Prescription } from '@product-line/dexie';
+import { Prescription } from '@product-line/dexie';
 
 interface PrescriptionDetailsFieldsProps {
   prescriptionData: Prescription;
-  customerData: Customer;
 }
 
 const PrescriptionDetailsFields: React.FC<PrescriptionDetailsFieldsProps> = ({
   prescriptionData,
-  customerData,
 }) => {
   const [selectedCustomer, setSelectedCustomer] = useState<ListboxOption>();
+  const customerData = prescriptionData?.customer;
 
   useEffect(() => {
     if (customerData?.id)

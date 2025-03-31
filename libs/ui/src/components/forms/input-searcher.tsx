@@ -30,7 +30,7 @@ export function InputSearcher({
   return (
     <Input
       {...props}
-      icon={<Search className="h-4 w-4" />}
+      icon={<Search className="h-4 w-4 dark:text-white text-current" />}
       value={value}
       onChange={(e) => setValue(e.target.value)}
     />

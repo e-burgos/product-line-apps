@@ -6,7 +6,10 @@ import Textarea from 'libs/ui/src/components/forms/textarea';
 import Listbox, { ListboxOption } from 'libs/ui/src/components/list-box';
 import { State, City } from 'country-state-city';
 import { useCustomerStore } from '../../hooks/use-customer-store';
-import { useCustomerMethods } from '@product-line/dexie';
+import {
+  useCustomerMethods,
+  usePrescriptionMethods,
+} from '@product-line/dexie';
 
 interface CustomerFormData {
   name: string;
@@ -28,6 +31,7 @@ interface EditCustomerFormProps {
 
 export const EditCustomerForm: FC<EditCustomerFormProps> = ({ customerId }) => {
   const { updateCustomer, getCustomerById } = useCustomerMethods();
+  const { getPrescriptionsByCustomerId } = usePrescriptionMethods();
   const { setOpenEditModal } = useCustomerStore();
   const {
     register,
@@ -40,6 +44,7 @@ export const EditCustomerForm: FC<EditCustomerFormProps> = ({ customerId }) => {
   } = useForm<CustomerFormData>();
 
   const customer = getCustomerById(customerId);
+  const prescriptions = getPrescriptionsByCustomerId(customerId);
 
   useEffect(() => {
     const subscription = watch((_value, { name, type }) => {
@@ -106,6 +111,8 @@ export const EditCustomerForm: FC<EditCustomerFormProps> = ({ customerId }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProvince]);
 
+  console.log(prescriptions);
+
   const onSubmit: SubmitHandler<CustomerFormData> = async (data) => {
     const update = await updateCustomer({
       id: customer?.id,
@@ -120,6 +127,7 @@ export const EditCustomerForm: FC<EditCustomerFormProps> = ({ customerId }) => {
       mobile: data.mobile,
       email: data.email,
       comments: data.comments,
+      prescriptions: prescriptions || [],
     });
     if (update.isSuccess) setOpenEditModal(false);
   };

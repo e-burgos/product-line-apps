@@ -46,8 +46,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {icon && (
               <div
                 className={cn(
-                  'flex justify-center align-middle w-fit',
-                  label && 'h-0'
+                  'flex justify-center align-middle w-fit dark:text-white text-current',
+                  label && 'h-full pt-7 *:first:mt-3.5 *:first:h-4 *:first:w-4'
                 )}
               >
                 {icon}

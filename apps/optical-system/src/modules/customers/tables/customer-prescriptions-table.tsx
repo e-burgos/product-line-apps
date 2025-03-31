@@ -1,10 +1,10 @@
 import { DataTable } from '@product-line/datatable';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { usePrescriptionStore } from '@optical-system-app/modules/prescriptions/hooks/use-prescription-store';
 import AddPrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/add-prescription-modal';
 import EditPrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/edit-prescription-modal';
-import DeletePrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/delete-customer-modal';
+import DeletePrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/delete-prescription-modal';
 import useCustomerPrescriptionsColumns from '../hooks/use-customer-prescriptions-columns';
 import {
   Customer,
@@ -12,17 +12,14 @@ import {
   useCustomerMethods,
   usePrescriptionMethods,
 } from '@product-line/dexie';
+import useCustomerPrescriptionsTableActions from '../hooks/use-customer-prescriptions-table-actions';
 
 function CustomerPrescriptionsTable() {
-  const navigate = useNavigate();
   const { getCustomerById } = useCustomerMethods();
   const { columns } = useCustomerPrescriptionsColumns();
-  const {
-    currentPrescription,
-    setCurrentPrescription,
-    setOpenDeleteModal,
-    setOpenEditModal,
-  } = usePrescriptionStore();
+  const { rowActions } = useCustomerPrescriptionsTableActions();
+  const { currentPrescription, setCurrentPrescription } =
+    usePrescriptionStore();
   const { getPrescriptionsByCustomerId } = usePrescriptionMethods();
 
   const { id } = useParams();
@@ -68,24 +65,7 @@ function CustomerPrescriptionsTable() {
         setCurrentRow={(row) =>
           setCurrentPrescription(row?.original as Prescription)
         }
-        rowActions={[
-          {
-            action: 'view',
-            label: () => 'Detalles',
-            onClick: () =>
-              navigate(`/prescriptions/${currentPrescription?.id}`),
-          },
-          {
-            action: 'edit',
-            label: () => 'Editar',
-            onClick: () => setOpenEditModal(true),
-          },
-          {
-            action: 'delete',
-            label: () => 'Eliminar',
-            onClick: () => setOpenDeleteModal(true),
-          },
-        ]}
+        rowActions={rowActions}
       />
       <DeletePrescriptionModal />
       <EditPrescriptionModal prescriptionId={currentPrescription?.id} />

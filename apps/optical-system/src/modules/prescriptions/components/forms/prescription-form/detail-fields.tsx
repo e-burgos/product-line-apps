@@ -27,17 +27,17 @@ const DetailFields: React.FC<DetailFieldsProps> = ({
 }) => {
   const framePrice = watch('framePrice') || 0;
   const crystalPrice = watch('crystalPrice') || 0;
-  const contactlensPrice = watch('contactlensPrice') || 0;
+  const contactLensPrice = watch('contactLensPrice') || 0;
   const arrangementPrice = watch('arrangementPrice') || 0;
 
   const handleSubtotalAmount = useCallback(() => {
     return (
       Number(framePrice) +
       Number(crystalPrice) +
-      Number(contactlensPrice) +
+      Number(contactLensPrice) +
       Number(arrangementPrice)
     );
-  }, [framePrice, crystalPrice, contactlensPrice, arrangementPrice]);
+  }, [framePrice, crystalPrice, contactLensPrice, arrangementPrice]);
 
   useEffect(() => {
     setValue('subtotalAmount', handleSubtotalAmount());
@@ -117,22 +117,22 @@ const DetailFields: React.FC<DetailFieldsProps> = ({
             className="w-full sm:w-calc-50-minus-8 mb-0"
             label="Lentes de contacto"
             placeholder='Ejemplo: "Lentes de contacto blandos"'
-            id="contactlensDesc"
-            {...register('contactlensDesc')}
+            id="contactLensDesc"
+            {...register('contactLensDesc')}
           />
           <Input
             disabled={forDetail}
             className="w-full sm:w-calc-50-minus-8 mb-4"
             label="Monto"
             placeholder="0.00"
-            id="contactlensPrice"
+            id="contactLensPrice"
             type="number"
             step="0.01"
             min="0"
             max="9999999999"
             icon={<DollarSign className="h-4 w-4 mt-1" />}
-            error={errors?.contactlensPrice?.message}
-            {...register('contactlensPrice', {
+            error={errors?.contactLensPrice?.message}
+            {...register('contactLensPrice', {
               pattern: {
                 value: /^[0-9]+(\.[0-9]{1,2})?$/,
                 message:

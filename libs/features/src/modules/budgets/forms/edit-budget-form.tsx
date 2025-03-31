@@ -4,11 +4,7 @@ import { useBudgetMethods } from '@product-line/dexie';
 import Button from 'libs/ui/src/components/button';
 import { FC, useEffect } from 'react';
 import { useBudgetStore } from '../hooks/use-budget-store';
-
-export type EditBudgetFormData = {
-  title: string;
-  description: string;
-};
+import { BudgetFormData } from './validations';
 
 export const EditBudgetForm: FC = () => {
   const { updateBudget, getBudgetById } = useBudgetMethods();
@@ -19,7 +15,7 @@ export const EditBudgetForm: FC = () => {
     handleSubmit,
     reset,
     formState: { errors, isValid },
-  } = useForm<EditBudgetFormData>();
+  } = useForm<BudgetFormData>();
 
   useEffect(() => {
     function loadBudgets() {
@@ -34,7 +30,7 @@ export const EditBudgetForm: FC = () => {
     loadBudgets();
   }, [budgetId, getBudgetById, reset]);
 
-  async function onSubmit(values: EditBudgetFormData) {
+  async function onSubmit(values: BudgetFormData) {
     const add = await updateBudget({
       id: budgetId,
       title: values.title,
@@ -63,8 +59,6 @@ export const EditBudgetForm: FC = () => {
         error={errors?.title?.message}
         {...register('title', {
           required: 'El título es obligatorio',
-          validate: (value) =>
-            value.length > 3 || 'El título debe tener al menos 3 caracteres',
         })}
       />
       <Input

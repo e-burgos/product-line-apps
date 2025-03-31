@@ -33,7 +33,7 @@ import ColumnVisibility from './ColumnVisibility';
 import styles from './table-header.module.css';
 
 interface TableHeaderProps {
-  header: Header<TData, TData>;
+  header: Header<TData, unknown>;
   headerGroup: HeaderGroup<TData>;
   index: number;
   headerOptions?: IHeaderOptions;
@@ -56,7 +56,7 @@ const TableHeader: FC<TableHeaderProps> = ({
   tableId,
 }) => {
   const { element: tableContainer } = useComponentEventListener(
-    `${tableId}-container`
+    `${tableId}-container`,
   );
   const { colors } = useTableColors();
   const { pinStyles, isPinned } = useGetCommonPinningStyles(header.column);
@@ -101,8 +101,7 @@ const TableHeader: FC<TableHeaderProps> = ({
   const enableHideColumns = handleHeaderAction('visibility');
   const enableResizeColumns = handleHeaderAction('resize');
 
-  const enableDraggableColumnConfig =
-    header.column.columnDef?.enableDraggable ?? true;
+  const enableDraggableColumnConfig = header.column.columnDef.enableDraggable;
   const isExpandedColumn = header.column.columnDef?.id === ExpandedColumn.id;
   const rowSelectionColumn =
     header.column.columnDef?.id === RowSelectionColumn.id;
@@ -275,9 +274,7 @@ const TableHeader: FC<TableHeaderProps> = ({
           ])}
           style={{
             // 28px width button and 2px gap and 24px of padding
-            width: `calc(100% - ${
-              (isEnabledActions ? actionsLength * (28 + 2) : 0) + 24
-            }px)`,
+            width: `calc(100% - ${(isEnabledActions ? actionsLength * (28 + 2) : 0) + 24}px)`,
             paddingLeft: isDragging ? 5 : 0,
           }}
         >
@@ -320,7 +317,7 @@ const TableHeader: FC<TableHeaderProps> = ({
           {!header.isPlaceholder &&
             flexRender(
               header.column.columnDef.header,
-              header.getContext() as any
+              header.getContext() as any,
             )}
         </div>
 

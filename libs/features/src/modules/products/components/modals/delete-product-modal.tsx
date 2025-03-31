@@ -3,7 +3,7 @@ import { useProductStore } from '../../hooks/use-product-store';
 import Modal from 'libs/ui/src/components/modal';
 import { Product, useProductMethods } from '@product-line/dexie';
 
-export const DeleteProduct: React.FC = () => {
+export const DeleteProductModal: React.FC = () => {
   const { openDeleteModal, setOpenDeleteModal, currentProduct } =
     useProductStore();
   const { deleteProduct } = useProductMethods();
@@ -31,4 +31,4 @@ export const DeleteProduct: React.FC = () => {
   );
 };
 
-export default DeleteProduct;
+export default DeleteProductModal;

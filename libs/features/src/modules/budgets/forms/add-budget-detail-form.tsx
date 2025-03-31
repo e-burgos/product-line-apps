@@ -1,7 +1,6 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Input } from 'libs/ui/src/components';
-import { formatCurrency } from 'libs/features/src/utils/utils';
+import { CardTitle, Input } from 'libs/ui/src/components';
 import Button from 'libs/ui/src/components/button';
 import InputLabel from 'libs/ui/src/components/input-label';
 import Listbox, { ListboxOption } from 'libs/ui/src/components/list-box';
@@ -11,57 +10,69 @@ import {
   Product,
   useBudgetMethods,
   useProductMethods,
-  Variant,
 } from '@product-line/dexie';
+import { BudgetDetailsFormData } from './validations';
+import { DollarSign } from 'lucide-react';
+import { useProductStore } from '../../products/hooks/use-product-store';
+import CreateProductModal from '../../products/components/modals/create-product-modal';
 
-export type AddBudgetDetailsFormData = {
-  budgetId: string;
-  productId: string;
-  variantId: string;
-  quantity: string;
-};
-
-export const AddBudgetDetailsForm: FC = () => {
-  const { addBudgetVariant, budgets } = useBudgetMethods();
-  const { getProductVariantsById } = useProductMethods();
-  const { products } = useProductMethods();
-  const { setOpenCreateModal } = useBudgetStore();
-  const [selectedBudget, setSelectedBudget] = useState<ListboxOption>();
+export const AddBudgetDetailsForm: FC<{ budget: Budget }> = ({ budget }) => {
+  const { setOpenCreateDetailModal } = useBudgetStore();
+  const { setOpenCreateModal: setOpenCreateProductModal } = useProductStore();
+  const { addBudgetDetail, budgets } = useBudgetMethods();
+  const { products, getProductById } = useProductMethods();
+  const [selectedBudget, setSelectedBudget] = useState<ListboxOption>({
+    name: budget.title,
+    value: budget.id?.toString() || '',
+  });
   const [selectedProduct, setSelectedProduct] = useState<ListboxOption>();
-  const [selectedVariantOption, setSelectedVariantOption] =
-    useState<ListboxOption>();
-  const [selectedVariant, setSelectedVariant] = useState<Variant>();
+
   const {
     register,
     handleSubmit,
     reset,
     watch,
     setValue,
-    formState: { errors, isValid },
-  } = useForm<AddBudgetDetailsFormData>();
+    formState: { errors },
+    trigger,
+  } = useForm<BudgetDetailsFormData>();
 
-  const budgetId = watch('budgetId');
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      if (type === 'change') {
+        trigger(name);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, trigger]);
+
   const productId = watch('productId');
   const quantity = watch('quantity');
-  const variants = getProductVariantsById(productId);
+  const title = watch('title');
+  const description = watch('description');
+  const amount = watch('amount');
+  const product = getProductById(productId);
 
-  async function onSubmit(values: AddBudgetDetailsFormData) {
-    if (selectedVariant?.id) {
-      const add = await addBudgetVariant({
-        budgetId: values.budgetId,
-        productId: values.productId,
-        variantId: values.variantId,
-        title: selectedVariant?.title,
-        description: selectedVariant?.description,
+  const isValidQuantity = (value: number): boolean => {
+    return Number.isInteger(value) && value > 0;
+  };
+
+  async function onSubmit(values: BudgetDetailsFormData) {
+    if (product) {
+      const add = await addBudgetDetail({
+        budgetId: budget.id as string,
+        productId: product.id as string,
+        title: title || product.title,
+        description: description || product?.description,
         quantity: Number(values.quantity),
-        amount: Number(selectedVariant?.amount) * Number(values.quantity),
+        amount:
+          Number(amount) || Number(product?.amount) * Number(values.quantity),
+        product: product,
       });
       if (add.isSuccess) {
         reset();
-        setSelectedBudget(undefined);
         setSelectedProduct(undefined);
-        setSelectedVariant(undefined);
-        setOpenCreateModal(false);
+        setOpenCreateDetailModal(false);
       }
     }
   }
@@ -78,128 +89,163 @@ export const AddBudgetDetailsForm: FC = () => {
       value: product.id?.toString() || '',
     })) || [];
 
-  const variantOptions: ListboxOption[] =
-    variants?.map((variant: Variant) => ({
-      name: variant.title,
-      value: variant.id?.toString() || '',
-    })) || [];
+  useEffect(() => {
+    if (product) {
+      setValue('title', product.title);
+      setValue('description', product.description);
+      setValue('amount', Number(product?.amount) * Number(quantity));
+    }
+  }, [product, setValue, quantity]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-8">
-      <div>
-        <InputLabel title={'Presupuestos'} />
-        <Listbox
-          className="w-full"
-          options={budgetOptions}
-          selectedOption={selectedBudget}
-          onChange={(e) => setSelectedBudget(e as ListboxOption)}
-          onSelect={(value) => setValue('budgetId', value)}
-        />
-      </div>
-
-      {products?.length !== 0 && budgetId && (
+    <>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 pr-4">
         <div>
-          <InputLabel title={'Productos'} />
+          <InputLabel title={'Presupuestos'} />
           <Listbox
+            disabled
             className="w-full"
-            options={productOptions}
-            selectedOption={selectedProduct}
-            onChange={(e) => setSelectedProduct(e as ListboxOption)}
-            onSelect={(value) => setValue('productId', value)}
+            options={budgetOptions}
+            selectedOption={selectedBudget}
+            onChange={(e) => setSelectedBudget(e as ListboxOption)}
+            onSelect={(value) => setValue('budgetId', value)}
           />
         </div>
-      )}
 
-      {budgetId && products?.length === 0 && (
-        <p className="text-destructive-foreground">
-          No se encontraron productos.
-        </p>
-      )}
+        {products?.length !== 0 && (
+          <div>
+            <InputLabel title={'Productos'} />
+            <Listbox
+              className="w-full"
+              options={productOptions}
+              selectedOption={selectedProduct}
+              onChange={(e) => setSelectedProduct(e as ListboxOption)}
+              onSelect={(value) => setValue('productId', value)}
+            />
+          </div>
+        )}
 
-      {productId &&
-        budgetId &&
-        products?.length !== 0 &&
-        variants?.length === 0 && (
-          <p className="text-destructive-foreground">
-            No se encontraron variantes para este producto.
+        {products?.length === 0 && (
+          <p className="text-sm text-red-500">
+            No se encontraron productos, por favor agrega un producto.
           </p>
         )}
 
-      {productId && variants?.length !== 0 && (
-        <div>
-          <InputLabel title={'Variantes'} />
-          <Listbox
-            className="w-full"
-            options={variantOptions}
-            selectedOption={selectedVariantOption}
-            onChange={(e) => setSelectedVariantOption(e as ListboxOption)}
-            onSelect={(value) => {
-              setValue('variantId', value);
-              setSelectedVariant(variants?.find((p) => p.id === value));
-            }}
+        {product?.id && (
+          <Input
+            className="w-full mb-4"
+            required
+            label="Cantidad"
+            id="quantity"
+            type="number"
+            step="1"
+            error={errors?.quantity?.message}
+            {...register('quantity', {
+              required: 'La cantidad es obligatoria',
+              pattern: {
+                value: /^[0-9]+$/,
+                message: 'La cantidad debe ser un número entero',
+              },
+            })}
           />
-        </div>
-      )}
+        )}
 
-      {selectedVariant?.id && (
-        <Input
-          className="w-full mb-4"
-          required
-          label="Cantidad"
-          id="quantity"
-          inputMode="decimal"
-          error={errors?.quantity?.message}
-          {...register('quantity', {
-            required: 'La cantidad es obligatoria',
-            validate: (value) =>
-              Number(value) > 0 || 'La cantidad debe ser mayor a 0',
-          })}
-        />
-      )}
+        {product?.id && quantity && isValidQuantity(Number(quantity)) && (
+          <div className="flex gap-4 md:flex-row flex-col pt-4">
+            <CardTitle title="Producto">
+              <Input
+                label="Nombre"
+                className="w-full mb-4"
+                value={product?.title}
+                disabled
+              />
+              <Input
+                label="Descripción"
+                className="w-full mb-4"
+                value={product?.description}
+                disabled
+              />
+              <Input
+                label="Monto Total"
+                className="w-full mb-4"
+                icon={<DollarSign className="h-4 w-4" />}
+                value={`${Number(product?.amount) * Number(quantity)}`}
+                disabled
+              />
+            </CardTitle>
 
-      {selectedVariant?.id && quantity && (
-        <div>
-          <InputLabel className="" title={'Detalle'} />
-          <Input
-            className="mt-2"
-            value={`Nombre: ${selectedVariant?.title}`}
-            disabled
-          />
-          <Input
-            value={`Descripción: ${selectedVariant?.description}`}
-            disabled
-          />
-          <Input
-            value={`Monto Total: ${formatCurrency(
-              selectedVariant?.amount * Number(quantity)
-            )}`}
-            disabled
-          />
+            <CardTitle title="Personalizar">
+              <Input
+                required
+                className="w-full mb-4"
+                label="Detalle"
+                id="title"
+                error={errors?.title?.message}
+                {...register('title', {
+                  required: 'El título es obligatorio',
+                })}
+              />
+              <Input
+                className="w-full mb-4"
+                label="Descripción Detalle"
+                id="description"
+                error={errors?.description?.message}
+                {...register('description', {
+                  required: 'La descripción es obligatoria',
+                })}
+              />
+              <Input
+                id="amount"
+                label="Monto Total"
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+                icon={<DollarSign className="h-4 w-4" />}
+                {...register('amount', {
+                  required: 'El precio es requerido',
+                  pattern: {
+                    value: /^[0-9]+[.,]?[0-9]*$/,
+                    message: 'El precio debe ser un número válido',
+                  },
+                })}
+                error={errors.amount?.message}
+              />
+            </CardTitle>
+          </div>
+        )}
+        <div className="flex justify-end gap-2 pt-4">
+          <Button
+            size="medium"
+            shape="rounded"
+            variant="ghost"
+            onClick={() => setOpenCreateDetailModal(false)}
+          >
+            {'Cerrar'}
+          </Button>
+          {products?.length !== 0 && (
+            <Button
+              size="medium"
+              shape="rounded"
+              type="submit"
+              disabled={
+                !product?.id || !quantity || !isValidQuantity(Number(quantity))
+              }
+            >
+              {'Guardar'}
+            </Button>
+          )}
+          {products?.length === 0 && (
+            <Button
+              size="medium"
+              shape="rounded"
+              onClick={() => setOpenCreateProductModal(true)}
+            >
+              {'Agregar Producto'}
+            </Button>
+          )}
         </div>
-      )}
-      <div className="flex justify-end gap-2 pt-4">
-        <Button
-          size="medium"
-          shape="rounded"
-          variant="ghost"
-          onClick={() => setOpenCreateModal(false)}
-        >
-          {'Cerrar'}
-        </Button>
-        <Button
-          size="medium"
-          shape="rounded"
-          type="submit"
-          disabled={
-            !isValid ||
-            !selectedVariant?.id ||
-            !quantity ||
-            !selectedBudget?.value
-          }
-        >
-          {'Guardar'}
-        </Button>
-      </div>
-    </form>
+      </form>
+      <CreateProductModal />
+    </>
   );
 };

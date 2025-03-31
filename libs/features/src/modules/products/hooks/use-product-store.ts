@@ -1,42 +1,66 @@
-import { Product, Variant } from '@product-line/dexie';
+import {
+  Product,
+  ProductCategory,
+  ProductSubCategory,
+} from '@product-line/dexie';
 import { create } from 'zustand';
 
 export interface IProductStore {
   currentProduct: Product | null;
-  currentVariant: Variant | null;
+  currentCategory: ProductCategory | null;
+  currentSubCategory: ProductSubCategory | null;
   openDeleteModal: boolean;
-  openDeleteVariantModal: boolean;
+  openDeleteCategoryModal: boolean;
+  openDeleteSubCategoryModal: boolean;
   openEditModal: boolean;
-  openEditVariantModal: boolean;
+  openEditCategoryModal: boolean;
+  openEditSubCategoryModal: boolean;
   openCreateModal: boolean;
-  openCreateVariantModal: boolean;
+  openCreateCategoryModal: boolean;
+  openCreateSubCategoryModal: boolean;
   setCurrentProduct: (product: Product | null) => void;
-  setCurrentVariant: (variant: Variant | null) => void;
+  setCurrentCategory: (category: ProductCategory | null) => void;
+  setCurrentSubCategory: (subCategory: ProductSubCategory | null) => void;
   setOpenDeleteModal: (isOpen: boolean) => void;
-  setOpenDeleteVariantModal: (isOpen: boolean) => void;
-  setOpenEditVariantModal: (isOpen: boolean) => void;
+  setOpenDeleteCategoryModal: (isOpen: boolean) => void;
+  setOpenDeleteSubCategoryModal: (isOpen: boolean) => void;
   setOpenEditModal: (isOpen: boolean) => void;
+  setOpenEditCategoryModal: (isOpen: boolean) => void;
+  setOpenEditSubCategoryModal: (isOpen: boolean) => void;
   setOpenCreateModal: (isOpen: boolean) => void;
-  setOpenCreateVariantModal: (isOpen: boolean) => void;
+  setOpenCreateCategoryModal: (isOpen: boolean) => void;
+  setOpenCreateSubCategoryModal: (isOpen: boolean) => void;
 }
 
 export const useProductStore = create<IProductStore>((set) => ({
   currentProduct: null,
-  currentVariant: null,
+  currentCategory: null,
+  currentSubCategory: null,
   openDeleteModal: false,
+  openDeleteCategoryModal: false,
+  openDeleteSubCategoryModal: false,
   openEditModal: false,
-  openEditVariantModal: false,
-  openDeleteVariantModal: false,
+  openEditCategoryModal: false,
+  openEditSubCategoryModal: false,
   openCreateModal: false,
-  openCreateVariantModal: false,
+  openCreateCategoryModal: false,
+  openCreateSubCategoryModal: false,
   setCurrentProduct: (product) => set({ currentProduct: product }),
-  setCurrentVariant: (variant) => set({ currentVariant: variant }),
+  setCurrentCategory: (category) => set({ currentCategory: category }),
+  setCurrentSubCategory: (subCategory) =>
+    set({ currentSubCategory: subCategory }),
   setOpenDeleteModal: (isOpen) => set({ openDeleteModal: isOpen }),
-  setOpenDeleteVariantModal: (isOpen) =>
-    set({ openDeleteVariantModal: isOpen }),
+  setOpenDeleteCategoryModal: (isOpen) =>
+    set({ openDeleteCategoryModal: isOpen }),
+  setOpenDeleteSubCategoryModal: (isOpen) =>
+    set({ openDeleteSubCategoryModal: isOpen }),
   setOpenEditModal: (isOpen) => set({ openEditModal: isOpen }),
-  setOpenEditVariantModal: (isOpen) => set({ openEditVariantModal: isOpen }),
+  setOpenEditCategoryModal: (isOpen) => set({ openEditCategoryModal: isOpen }),
+  setOpenEditSubCategoryModal: (isOpen) =>
+    set({ openEditSubCategoryModal: isOpen }),
   setOpenCreateModal: (isOpen) => set({ openCreateModal: isOpen }),
-  setOpenCreateVariantModal: (isOpen) =>
-    set({ openCreateVariantModal: isOpen }),
+  setOpenCreateCategoryModal: (isOpen) =>
+    set({ openCreateCategoryModal: isOpen }),
+  setOpenCreateSubCategoryModal: (isOpen) =>
+    set({ openCreateSubCategoryModal: isOpen }),
 }));

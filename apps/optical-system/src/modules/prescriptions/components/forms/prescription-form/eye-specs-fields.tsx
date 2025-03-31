@@ -31,7 +31,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               type="decimal"
               error={errors?.farRightSphere?.message}
               icon={
-                <span className="text-[10px] font-bold border h-5 rounded mt-0.5 px-0.5">
+                <span className="bg-brand text-[10px] font-bold dark:text-white text-current border h-5 rounded mt-0.5 px-0.5">
                   SPH
                 </span>
               }
@@ -63,7 +63,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               type="decimal"
               error={errors?.farRightCylinder?.message}
               icon={
-                <span className="text-[10px] font-bold border h-5 rounded mt-0.5 px-0.5">
+                <span className="bg-brand text-[10px] font-bold dark:text-white text-current border h-5 rounded mt-0.5 px-0.5">
                   CIL
                 </span>
               }
@@ -95,7 +95,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               type="number"
               error={errors?.farRightAxis?.message}
               icon={
-                <span className="text-[10px] font-bold border h-5 rounded mt-0.5 px-0.5">
+                <span className="bg-brand text-[10px] font-bold dark:text-white text-current border h-5 rounded mt-0.5 px-0.5">
                   EJE
                 </span>
               }
@@ -126,7 +126,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               pattern="^[-+]?[0-9]*\.?[0-9]+$"
               error={errors?.farLeftSphere?.message}
               icon={
-                <span className="text-[10px] font-bold border h-5 rounded mt-0.5 px-0.5">
+                <span className="bg-brand text-[10px] font-bold dark:text-white text-current border h-5 rounded mt-0.5 px-0.5">
                   SPH
                 </span>
               }
@@ -158,7 +158,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               type="decimal"
               error={errors?.farLeftCylinder?.message}
               icon={
-                <span className="text-[10px] font-bold border h-5 rounded mt-0.5 px-0.5">
+                <span className="bg-brand text-[10px] font-bold dark:text-white text-current border h-5 rounded mt-0.5 px-0.5">
                   CIL
                 </span>
               }
@@ -190,7 +190,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               type="number"
               error={errors?.farLeftAxis?.message}
               icon={
-                <span className="text-[10px] font-bold border h-5 rounded mt-0.5 px-0.5">
+                <span className="bg-brand text-[10px] font-bold dark:text-white text-current border h-5 rounded mt-0.5 px-0.5">
                   EJE
                 </span>
               }
@@ -223,7 +223,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               pattern="^[-+]?[0-9]*\.?[0-9]+$"
               error={errors?.nearRightSphere?.message}
               icon={
-                <span className="text-[10px] font-bold border h-5 rounded mt-0.5 px-0.5">
+                <span className="bg-brand text-[10px] font-bold dark:text-white text-current border h-5 rounded mt-0.5 px-0.5">
                   SPH
                 </span>
               }
@@ -255,7 +255,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               type="decimal"
               error={errors?.nearRightCylinder?.message}
               icon={
-                <span className="text-[10px] font-bold border h-5 rounded mt-0.5 px-0.5">
+                <span className="bg-brand text-[10px] font-bold dark:text-white text-current border h-5 rounded mt-0.5 px-0.5">
                   CIL
                 </span>
               }
@@ -287,7 +287,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               type="number"
               error={errors?.nearRightAxis?.message}
               icon={
-                <span className="text-[10px] font-bold border h-5 rounded mt-0.5 px-0.5">
+                <span className="bg-brand text-[10px] font-bold dark:text-white text-current border h-5 rounded mt-0.5 px-0.5">
                   EJE
                 </span>
               }
@@ -318,7 +318,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               pattern="^[-+]?[0-9]*\.?[0-9]+$"
               error={errors?.nearLeftSphere?.message}
               icon={
-                <span className="text-[10px] font-bold border h-5 rounded mt-0.5 px-0.5">
+                <span className="bg-brand text-[10px] font-bold dark:text-white text-current border h-5 rounded mt-0.5 px-0.5">
                   SPH
                 </span>
               }
@@ -350,7 +350,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               type="decimal"
               error={errors?.nearLeftCylinder?.message}
               icon={
-                <span className="text-[10px] font-bold border h-5 rounded mt-0.5 px-0.5">
+                <span className="bg-brand text-[10px] font-bold dark:text-white text-current border h-5 rounded mt-0.5 px-0.5">
                   CIL
                 </span>
               }
@@ -382,7 +382,7 @@ const EyeSpecsFields: React.FC<EyeSpecsFieldsProps> = ({
               type="number"
               error={errors?.nearLeftAxis?.message}
               icon={
-                <span className="text-[10px] font-bold border h-5 rounded mt-0.5 px-0.5">
+                <span className="bg-brand text-[10px] font-bold dark:text-white text-current border h-5 rounded mt-0.5 px-0.5">
                   EJE
                 </span>
               }

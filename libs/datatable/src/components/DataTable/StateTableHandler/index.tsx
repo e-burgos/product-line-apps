@@ -57,7 +57,7 @@ const StateTableHandler: React.FC<StateTableHandlerProps> = ({
         <td className={styles.messageContainer}>
           {isLoading && (
             <div className={styles.stateContainer}>
-              <Spinner />
+              <Spinner size="lg" />
             </div>
           )}
           {isEmpty && !isError && !isLoading && (

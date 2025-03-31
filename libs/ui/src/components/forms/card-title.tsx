@@ -24,7 +24,7 @@ export const CardTitle: React.FC<CardTitleProps> = ({
     >
       {title && (
         <h3
-          className={`absolute -top-4 left-4 m-0 dark:bg-light-dark bg-white font-bold sm:text-2xl text-lg px-2 rounded-lg`}
+          className={`absolute -top-4 left-4 m-0 dark:bg-light-dark bg-white font-bold sm:text-2xl text-lg dark:text-white text-current px-2 rounded-lg`}
         >
           {title}
         </h3>

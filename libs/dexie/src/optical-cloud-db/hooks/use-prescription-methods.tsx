@@ -10,10 +10,20 @@ export const usePrescriptionMethods = () => {
 
   const addPrescription = async (prescription: Prescription) => {
     try {
+      if (
+        !prescription.customer ||
+        !prescription.crystalSpecs ||
+        !prescription.prescriptionPayment ||
+        !prescription.prescriptionDetail
+      ) {
+        throw new Error('Missing required related entities');
+      }
+      // Add prescription
       await db.prescriptions.add({
         ...prescription,
         id: uuidv4(),
       });
+
       addToast({
         id: 'prescription-created',
         title: 'Ficha creada',
@@ -35,9 +45,20 @@ export const usePrescriptionMethods = () => {
 
   const updatePrescription = async (prescription: Prescription) => {
     try {
+      if (
+        !prescription.customer ||
+        !prescription.crystalSpecs ||
+        !prescription.prescriptionPayment ||
+        !prescription.prescriptionDetail
+      ) {
+        throw new Error('Missing required related entities');
+      }
+
+      // Update prescription
       await db.prescriptions.update(prescription.id, {
         ...prescription,
       });
+
       addToast({
         id: 'prescription-updated',
         title: 'Ficha actualizada',
@@ -59,7 +80,9 @@ export const usePrescriptionMethods = () => {
 
   const deletePrescription = async (prescriptionId: string) => {
     try {
+      // Delete prescription
       await db.prescriptions.delete(prescriptionId);
+
       addToast({
         id: 'prescription-deleted',
         title: 'Ficha eliminada',
@@ -86,16 +109,20 @@ export const usePrescriptionMethods = () => {
   const getPrescriptionsByCustomerId = useCallback(
     (customerId: string) => {
       return prescriptions?.filter(
-        (prescription) => prescription.customerId === customerId
+        (prescription) => prescription.customer?.id === customerId
       );
     },
     [prescriptions]
   );
 
-  const getPrescriptionById = (id: string) =>
-    prescriptions?.find(
-      (prescription) => prescription.id === id
-    ) as Prescription;
+  const getPrescriptionById = useCallback(
+    (id: string) => {
+      const prescription = prescriptions?.find((p) => p.id === id);
+      if (!prescription) return null;
+      return prescription;
+    },
+    [prescriptions]
+  );
 
   const checkIsPrescription = (prescriptionId: string) =>
     prescriptions?.find((p) => p.id === prescriptionId) ? true : false;

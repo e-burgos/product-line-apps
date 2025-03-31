@@ -1,9 +1,10 @@
 import { Customer } from '@product-line/dexie';
 import { ColumnDef } from '@tanstack/react-table';
+import Badge from 'libs/ui/src/components/badge';
 import { User } from 'lucide-react';
 import { useMemo } from 'react';
 
-const useCustomerColumns = () => {
+export const useCustomerColumns = () => {
   const columns: ColumnDef<Customer, Customer>[] = useMemo(
     () => [
       {
@@ -69,6 +70,27 @@ const useCustomerColumns = () => {
             <div className="flex items-center gap-2">
               <span>{info?.getValue()?.email || '-'}</span>
             </div>
+          );
+        },
+      },
+      {
+        id: 'prescriptions',
+        header: 'Recetas',
+        accessorKey: 'prescriptions',
+        enableHiding: false,
+        enableSorting: false,
+        enablePinning: false,
+        size: 100,
+        accessorFn: (row) => row,
+        cell: (info) => {
+          return (
+            <Badge
+              status={
+                info?.getValue()?.prescriptions?.length ? 'active' : 'inactive'
+              }
+            >
+              {info?.getValue()?.prescriptions?.length || '0'}
+            </Badge>
           );
         },
       },

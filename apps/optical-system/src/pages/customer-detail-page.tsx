@@ -1,6 +1,4 @@
-import Button from 'libs/ui/src/components/button/button';
-import { UserCog2, Download, Share2 } from 'lucide-react';
-import useCustomerData from '@optical-system-app/modules/customers/hooks/use-customer-data';
+import { UserCog2 } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import CardContainer from 'libs/ui/src/components/forms/card-container';
 import DetailCustomerForm from '@optical-system-app/modules/customers/components/forms/detail-customer-form';
@@ -11,9 +9,9 @@ import DeleteCustomerModal from '@optical-system-app/modules/customers/component
 import Layout from '@optical-system-app/components/layout';
 import CustomerPrescriptionsTable from '@optical-system-app/modules/customers/tables/customer-prescriptions-table';
 import { Customer, useCustomerMethods } from '@product-line/dexie';
+import ShareButtons from '@optical-system-app/components/share-buttons';
 
 function CustomerDetailPage() {
-  const { shareOneCustomer, exportOneCustomerToExcel } = useCustomerData();
   const { getCustomerById, checkIsCustomer } = useCustomerMethods();
 
   const { id } = useParams();
@@ -28,30 +26,11 @@ function CustomerDetailPage() {
     <Layout
       header={{
         title: 'Detalles del Cliente',
-        titleIcon: <UserCog2 className="h-6 w-6" />,
-        linkToBack: '/customers',
+        titleIcon: <UserCog2 className="h-6 w-6 text-brand" />,
         headerContent: (
           <>
-            <Button
-              variant="ghost"
-              size="small"
-              shape="rounded"
-              onClick={() => exportOneCustomerToExcel(customerId)}
-              title="Exportar a Excel"
-              className="p-2"
-            >
-              <Download className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="small"
-              shape="rounded"
-              onClick={() => shareOneCustomer(customerId)}
-              title="Compartir"
-              className="p-2"
-            >
-              <Share2 className="h-4 w-4" />
-            </Button>
+            {/* TODO: Add share buttons */}
+            <ShareButtons />
             <DeleteCustomerModal
               showButton
               customerId={customerId}

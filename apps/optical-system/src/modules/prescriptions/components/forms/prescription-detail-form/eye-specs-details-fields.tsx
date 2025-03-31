@@ -19,21 +19,21 @@ const EyeSpecsDetailsFields: React.FC<EyeSpecsDetailsFieldsProps> = ({
           <div className="flex flex-row flex-wrap justify-between gap-2">
             <Input
               disabled
-              value={prescriptionData?.farRightSphere}
+              value={prescriptionData?.crystalSpecs?.farRightSphere}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="farRightSphere"
               type="decimal"
             />
             <Input
               disabled
-              value={prescriptionData?.farRightCylinder}
+              value={prescriptionData?.crystalSpecs?.farRightCylinder}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="farRightCylinder"
               type="decimal"
             />
             <Input
               disabled
-              value={prescriptionData?.farRightAxis}
+              value={prescriptionData?.crystalSpecs?.farRightAxis}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="farRightAxis"
               type="number"
@@ -45,21 +45,21 @@ const EyeSpecsDetailsFields: React.FC<EyeSpecsDetailsFieldsProps> = ({
           <div className="flex flex-row flex-wrap justify-between gap-2">
             <Input
               disabled
-              value={prescriptionData?.farLeftSphere}
+              value={prescriptionData?.crystalSpecs?.farLeftSphere}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="farLeftSphere"
               type="decimal"
             />
             <Input
               disabled
-              value={prescriptionData?.farLeftCylinder}
+              value={prescriptionData?.crystalSpecs?.farLeftCylinder}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="farLeftCylinder"
               type="decimal"
             />
             <Input
               disabled
-              value={prescriptionData?.farLeftAxis}
+              value={prescriptionData?.crystalSpecs?.farLeftAxis}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="farLeftAxis"
               type="number"
@@ -73,7 +73,7 @@ const EyeSpecsDetailsFields: React.FC<EyeSpecsDetailsFieldsProps> = ({
           <div className="flex flex-row flex-wrap justify-between gap-2">
             <Input
               disabled
-              value={prescriptionData?.nearRightSphere}
+              value={prescriptionData?.crystalSpecs?.nearRightSphere}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="nearRightSphere"
               type="decimal"
@@ -81,14 +81,14 @@ const EyeSpecsDetailsFields: React.FC<EyeSpecsDetailsFieldsProps> = ({
             />
             <Input
               disabled
-              value={prescriptionData?.nearRightCylinder}
+              value={prescriptionData?.crystalSpecs?.nearRightCylinder}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="nearRightCylinder"
               type="decimal"
             />
             <Input
               disabled
-              value={prescriptionData?.nearRightAxis}
+              value={prescriptionData?.crystalSpecs?.nearRightAxis}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="nearRightAxis"
               type="number"
@@ -100,21 +100,21 @@ const EyeSpecsDetailsFields: React.FC<EyeSpecsDetailsFieldsProps> = ({
           <div className="flex flex-row flex-wrap justify-between gap-2">
             <Input
               disabled
-              value={prescriptionData?.nearLeftSphere}
+              value={prescriptionData?.crystalSpecs?.nearLeftSphere}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="nearLeftSphere"
               type="decimal"
             />
             <Input
               disabled
-              value={prescriptionData?.nearLeftCylinder}
+              value={prescriptionData?.crystalSpecs?.nearLeftCylinder}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="nearLeftCylinder"
               type="decimal"
             />
             <Input
               disabled
-              value={prescriptionData?.nearLeftAxis}
+              value={prescriptionData?.crystalSpecs?.nearLeftAxis}
               className="w-full sm:w-calc-33-minus-4 mb-1"
               id="nearLeftAxis"
               type="number"

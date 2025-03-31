@@ -56,7 +56,7 @@ export const useDataTable = ({
 
   useEffect(() => {
     setResolveColumns(
-      getColumns(defaultColumns, scrollProps?.containerWith, offset)
+      getColumns(defaultColumns, scrollProps?.containerWith, offset),
     );
   }, [defaultColumns, offset, scrollProps?.containerWith]);
 
@@ -91,13 +91,13 @@ export const useDataTable = ({
     useState<PaginationState>(initialPagination);
   const [sorting, setInternalSorting] = useState<SortingState>(initialSorting);
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
-    columnOrderStore.length > 0
+    columnOrderStore?.length > 0
       ? columnOrderStore
-      : (defaultColumns.map((c) => c.id) as ColumnOrderState)
+      : (defaultColumns?.map((c) => c.id) as ColumnOrderState),
   );
   // TODO: state unnecessary use columnVisibility of table state
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-    initialColumnVisibility
+    initialColumnVisibility,
   );
   const [columnPinning, setColumnPinning] =
     useState<ColumnPinningState>(initialColumnPinning);
@@ -118,7 +118,7 @@ export const useDataTable = ({
         return newSortVal;
       });
     },
-    [onSortModelChange]
+    [onSortModelChange],
   );
 
   const table = useReactTable({
@@ -132,15 +132,8 @@ export const useDataTable = ({
       rowSelection,
       columnPinning: {
         ...columnPinning,
-        left: [
-          ExpandedColumn.id as string,
-          RowSelectionColumn.id as string,
-          ...(columnPinning.left as string[]),
-        ],
-        right: [
-          ...(columnPinning.right as string[]),
-          RowActionsColumn.id as string,
-        ],
+        left: [ExpandedColumn.id, RowSelectionColumn.id, ...columnPinning.left],
+        right: [...columnPinning.right, RowActionsColumn.id],
       },
     },
     onPaginationChange: (updater) => {
@@ -230,7 +223,7 @@ export const useDataTable = ({
           }
         });
         setResolveColumns(
-          getColumns(newColumns, scrollProps?.containerWith, offset)
+          getColumns(newColumns, scrollProps?.containerWith, offset),
         );
       }
     }

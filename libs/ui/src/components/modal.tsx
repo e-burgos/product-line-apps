@@ -70,7 +70,7 @@ const Modal: React.FC<ModalProps> = ({
               {text?.title && (
                 <DialogTitle
                   as="h3"
-                  className="flex w-full justify-between items-center font-bold uppercase tracking-wider text-lg h-14"
+                  className="flex w-full justify-between items-center font-bold uppercase tracking-wider text-lg h-14 dark:text-white text-current"
                 >
                   {text.title}
                   <Close
@@ -80,9 +80,11 @@ const Modal: React.FC<ModalProps> = ({
                 </DialogTitle>
               )}
               {text?.content && (
-                <p className="mt-4 text-sm/6">{text.content}</p>
+                <p className="mt-4 text-sm/6 dark:text-white text-current">
+                  {text.content}
+                </p>
               )}
-              <div className=" flex flex-col w-full overflow-x-hidden overflow-y-auto max-h-[60vh] p-2">
+              <div className="flex flex-col w-full overflow-x-hidden overflow-y-auto max-h-[60vh] p-2 dark:text-white text-current mt-4">
                 {children}
               </div>
               {buttonContainer && <div className="mt-6">{buttonContainer}</div>}

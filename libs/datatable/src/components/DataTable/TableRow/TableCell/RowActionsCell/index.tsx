@@ -25,7 +25,7 @@ export interface RowActionsCellProps {
   hoverRow: HoverType;
   rowActions?: IRowActions<TData>[];
   setHoverRow: (value: HoverType) => void;
-  setOpenActions?: (value: boolean) => void;
+  setOpenActions: (value: boolean) => void;
   forceShowMenuActions?: boolean;
 }
 
@@ -76,7 +76,7 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
   };
 
   const closeMenu = useCallback(() => {
-    setOpenActions?.(false);
+    setOpenActions(false);
     setOpenOptions(false);
     updateMenuPosition();
     updateOptionsContainerHeight();
@@ -87,10 +87,10 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
     window.dispatchEvent(event);
 
     if (openOptions) {
-      setOpenActions?.(false);
+      setOpenActions(false);
       setOpenOptions(false);
     } else {
-      setOpenActions?.(true);
+      setOpenActions(true);
       setOpenOptions(true);
       updateMenuPosition();
       updateOptionsContainerHeight();
@@ -181,7 +181,7 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
       ) {
         setHoverOption({ hover: false, index: 0 });
         setOpenOptions(false);
-        setOpenActions?.(false);
+        setOpenActions(false);
       }
     };
 
@@ -207,9 +207,7 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
   const hideSingleAction = firstActionRow?.hidden?.(row);
   const singleActionLabel =
     firstActionRow?.showLabelInTooltip && firstActionRow?.label?.(row);
-  const isSingleActionDisabled = firstActionRow
-    ? Boolean(isRowActionDisabled(firstActionRow))
-    : false;
+  const isSingleActionDisabled = Boolean(isRowActionDisabled(firstActionRow));
 
   return (
     <div
@@ -225,10 +223,10 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
       {showMoreMenu &&
       (firstActionRow?.showOptions?.(row) === undefined ||
         !firstActionRow?.showOptions?.(row)) ? (
-        <Tooltip text={singleActionLabel || ''}>
+        <Tooltip text={singleActionLabel}>
           <IconButton
             isPinned
-            icon={handleAssetAction(firstActionRow?.action ?? 'more')}
+            icon={handleAssetAction(firstActionRow?.action)}
             onClick={(event) => {
               // NO DELETE: stop event when send setRowClick in table
               event?.stopPropagation?.();
@@ -263,7 +261,7 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
           border: `1px solid ${colors?.divider}`,
           position: 'fixed',
           zIndex: 1000,
-          top: handleOptionsContainerPosition(optionsContainerHeight ?? 0),
+          top: handleOptionsContainerPosition(optionsContainerHeight),
           left: menuPosition.left - 180,
           transition: 'all 0.1s ease-in',
           display: openOptions ? 'flex' : 'none',
@@ -285,7 +283,7 @@ const RowActionsCell: React.FC<RowActionsCellProps> = ({
                 if (disabled) return;
                 action.onClick(row);
                 setOpenOptions(false);
-                setOpenActions?.(false);
+                setOpenActions(false);
                 setHoverRow({ hover: false, index: 0 });
               }}
               style={{

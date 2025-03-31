@@ -2,13 +2,12 @@
 import { useToastStore } from '@product-line/ui';
 import { formatCurrency } from 'libs/features/src/utils/utils';
 import * as XLSX from 'xlsx';
-import { ProductWithVariants, useProductMethods } from '@product-line/dexie';
+import { useProductMethods } from '@product-line/dexie';
 
 export const useProductData = () => {
   const { addToast } = useToastStore();
-  const { getProductsWithVariants } = useProductMethods();
-
-  const products: ProductWithVariants[] = getProductsWithVariants();
+  const { products, getCategoryByProductId, getSubCategoryByProductId } =
+    useProductMethods();
 
   const exportToExcel = () => {
     const data: any[] = [];
@@ -18,18 +17,11 @@ export const useProductData = () => {
       data.push({
         Producto: product.title,
         Descripción: product.description,
-        Variantes: product.count,
-      });
-
-      product.variants?.forEach((variant) => {
-        data.push({
-          Producto: '',
-          Descripción: '',
-          Variantes: '',
-          'Nombre Variante': variant.title,
-          'Descripción Variante': variant.description,
-          'Precio Variante': formatCurrency(variant.amount),
-        });
+        Categoría: getCategoryByProductId(product?.id as string)?.title,
+        Subcategoría: getSubCategoryByProductId(product?.id as string)?.title,
+        'Precio Unitario': formatCurrency(product.amount),
+        Stock: product.stock,
+        Estado: product.status,
       });
     });
 
@@ -48,18 +40,11 @@ export const useProductData = () => {
     data.push({
       Producto: product.title,
       Descripción: product.description,
-      Variantes: product.count,
-    });
-
-    product.variants?.forEach((variant) => {
-      data.push({
-        Producto: '',
-        Descripción: '',
-        Variantes: '',
-        'Nombre Variante': variant.title,
-        'Descripción Variante': variant.description,
-        'Precio Variante': formatCurrency(variant.amount),
-      });
+      Categoría: getCategoryByProductId(product?.id as string)?.title,
+      Subcategoría: getSubCategoryByProductId(product?.id as string)?.title,
+      'Precio Unitario': formatCurrency(product.amount),
+      Stock: product.stock,
+      Estado: product.status,
     });
 
     const worksheet = XLSX.utils.json_to_sheet(data);
@@ -80,12 +65,12 @@ export const useProductData = () => {
         (product) =>
           `${product.title}\n${
             product.description
-          }\nTotal: ${new Intl.NumberFormat('es-AR', {
+          }\nPrecio: ${new Intl.NumberFormat('es-AR', {
             style: 'currency',
             currency: 'ARS',
-          }).format(product.count || 0)}\n\nVariantes:\n${product.variants
-            ?.map((v) => `- ${v.title}: ${formatCurrency(v.amount)}`)
-            .join('\n')}\n\n`
+          }).format(product.amount || 0)}\nStock: ${product.stock}\nEstado: ${
+            product.status
+          }\n\n`
       )
       .join('---\n\n');
 
@@ -113,9 +98,13 @@ export const useProductData = () => {
 
     const shareText = `Nombre: ${product.title}\nDescripción: ${
       product.description
-    }\nVariantes: ${product.count || 0}\n\nVariantes:\n${product.variants
-      ?.map((v) => `- ${v.title}: ${formatCurrency(v.amount)}`)
-      .join('\n')}\n\n`;
+    }\nCategoría: ${
+      getCategoryByProductId(product?.id as string)?.title
+    }\nSubcategoría: ${
+      getSubCategoryByProductId(product?.id as string)?.title
+    }\nPrecio: ${formatCurrency(product.amount)}\nStock: ${
+      product.stock
+    }\nEstado: ${product.status}\n\n`;
 
     try {
       await navigator.share({

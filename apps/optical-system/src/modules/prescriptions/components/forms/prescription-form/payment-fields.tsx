@@ -35,69 +35,115 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
   const [paymentMethodSelected, setPaymentMethodSelected] =
     useState<ListboxOption>();
 
-  useEffect(() => {
-    if (currentPrescription?.paymentMethod)
-      setPaymentMethodSelected(
-        paymentMethodList.find(
-          (method) => method.value === currentPrescription.paymentMethod
-        )
-      );
-    if (currentPrescription?.creditCardType)
-      setCreditCardSelected(
-        creditCardList.find(
-          (card) => card.value === currentPrescription.creditCardType
-        )
-      );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const prescriptionPaymentData = currentPrescription?.prescriptionPayment;
+  const paymentMethod = prescriptionPaymentData?.paymentMethod;
+  const creditCardType = prescriptionPaymentData?.creditCardType;
+  const creditCardNumber = prescriptionPaymentData?.creditCardNumber;
+  const creditCardInstallments =
+    prescriptionPaymentData?.creditCardInstallments;
+  const creditCardDepositData = prescriptionPaymentData?.creditCardDeposit;
+  const cashDepositData = prescriptionPaymentData?.cashDeposit;
 
   const subTotalAmount = watch('subtotalAmount') || 0;
   const cashDeposit = watch('cashDeposit') || 0;
   const creditCardDeposit = watch('creditCardDeposit') || 0;
 
   const handleBalanceAmount = useCallback(() => {
-    if (
-      paymentMethodSelected?.value?.includes('Efectivo') &&
-      !creditCardDeposit
-    ) {
-      return Number(subTotalAmount) - Number(cashDeposit);
+    const totalDeposit = Number(cashDeposit) + Number(creditCardDeposit);
+    return Math.max(0, Number(subTotalAmount) - totalDeposit);
+  }, [cashDeposit, creditCardDeposit, subTotalAmount]);
+
+  const handlePaymentMethod = useCallback(() => {
+    const method = paymentMethodList?.find(
+      (method) => method.value === paymentMethod
+    );
+    if (method) {
+      setPaymentMethodSelected(method);
+      setValue('paymentMethod', method.value);
     }
-    if (paymentMethodSelected?.value?.includes('Tarjeta') && !cashDeposit) {
-      return Number(subTotalAmount) - Number(creditCardDeposit);
+  }, [paymentMethod, paymentMethodList, setValue]);
+
+  const handleCreditCard = useCallback(() => {
+    const card = creditCardList?.find((card) => card.value === creditCardType);
+    if (card) {
+      setCreditCardSelected(card);
+      setValue('creditCardType', card.value);
     }
-    if (paymentMethodSelected?.value?.includes('Efectivo + Tarjeta')) {
-      return (
-        Number(subTotalAmount) - Number(cashDeposit) - Number(creditCardDeposit)
-      );
-    }
-    return 0;
+  }, [creditCardList, creditCardType, setValue]);
+
+  const initialValues = useCallback(() => {
+    handlePaymentMethod();
+    handleCreditCard();
+    setValue('creditCardDeposit', creditCardDepositData || 0);
+    setValue('creditCardNumber', creditCardNumber || 0);
+    setValue('creditCardInstallments', creditCardInstallments || 0);
+    setValue('cashDeposit', cashDepositData || 0);
+    setValue('creditCardDeposit', creditCardDepositData || 0);
   }, [
-    cashDeposit,
-    creditCardDeposit,
-    paymentMethodSelected?.value,
-    subTotalAmount,
+    cashDepositData,
+    creditCardDepositData,
+    creditCardInstallments,
+    creditCardNumber,
+    handleCreditCard,
+    handlePaymentMethod,
+    setValue,
   ]);
 
   const handleSelectPaymentMethod = useCallback(() => {
-    if (paymentMethodSelected?.value === 'Efectivo') {
-      setValue('creditCardDeposit', 0);
+    switch (paymentMethodSelected?.value) {
+      case 'Efectivo':
+        setValue('creditCardDeposit', 0);
+        setValue('creditCardNumber', 0);
+        setValue('creditCardInstallments', 0);
+        setValue('creditCardDeposit', 0);
+        setValue('creditCardType', '');
+        setValue('cashDeposit', cashDepositData as number);
+        break;
+      case 'Tarjeta de crédito':
+      case 'Tarjeta de débito':
+        setValue('creditCardDeposit', creditCardDepositData as number);
+        setValue('creditCardNumber', creditCardNumber as number);
+        setValue('creditCardInstallments', creditCardInstallments as number);
+        setValue('creditCardDeposit', creditCardDepositData as number);
+        setValue('creditCardType', creditCardType as string);
+        setValue('cashDeposit', 0);
+        break;
+      case 'Efectivo + Tarjeta':
+        setValue('creditCardDeposit', creditCardDepositData as number);
+        setValue('creditCardNumber', creditCardNumber as number);
+        setValue('creditCardInstallments', creditCardInstallments as number);
+        setValue('creditCardDeposit', creditCardDepositData as number);
+        setValue('creditCardType', creditCardType as string);
+        setValue('cashDeposit', cashDepositData as number);
+        break;
+      default:
+        setValue('creditCardDeposit', 0);
+        setValue('creditCardNumber', 0);
+        setValue('creditCardInstallments', 0);
+        setValue('creditCardDeposit', 0);
+        setValue('creditCardType', '');
+        setValue('cashDeposit', 0);
+        break;
     }
-    if (
-      paymentMethodSelected?.value === 'Tarjeta de crédito' ||
-      paymentMethodSelected?.value === 'Tarjeta de débito'
-    ) {
-      setValue('cashDeposit', 0);
-    }
-    if (paymentMethodSelected?.value === 'Efectivo + Tarjeta') {
-      setValue('creditCardDeposit', 0);
-      setValue('cashDeposit', 0);
-    }
-  }, [paymentMethodSelected?.value, setValue]);
+  }, [
+    cashDepositData,
+    creditCardDepositData,
+    creditCardInstallments,
+    creditCardNumber,
+    creditCardType,
+    paymentMethodSelected?.value,
+    setValue,
+  ]);
+
+  useEffect(() => {
+    initialValues();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     handleSelectPaymentMethod();
-  }, [handleSelectPaymentMethod]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paymentMethodSelected?.value]);
 
   useEffect(() => {
     setValue('balanceAmount', handleBalanceAmount());
@@ -113,8 +159,10 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
             label="Método de pago"
             options={paymentMethodList}
             selectedOption={paymentMethodSelected}
-            onChange={(e) => setPaymentMethodSelected(e as ListboxOption)}
-            onSelect={(e) => setValue('paymentMethod', e)}
+            onChange={(e) => {
+              setPaymentMethodSelected(e as ListboxOption);
+              setValue('paymentMethod', (e as ListboxOption).value);
+            }}
             disabled={forDetail}
           />
           {paymentMethodSelected?.value?.includes('Tarjeta') && (
@@ -124,8 +172,10 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
                 label="Tarjeta de crédito/débito"
                 options={creditCardList}
                 selectedOption={creditCardSelected}
-                onChange={(e) => setCreditCardSelected(e as ListboxOption)}
-                onSelect={(e) => setValue('creditCardType', e)}
+                onChange={(e) => {
+                  setCreditCardSelected(e as ListboxOption);
+                  setValue('creditCardType', (e as ListboxOption).value);
+                }}
                 disabled={forDetail}
               />
               <Input
@@ -136,7 +186,7 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
                 type="number"
                 step="0.01"
                 min="0"
-                max="9999999999"
+                max={subTotalAmount}
                 placeholder="Ingrese un monto"
                 icon={<DollarSign className="h-4 w-4 mt-1" />}
                 error={errors?.creditCardDeposit?.message}
@@ -144,7 +194,11 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
                   pattern: {
                     value: /^[0-9]+(\.[0-9]{1,2})?$/,
                     message:
-                      'El precio debe ser válido. Utilice punto o como para max 2 decimales.',
+                      'El precio debe ser válido. Utilice punto o coma para max 2 decimales.',
+                  },
+                  validate: (value) => {
+                    const total = Number(value) + Number(cashDeposit);
+                    return total <= subTotalAmount || 'El pago excede el total';
                   },
                 })}
               />
@@ -155,10 +209,14 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
                 placeholder="Ingrese el número de tarjeta"
                 id="creditCardNumber"
                 type="number"
-                mask="9999 9999 9999 9999"
                 icon={<CreditCard className="h-4 w-4 mt-1" />}
                 error={errors?.creditCardNumber?.message}
-                {...register('creditCardNumber')}
+                {...register('creditCardNumber', {
+                  pattern: {
+                    value: /^[0-9\s]{16}$/,
+                    message: 'Número de tarjeta inválido',
+                  },
+                })}
               />
               <Input
                 disabled={forDetail}
@@ -167,12 +225,22 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
                 id="creditCardInstallments"
                 placeholder='Ingrese la cantidad de cuotas. Ej: "3"'
                 type="number"
+                min="1"
+                max="24"
                 icon={<SquareDivideIcon className="h-4 w-4 mt-1" />}
                 error={errors?.creditCardInstallments?.message}
                 {...register('creditCardInstallments', {
                   pattern: {
                     value: /^[0-9]+$/,
                     message: 'Las cuotas deben ser un número entero.',
+                  },
+                  min: {
+                    value: 1,
+                    message: 'Mínimo 1 cuota',
+                  },
+                  max: {
+                    value: 24,
+                    message: 'Máximo 24 cuotas',
                   },
                 })}
               />
@@ -189,14 +257,19 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
               type="number"
               step="0.01"
               min="0"
-              max="9999999999"
+              max={subTotalAmount}
+              placeholder="Ingrese un monto"
               icon={<DollarSign className="h-4 w-4 mt-1" />}
               error={errors?.cashDeposit?.message}
               {...register('cashDeposit', {
                 pattern: {
                   value: /^[0-9]+(\.[0-9]{1,2})?$/,
                   message:
-                    'El precio debe ser válido. Utilice punto o como para max 2 decimales.',
+                    'El precio debe ser válido. Utilice punto o coma para max 2 decimales.',
+                },
+                validate: (value) => {
+                  const total = Number(value) + Number(creditCardDeposit);
+                  return total <= subTotalAmount || 'El pago excede el total';
                 },
               })}
             />
@@ -211,17 +284,13 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
             type="number"
             step="0.01"
             min="0"
-            max="9999999999"
-            disabled
+            disabled={
+              paymentMethodSelected?.value?.includes('Efectivo') ||
+              paymentMethodSelected?.value?.includes('Tarjeta')
+            }
             icon={<DollarSign className="h-4 w-4 mt-1" />}
             error={errors?.balanceAmount?.message}
-            {...register('balanceAmount', {
-              pattern: {
-                value: /^[0-9]+(\.[0-9]{1,2})?$/,
-                message:
-                  'El precio debe ser válido. Utilice punto o como para max 2 decimales.',
-              },
-            })}
+            {...register('balanceAmount')}
           />
           <Input
             className="w-full sm:w-calc-50-minus-10 mb-1"
@@ -230,17 +299,10 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
             type="number"
             step="0.01"
             min="0"
-            max="9999999999"
             disabled
             icon={<DollarSign className="h-4 w-4 mt-1" />}
             error={errors?.totalAmount?.message}
-            {...register('totalAmount', {
-              pattern: {
-                value: /^[0-9]+(\.[0-9]{1,2})?$/,
-                message:
-                  'El precio debe ser válido. Utilice punto o como para max 2 decimales.',
-              },
-            })}
+            {...register('totalAmount')}
           />
         </div>
         <Textarea
@@ -248,7 +310,6 @@ const PaymentFields: React.FC<PaymentFieldsProps> = ({
           className="w-full"
           label="Comentarios"
           placeholder="Ingrese un comentario, si es necesario, por ejemplo: 'Descuento por pago en efectivo'"
-          id="description"
           {...register('description')}
         />
       </CardTitle>

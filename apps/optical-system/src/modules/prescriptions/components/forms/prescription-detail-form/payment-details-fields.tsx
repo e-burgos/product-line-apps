@@ -19,21 +19,29 @@ const PaymentDetailsFields: React.FC<PaymentDetailsFieldsProps> = ({
   const [paymentMethodSelected, setPaymentMethodSelected] =
     useState<ListboxOption>();
 
+  const prescriptionPaymentData = prescriptionData?.prescriptionPayment;
+  const paymentMethod = prescriptionPaymentData?.paymentMethod;
+  const creditCardType = prescriptionPaymentData?.creditCardType;
+  const creditCardDeposit = prescriptionPaymentData?.creditCardDeposit;
+  const creditCardNumber = prescriptionPaymentData?.creditCardNumber;
+  const creditCardInstallments =
+    prescriptionPaymentData?.creditCardInstallments;
+  const cashDeposit = prescriptionPaymentData?.cashDeposit;
+  const balanceAmount = prescriptionData?.balanceAmount;
+  const totalAmount = prescriptionData?.totalAmount;
+  const description = prescriptionData?.description;
+
   useEffect(() => {
-    if (prescriptionData?.paymentMethod)
+    if (paymentMethod)
       setPaymentMethodSelected(
-        paymentMethodList.find(
-          (method) => method.value === prescriptionData.paymentMethod
-        )
+        paymentMethodList?.find((method) => method.value === paymentMethod)
       );
-    if (prescriptionData?.creditCardType)
+    if (creditCardType)
       setCreditCardSelected(
-        creditCardList.find(
-          (card) => card.value === prescriptionData.creditCardType
-        )
+        creditCardList.find((card) => card.value === creditCardType)
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [prescriptionPaymentData]);
 
   return (
     <>
@@ -59,7 +67,7 @@ const PaymentDetailsFields: React.FC<PaymentDetailsFieldsProps> = ({
               />
               <Input
                 disabled
-                value={prescriptionData?.creditCardDeposit}
+                value={creditCardDeposit}
                 className="w-full sm:w-calc-50-minus-8 mb-4"
                 label="Pago con tarjeta"
                 id="creditCardDeposit"
@@ -71,17 +79,16 @@ const PaymentDetailsFields: React.FC<PaymentDetailsFieldsProps> = ({
               />
               <Input
                 disabled
-                value={prescriptionData?.creditCardNumber}
+                value={creditCardNumber}
                 className="w-full sm:w-calc-50-minus-8 mb-4"
                 label="Número de tarjeta"
                 id="creditCardNumber"
                 type="number"
-                mask="9999 9999 9999 9999"
                 icon={<CreditCard className="h-4 w-4 mt-1" />}
               />
               <Input
                 disabled
-                value={prescriptionData?.creditCardInstallments}
+                value={creditCardInstallments}
                 className="w-full sm:w-calc-50-minus-8 mb-4"
                 label="Cuotas de la tarjeta"
                 id="creditCardInstallments"
@@ -95,7 +102,7 @@ const PaymentDetailsFields: React.FC<PaymentDetailsFieldsProps> = ({
           <>
             <Input
               disabled
-              value={prescriptionData?.cashDeposit}
+              value={cashDeposit}
               className="w-full mb-4"
               label="Pago en efectivo"
               id="cashDeposit"
@@ -111,7 +118,7 @@ const PaymentDetailsFields: React.FC<PaymentDetailsFieldsProps> = ({
         <div className="flex flex-row flex-wrap justify-between gap-2 my-4 border-t border-b py-6 border-gray-200 dark:border-gray-700">
           <Input
             disabled
-            value={prescriptionData?.balanceAmount}
+            value={balanceAmount}
             className="w-full sm:w-calc-50-minus-10 mb-1"
             label="Saldo"
             id="balanceAmount"
@@ -123,7 +130,7 @@ const PaymentDetailsFields: React.FC<PaymentDetailsFieldsProps> = ({
           />
           <Input
             disabled
-            value={prescriptionData?.totalAmount}
+            value={totalAmount}
             className="w-full sm:w-calc-50-minus-10 mb-1"
             label="Total a pagar"
             id="totalAmount"
@@ -136,7 +143,7 @@ const PaymentDetailsFields: React.FC<PaymentDetailsFieldsProps> = ({
         </div>
         <Textarea
           disabled
-          value={prescriptionData?.description}
+          value={description}
           className="w-full"
           label="Comentarios"
           id="description"

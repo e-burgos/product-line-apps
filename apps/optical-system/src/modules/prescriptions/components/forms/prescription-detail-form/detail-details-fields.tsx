@@ -16,7 +16,7 @@ const DetailDetailsFields: React.FC<DetailDetailsFieldsProps> = ({
       <CardTitle title="Detalles del Servicio">
         <Input
           disabled
-          value={prescriptionData?.doctorName}
+          value={prescriptionData?.prescriptionDetail?.doctorName}
           className="w-full mb-4"
           label="Receta realizada por"
           placeholder="Nombre del profesional"
@@ -25,14 +25,14 @@ const DetailDetailsFields: React.FC<DetailDetailsFieldsProps> = ({
         <div className="flex flex-row flex-wrap justify-between gap-2">
           <Input
             disabled
-            value={prescriptionData?.frameDesc}
+            value={prescriptionData?.prescriptionDetail?.frameDesc}
             className="w-full sm:w-calc-50-minus-8 mb-0"
             label="Armazón"
             id="frameDesc"
           />
           <Input
             disabled
-            value={prescriptionData?.framePrice}
+            value={prescriptionData?.prescriptionDetail?.framePrice}
             className="w-full sm:w-calc-50-minus-8 mb-4"
             label="Monto"
             placeholder="0.00"
@@ -45,14 +45,14 @@ const DetailDetailsFields: React.FC<DetailDetailsFieldsProps> = ({
           />
           <Input
             disabled
-            value={prescriptionData?.crystalDesc}
+            value={prescriptionData?.prescriptionDetail?.crystalDesc}
             className="w-full sm:w-calc-50-minus-8 mb-0"
             label="Cristales"
             id="crystalDesc"
           />
           <Input
             disabled
-            value={prescriptionData?.crystalPrice}
+            value={prescriptionData?.prescriptionDetail?.crystalPrice}
             className="w-full sm:w-calc-50-minus-8 mb-4"
             label="Monto"
             placeholder="0.00"
@@ -66,18 +66,18 @@ const DetailDetailsFields: React.FC<DetailDetailsFieldsProps> = ({
 
           <Input
             disabled
-            value={prescriptionData?.contactlensDesc}
+            value={prescriptionData?.prescriptionDetail?.contactLensDesc}
             className="w-full sm:w-calc-50-minus-8 mb-0"
             label="Lentes de contacto"
-            id="contactlensDesc"
+            id="contactLensDesc"
           />
           <Input
             disabled
-            value={prescriptionData?.contactlensPrice}
+            value={prescriptionData?.prescriptionDetail?.contactLensPrice}
             className="w-full sm:w-calc-50-minus-8 mb-4"
             label="Monto"
             placeholder="0.00"
-            id="contactlensPrice"
+            id="contactLensPrice"
             type="number"
             step="0.01"
             min="0"
@@ -86,14 +86,14 @@ const DetailDetailsFields: React.FC<DetailDetailsFieldsProps> = ({
           />
           <Input
             disabled
-            value={prescriptionData?.arrangementDesc}
+            value={prescriptionData?.prescriptionDetail?.arrangementDesc}
             className="w-full sm:w-calc-50-minus-8 mb-0"
             label="Arreglos"
             id="arrangementDesc"
           />
           <Input
             disabled
-            value={prescriptionData?.arrangementPrice}
+            value={prescriptionData?.prescriptionDetail?.arrangementPrice}
             className="w-full sm:w-calc-50-minus-8 mb-4"
             label="Monto"
             placeholder="0.00"
@@ -106,7 +106,7 @@ const DetailDetailsFields: React.FC<DetailDetailsFieldsProps> = ({
           />
           <Input
             disabled
-            value={prescriptionData?.subtotalAmount}
+            value={prescriptionData?.prescriptionDetail?.subtotalAmount}
             className="w-full mb-4"
             label="Subtotal"
             id="subtotalAmount"

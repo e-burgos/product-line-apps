@@ -86,8 +86,8 @@ export default function Listbox({
           leaveTo="opacity-0"
         >
           <ListboxOptions className="absolute max-h-44 overflow-auto left-0 z-10 mt-1 grid w-full origin-top-right gap-0.5 rounded-lg border border-gray-200 bg-white p-1 shadow-large outline-none dark:border-gray-700 dark:bg-gray-800 xs:p-2">
-            {options.map((option) => (
-              <ListboxOption key={option.value} value={option}>
+            {options.map((option, index) => (
+              <ListboxOption key={`${option.value}-${index}`} value={option}>
                 {({ selected }) => (
                   <div
                     onClick={() => onSelect && onSelect(option.value)}

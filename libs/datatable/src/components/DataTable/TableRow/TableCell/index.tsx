@@ -112,7 +112,7 @@ const TableCell: React.FC<TableCellProps> = ({
       className={cn(
         styles.tdWrapper,
         isExpanded ? styles.tdExpanded : styles.tdDefaultColor,
-        isDragging && styles.tdDragged
+        isDragging && styles.tdDragged,
       )}
       style={{
         ...style,

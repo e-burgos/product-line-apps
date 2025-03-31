@@ -37,8 +37,7 @@ export const PrescriptionButtons: FC<PrescriptionButtonsProps> = ({
           errors.date ||
           !watch('receiptNumber') ||
           !watch('date') ||
-          currentCustomer === undefined ||
-          currentCustomer === null
+          !currentCustomer?.id
         ) {
           return true;
         }
@@ -68,8 +67,8 @@ export const PrescriptionButtons: FC<PrescriptionButtonsProps> = ({
           errors.framePrice ||
           errors.crystalDesc ||
           errors.crystalPrice ||
-          errors.contactlensDesc ||
-          errors.contactlensPrice ||
+          errors.contactLensDesc ||
+          errors.contactLensPrice ||
           errors.arrangementDesc ||
           errors.arrangementPrice
         ) {

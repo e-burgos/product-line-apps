@@ -1,27 +1,20 @@
 import { useState } from 'react';
 import { DataTable } from '@product-line/datatable';
 import { Budget, useBudgetMethods } from '@product-line/dexie';
-import {
-  BudgetDetailsDatatable,
-  DeleteBudget,
-  EditBudgetModal,
-  useBudgetColumns,
-  useBudgetData,
-  useBudgetStore,
-} from '@product-line/features';
 import { CardContainer, CardTitle, InputSearcher } from '@product-line/ui';
-import AddBudgetDetailModal from '../modals/add-budget-detail-modal';
+import useBudgetTableActions from '../hooks/use-budget-table-actions';
+import { useBudgetStore } from '../hooks/use-budget-store';
+import useBudgetColumns from '../hooks/use-budget-columns';
+import BudgetDetailsDatatable from './budget-details-datatable';
+import EditBudgetModal from '../modals/edit-budget-modal';
+import CreateBudgetDetailModal from '../modals/create-budget-detail-modal';
+import DeleteBudget from '../modals/delete-budget';
 
 export function BudgetsDatatable() {
-  const {
-    setCurrentBudget,
-    setOpenDeleteModal,
-    setOpenEditModal,
-    setOpenCreateDetailModal,
-  } = useBudgetStore();
+  const { setCurrentBudget } = useBudgetStore();
   const { budgets } = useBudgetMethods();
   const { columns } = useBudgetColumns();
-  const { exportOneBudgetToExcel, shareOneBudget } = useBudgetData();
+  const { rowActions } = useBudgetTableActions();
 
   const [search, setSearch] = useState<string>('');
 
@@ -66,10 +59,6 @@ export function BudgetsDatatable() {
               pageIndex: 0,
               takeDefaultPagination: true,
             }}
-            renderSubComponent={(row) => {
-              const budget = (row?.row?.original as Budget) || {};
-              return <BudgetDetailsDatatable budgetId={budget?.id as string} />;
-            }}
             stateMessage={{
               noData:
                 search && filterData()
@@ -81,38 +70,16 @@ export function BudgetsDatatable() {
                   : 'Agrega un nuevo presupuesto para comenzar. Para agregar un nuevo presupuesto, haz clic en el botón "Agregar". Tips: Puedes exportar los presupuestos a Excel o compartirlos con otras personas.',
             }}
             setCurrentRow={(row) => setCurrentBudget(row?.original as Budget)}
-            rowActions={[
-              {
-                action: 'edit',
-                label: () => 'Editar',
-                onClick: () => setOpenEditModal(true),
-              },
-              {
-                action: 'delete',
-                label: () => 'Borrar',
-                onClick: () => setOpenDeleteModal(true),
-              },
-              {
-                action: 'edit',
-                label: () => 'Agregar Detalle',
-                onClick: () => setOpenCreateDetailModal(true),
-              },
-              {
-                action: 'download',
-                label: () => 'Compartir',
-                onClick: (row) => shareOneBudget(Number(row?.original?.id)),
-              },
-              {
-                action: 'download',
-                label: () => 'Exportar a Excel',
-                onClick: (row) => exportOneBudgetToExcel(row?.original?.id),
-              },
-            ]}
+            rowActions={rowActions}
+            renderSubComponent={(row) => {
+              const budget = (row?.row?.original as Budget) || {};
+              return <BudgetDetailsDatatable budgetId={budget?.id as string} />;
+            }}
           />
         </CardTitle>
       </CardContainer>
       <EditBudgetModal />
-      <AddBudgetDetailModal />
+      <CreateBudgetDetailModal />
       <DeleteBudget />
     </>
   );

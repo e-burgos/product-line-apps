@@ -10,7 +10,8 @@ const useUsersColumns = () => {
       {
         id: 'userId',
         header: 'ID',
-
+        accessorKey: 'userId',
+        minSize: 250,
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -22,27 +23,27 @@ const useUsersColumns = () => {
         },
       },
       {
-        id: 'type',
-        header: 'Type',
-
-        accessorFn: (row) => row,
-        cell: (info) => {
-          return <span>{info?.getValue()?.type || '-'}</span>;
-        },
-      },
-      {
         id: 'displayName',
         header: 'Display Name',
-
+        accessorKey: 'displayName',
         accessorFn: (row) => row,
         cell: (info) => {
           return <span>{info?.getValue()?.data?.displayName || '-'}</span>;
         },
       },
       {
+        id: 'type',
+        header: 'Type',
+        accessorKey: 'type',
+        accessorFn: (row) => row,
+        cell: (info) => {
+          return <span>{info?.getValue()?.type || '-'}</span>;
+        },
+      },
+      {
         id: 'deactivated',
         header: 'Deactivated',
-
+        accessorKey: 'deactivated',
         accessorFn: (row) => row,
         cell: (info) => {
           return <span>{info?.getValue()?.deactivated ? 'Yes' : 'No'}</span>;
@@ -51,7 +52,7 @@ const useUsersColumns = () => {
       {
         id: 'created',
         header: 'Created',
-
+        accessorKey: 'created',
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -64,7 +65,7 @@ const useUsersColumns = () => {
       {
         id: 'updated',
         header: 'Updated',
-
+        accessorKey: 'updated',
         accessorFn: (row) => row,
         cell: (info) => {
           return (
@@ -77,7 +78,7 @@ const useUsersColumns = () => {
       {
         id: 'lastLogin',
         header: 'Last Login',
-
+        accessorKey: 'lastLogin',
         size: 200,
         accessorFn: (row) => row,
         cell: (info) => {

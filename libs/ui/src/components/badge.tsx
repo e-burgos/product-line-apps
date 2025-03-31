@@ -1,21 +1,36 @@
-function Badge(props: React.HTMLAttributes<HTMLSpanElement>) {
-  return <span {...props} />;
-}
+import cn from 'classnames';
+
+type BadgeProps = {
+  className?: string;
+  status?: 'active' | 'inactive';
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'outline';
+} & React.HTMLAttributes<HTMLSpanElement>;
+
+const Badge = ({
+  className,
+  status = 'active',
+  size = 'sm',
+  variant = 'default',
+  ...props
+}: BadgeProps) => {
+  return (
+    <span
+      className={cn(
+        'rounded-full bg-brand text-sm px-2 py-1 h-6 w-fit flex items-center justify-center',
+        className,
+        {
+          'bg-green-500/10 border border-green-500': status === 'active',
+          'bg-red-500/10 border border-red-500': status === 'inactive',
+          'h-6 w-6': size === 'sm',
+          'h-6 w-fit': size === 'md',
+          'h-7 w-full': size === 'lg',
+          'bg-transparent border border-gray-300': variant === 'outline',
+        }
+      )}
+      {...props}
+    />
+  );
+};
 
 export default Badge;
-
-// display: flex;
-// flex-direction: row;
-// align-items: flex-start;
-// padding: 8px 12px;
-
-// position: absolute;
-// width: 125px;
-// height: 31px;
-// left: 515px;
-// top: 90px;
-
-// background: #373737;
-// border: 1px solid #474747;
-// box-sizing: border-box;
-// border-radius: 100px;

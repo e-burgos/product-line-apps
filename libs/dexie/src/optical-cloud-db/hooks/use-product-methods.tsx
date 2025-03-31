@@ -1,13 +1,17 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db';
-import { Product, ProductWithVariants, Variant } from '../types/db-types';
+import {
+  Product,
+  ProductCategory,
+  ProductSubCategory,
+} from '../types/db-types';
 import { useToastStore } from 'libs/ui/src/hooks';
 import { v4 as uuidv4 } from 'uuid';
-import { useCallback } from 'react';
 
 export const useProductMethods = () => {
   const { addToast } = useToastStore();
 
+  // Product methods
   const addProduct = async (product: Product) => {
     try {
       await db.products.add({
@@ -50,7 +54,7 @@ export const useProductMethods = () => {
       addToast({
         id: 'product-error',
         title: 'Error',
-        message: 'No se pudo crear el producto.',
+        message: 'No se pudo actualizar el producto.',
         variant: 'destructive',
       });
       return { isSuccess: false, isError: true, product: null };
@@ -60,7 +64,6 @@ export const useProductMethods = () => {
   const deleteProduct = async (productId: string) => {
     try {
       await db.products.delete(productId);
-      await db.variants.where('productId').equals(productId).delete();
       addToast({
         id: 'product-deleted',
         title: 'Producto eliminado',
@@ -80,143 +83,268 @@ export const useProductMethods = () => {
     }
   };
 
-  const products = useLiveQuery(
-    () => db.products.orderBy('title').toArray() || []
-  ) as Product[];
-
-  const getProductById = useCallback(
-    (productId: string) =>
-      products?.find((product) => product.id === productId),
-    [products]
-  );
-
-  const productVariants = useLiveQuery(() =>
-    db.variants.orderBy('productId').toArray()
-  ) as Variant[];
-
-  const getProductVariantsById = useCallback(
-    (productId: string) =>
-      productVariants?.filter((variant) => variant.productId === productId),
-    [productVariants]
-  );
-
-  const getProductWithVariantsById = useCallback(
-    (productId: string): ProductWithVariants => {
-      const product = getProductById(productId) as Product;
-      const variants = getProductVariantsById(productId) as Variant[];
-      const count = variants?.length;
-      return {
-        ...product,
-        variants,
-        count,
-      };
-    },
-    [getProductById, getProductVariantsById]
-  );
-
-  const getProductVariantById = useCallback(
-    (variantId: string) =>
-      productVariants?.find((variant) => variant.id === variantId),
-    [productVariants]
-  );
-
-  const getProductsWithVariants = useCallback((): ProductWithVariants[] => {
-    return products?.map((product) => {
-      const variants = getProductVariantsById(product.id as string);
-      const count = variants?.length;
-      return {
-        ...product,
-        variants,
-        count,
-      };
-    });
-  }, [getProductVariantsById, products]);
-
-  const addProductVariant = async (variant: Variant) => {
+  // Category methods
+  const addCategory = async (category: ProductCategory) => {
     try {
-      await db.variants.add({
-        ...variant,
+      await db.productCategories.add({
+        ...category,
         id: uuidv4(),
       });
       addToast({
-        id: 'variant-created',
-        title: 'Variante creada',
-        message: 'La variante se ha creado correctamente.',
+        id: 'category-created',
+        title: 'Categoría creada',
+        message: 'La categoría se ha creado correctamente.',
         variant: 'success',
       });
-      return { isSuccess: true, isError: false, variant };
+      return { isSuccess: true, isError: false, category };
     } catch (error) {
       console.error(error);
       addToast({
-        id: 'variant-error',
+        id: 'category-error',
         title: 'Error',
-        message: 'No se pudo crear la variante.',
+        message: 'No se pudo crear la categoría.',
         variant: 'destructive',
       });
-      return { isSuccess: false, isError: true, variant: null };
+      return { isSuccess: false, isError: true, category: null };
     }
   };
 
-  const updateProductVariant = async (variant: Variant) => {
+  const updateCategory = async (category: ProductCategory) => {
     try {
-      await db.variants.update(variant.id, {
-        ...variant,
+      await db.productCategories.update(category.id, {
+        ...category,
       });
       addToast({
-        id: 'variant-updated',
-        title: 'Variante actualizada',
-        message: 'La variante se ha actualizado correctamente.',
+        id: 'category-updated',
+        title: 'Categoría actualizada',
+        message: 'La categoría se ha actualizado correctamente.',
         variant: 'success',
       });
-      return { isSuccess: true, isError: false, variant };
+      return { isSuccess: true, isError: false, category };
     } catch (error) {
       console.error(error);
       addToast({
-        id: 'variant-error',
+        id: 'category-error',
         title: 'Error',
-        message: 'No se pudo actualizar la variante.',
+        message: 'No se pudo actualizar la categoría.',
         variant: 'destructive',
       });
-      return { isSuccess: false, isError: true, variant: null };
+      return { isSuccess: false, isError: true, category: null };
     }
   };
 
-  const deleteProductVariant = async (variantId: string) => {
+  const deleteCategory = async (categoryId: string) => {
     try {
-      await db.variants.delete(variantId);
+      await db.productCategories.delete(categoryId);
       addToast({
-        id: 'variant-deleted',
-        title: 'Variante eliminada',
-        message: 'La variante se ha eliminado correctamente.',
+        id: 'category-deleted',
+        title: 'Categoría eliminada',
+        message: 'La categoría se ha eliminado correctamente.',
         variant: 'success',
       });
       return { isSuccess: true, isError: false };
     } catch (error) {
       console.error(error);
       addToast({
-        id: 'variant-error',
+        id: 'category-error',
         title: 'Error',
-        message: 'No se pudo eliminar la variante.',
+        message: 'No se pudo eliminar la categoría.',
         variant: 'destructive',
       });
       return { isSuccess: false, isError: true };
     }
   };
 
+  // SubCategory methods
+  const addSubCategory = async (
+    subCategory: ProductSubCategory,
+    category: ProductCategory
+  ) => {
+    try {
+      const newSubCategory = {
+        ...subCategory,
+        id: uuidv4(),
+      };
+
+      await db.productSubCategories.add(newSubCategory);
+
+      const updatedCategory = {
+        ...category,
+        subcategories: [...(category.subcategories || []), newSubCategory],
+      };
+
+      await db.productCategories.update(category.id, updatedCategory);
+
+      addToast({
+        id: 'subcategory-created',
+        title: 'Subcategoría creada',
+        message: 'La subcategoría se ha creado correctamente.',
+        variant: 'success',
+      });
+
+      return { isSuccess: true, isError: false, subCategory: newSubCategory };
+    } catch (error) {
+      console.error(error);
+      addToast({
+        id: 'subcategory-error',
+        title: 'Error',
+        message: 'No se pudo crear la subcategoría.',
+        variant: 'destructive',
+      });
+      return { isSuccess: false, isError: true, subCategory: null };
+    }
+  };
+
+  const updateSubCategory = async (
+    subCategory: ProductSubCategory,
+    category: ProductCategory,
+    currentCategory: ProductCategory
+  ) => {
+    try {
+      await db.productSubCategories.update(subCategory.id, {
+        ...subCategory,
+      });
+
+      if (currentCategory.id !== category.id) {
+        const currentCategoryData = {
+          ...currentCategory,
+          subcategories: currentCategory.subcategories?.filter(
+            (subC) => subC.id !== subCategory.id
+          ),
+        };
+
+        const newSelectedCategoryData = {
+          ...category,
+          subcategories: [
+            ...(category.subcategories?.filter(
+              (subC) => subC.id !== subCategory.id
+            ) || []),
+            subCategory,
+          ],
+        };
+
+        await db.productCategories.update(
+          currentCategory.id,
+          currentCategoryData
+        );
+        await db.productCategories.update(category.id, newSelectedCategoryData);
+      }
+
+      addToast({
+        id: 'subcategory-updated',
+        title: 'Subcategoría actualizada',
+        message: 'La subcategoría se ha actualizado correctamente.',
+        variant: 'success',
+      });
+      return { isSuccess: true, isError: false, subCategory };
+    } catch (error) {
+      console.error(error);
+      addToast({
+        id: 'subcategory-error',
+        title: 'Error',
+        message: 'No se pudo actualizar la subcategoría.',
+        variant: 'destructive',
+      });
+      return { isSuccess: false, isError: true, subCategory: null };
+    }
+  };
+
+  const deleteSubCategory = async (subCategoryId: string) => {
+    try {
+      const subCategory = await db.productSubCategories.get(subCategoryId);
+      const category = await db.productCategories.get(subCategory?.categoryId);
+      if (category) {
+        await db.productCategories.update(category.id, {
+          ...category,
+          subcategories: category.subcategories?.filter(
+            (subC) => subC.id !== subCategoryId
+          ),
+        });
+      }
+      await db.productSubCategories.delete(subCategoryId);
+      addToast({
+        id: 'subcategory-deleted',
+        title: 'Subcategoría eliminada',
+        message: 'La subcategoría se ha eliminado correctamente.',
+        variant: 'success',
+      });
+      return { isSuccess: true, isError: false };
+    } catch (error) {
+      console.error(error);
+      addToast({
+        id: 'subcategory-error',
+        title: 'Error',
+        message: 'No se pudo eliminar la subcategoría.',
+        variant: 'destructive',
+      });
+      return { isSuccess: false, isError: true };
+    }
+  };
+
+  // Queries
+  const products = useLiveQuery(() => db.products.toArray());
+  const categories = useLiveQuery(() => db.productCategories.toArray());
+  const subCategories = useLiveQuery(() => db.productSubCategories.toArray());
+
+  const getProductById = (productId: string) => {
+    const product = products?.find((product) => product.id === productId);
+    return product;
+  };
+
+  const getCategoryById = (categoryId: string) => {
+    const category = categories?.find((category) => category.id === categoryId);
+    return category;
+  };
+
+  const getCategoryByProductId = (productId: string) => {
+    const product = products?.find((product) => product.id === productId);
+    const category = categories?.find(
+      (category) => category.id === product?.category?.id
+    );
+    return category;
+  };
+
+  const getSubCategoryByProductId = (productId: string) => {
+    const product = products?.find((product) => product.id === productId);
+    const subCategory = subCategories?.find(
+      (subCategory) => subCategory.id === product?.subcategory?.id
+    );
+    return subCategory;
+  };
+
+  const getSubCategoryById = (subCategoryId: string) => {
+    const subCategory = subCategories?.find(
+      (subCategory) => subCategory.id === subCategoryId
+    );
+    return subCategory;
+  };
+
+  const getSubCategoriesByCategoryId = (categoryId: string) => {
+    const subCategoriesByCategoryId = subCategories?.filter(
+      (subCategory) => subCategory.categoryId === categoryId
+    );
+    return subCategoriesByCategoryId;
+  };
+
   return {
+    products,
+    categories,
+    subCategories,
     addProduct,
     updateProduct,
     deleteProduct,
+    addCategory,
+    updateCategory,
+    deleteCategory,
+    addSubCategory,
+    updateSubCategory,
+    deleteSubCategory,
     getProductById,
-    getProductVariantsById,
-    getProductVariantById,
-    getProductsWithVariants,
-    addProductVariant,
-    updateProductVariant,
-    deleteProductVariant,
-    getProductWithVariantsById,
-    products,
-    productVariants,
+    getCategoryById,
+    getSubCategoryById,
+    getSubCategoriesByCategoryId,
+    getCategoryByProductId,
+    getSubCategoryByProductId,
   };
 };
 

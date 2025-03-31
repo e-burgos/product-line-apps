@@ -1,45 +1,38 @@
-/// <reference types='vitest' />
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import dts from 'vite-plugin-dts';
 import * as path from 'path';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 export default defineConfig({
   root: __dirname,
-  cacheDir: '../../node_modules/.vite/libs/datatable',
+  cacheDir: '../../node_modules/.vite/ui/datatable',
+
   plugins: [
     react(),
     nxViteTsPaths(),
-    nxCopyAssetsPlugin(['*.md']),
+    nodePolyfills(),
     dts({
       entryRoot: 'src',
       tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),
     }),
   ],
-  resolve: {
-    alias: {
-      'libs/ui/src': path.resolve(__dirname, '../ui/src'),
-      'libs/shell/src': path.resolve(__dirname, '../shell/src'),
-      'libs/integrations/src': path.resolve(__dirname, '../integrations/src'),
+
+  // Uncomment this if you are using workers.
+  // worker: {
+  //  plugins: [ nxViteTsPaths() ],
+  // },
+
+  test: {
+    globals: true,
+    cache: { dir: '../../node_modules/.vitest' },
+    environment: 'jsdom',
+    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    reporters: ['default'],
+    coverage: {
+      reportsDirectory: '../../coverage/ui/datatable',
+      provider: 'v8',
     },
   },
-  // build: {
-  //   outDir: '../../dist/libs/datatable',
-  //   emptyOutDir: true,
-  //   reportCompressedSize: true,
-  //   commonjsOptions: {
-  //     transformMixedEsModules: true,
-  //   },
-  //   lib: {
-  //     entry: 'src/index.ts',
-  //     name: 'datatable',
-  //     fileName: 'index',
-  //     formats: ['es', 'cjs'],
-  //   },
-  //   rollupOptions: {
-  //     external: ['react', 'react-dom', 'react/jsx-runtime'],
-  //   },
-  // },
 });

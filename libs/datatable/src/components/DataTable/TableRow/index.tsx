@@ -26,10 +26,10 @@ interface RowProps {
   };
   isColumn: boolean;
   rowActions?: IRowActions<TData>[];
-  onClick?: React.MouseEventHandler<HTMLTableRowElement>;
+  onClick: React.MouseEventHandler<HTMLTableRowElement>;
   forceShowMenuActions?: boolean;
   columnOffset: number;
-  rowSelection?: IRowSelection<TData>;
+  rowSelection: IRowSelection<TData>;
   smallAnatomy?: boolean;
 }
 

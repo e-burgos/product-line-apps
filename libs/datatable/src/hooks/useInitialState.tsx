@@ -15,12 +15,12 @@ import useDataTableStore from './useDataTableStore';
 
 export const useInitialState = (
   tableId: string,
-  defaultColumns: ColumnDef<TData, TData>[]
+  defaultColumns: ColumnDef<TData, TData>[],
 ) => {
   const {
     pagination: paginationStore,
     sorting: sortingStore,
-    //columnOrder: columnOrderStore,
+    columnOrder: columnOrderStore,
     columnVisibility: columnVisibilityStore,
     columnPinning: columnPinningStore,
     manualPagination: manualPaginationStore,
@@ -34,7 +34,7 @@ export const useInitialState = (
       RowActionsColumn,
       OffsetColumn,
     ],
-    [defaultColumns]
+    [defaultColumns],
   );
 
   const initialPagination = React.useMemo<PaginationState>(() => {
@@ -61,9 +61,10 @@ export const useInitialState = (
   }, []);
 
   const initialColumnOrder = React.useMemo<string[]>(() => {
+    if (columnOrderStore?.length !== 0) return columnOrderStore;
     const initialState = columns.map((c) => c.id);
     return initialState;
-  }, [columns]);
+  }, [columnOrderStore, columns]);
 
   const defaultColumnOrder = React.useMemo<string[]>(() => {
     return columns.map((c) => c.id);

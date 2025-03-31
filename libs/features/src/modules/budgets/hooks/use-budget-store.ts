@@ -1,9 +1,9 @@
-import { Budget, BudgetVariant } from '@product-line/dexie';
+import { Budget, BudgetDetail } from '@product-line/dexie';
 import { create } from 'zustand';
 
 export interface IBudgetStore {
   currentBudget: Budget | null;
-  currentDetail: BudgetVariant | null;
+  currentDetail: BudgetDetail | null;
   openDeleteModal: boolean;
   openDeleteDetailModal: boolean;
   openEditModal: boolean;
@@ -11,7 +11,7 @@ export interface IBudgetStore {
   openCreateModal: boolean;
   openCreateDetailModal: boolean;
   setCurrentBudget: (budget: Budget | null) => void;
-  setCurrentDetail: (detail: BudgetVariant | null) => void;
+  setCurrentDetail: (detail: BudgetDetail | null) => void;
   setOpenDeleteModal: (isOpen: boolean) => void;
   setOpenDeleteDetailModal: (isOpen: boolean) => void;
   setOpenEditDetailModal: (isOpen: boolean) => void;

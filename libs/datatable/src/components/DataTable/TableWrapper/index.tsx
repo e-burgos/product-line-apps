@@ -4,7 +4,7 @@ import { getCSSColorName } from '../../../common/helpers/theme';
 import styles from '../../../common/styles/main.module.css';
 import { IDataTableStyles } from '../../../common/types';
 import useTableColors from '../../../hooks/useTableColors';
-import { Spinner } from '@product-line/ui';
+import Spinner from 'libs/ui/src/components/spinner';
 
 export interface TableWrapperProps {
   tableId: string;
@@ -40,13 +40,7 @@ const TableWrapper: React.FC<TableWrapperProps> = ({
 
   const colorsInject = useMemo(() => {
     return Object.entries(colors).reduce((acc, [colorName, colorValue]) => {
-      const finalColor =
-        typeof colorValue === 'string'
-          ? colorValue
-          : colorValue && 'default' in colorValue
-          ? colorValue.default
-          : '';
-      acc[getCSSColorName(colorName)] = finalColor;
+      acc[getCSSColorName(colorName)] = colorValue;
 
       return acc;
     }, {} as Record<string, string>);

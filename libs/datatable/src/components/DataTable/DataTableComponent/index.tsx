@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, {
   Dispatch,
   Fragment,
@@ -19,7 +18,6 @@ import styles from '../../../common/styles/main.module.css';
 import {
   IOptionalDataTableProps,
   ManualPaginationState,
-  TData,
 } from '../../../common/types';
 import { IScrollProps } from '../../../context/DataTableContext';
 import DragDropContentContext from '../../../context/DragDropContentContext';
@@ -40,6 +38,7 @@ import TableWrapper from '../TableWrapper';
  * @category ui/datatable
  * @subcategory Props
  *
+ * @template TData - The type of data used in the table.
  * @extends IOptionalDataTableProps<TData> - Extends the optional properties for the data table.
  *
  * @property {string} tableId - Unique identifier for the table.
@@ -54,7 +53,7 @@ import TableWrapper from '../TableWrapper';
  * @property {RefObject<HTMLDivElement>} [tableContainerRef] - Reference to the table container element.
  * @property {IScrollProps} [scrollProps] - Scroll-related properties for the table.
  */
-export interface DataTableComponentProps
+export interface DataTableComponentProps<TData>
   extends IOptionalDataTableProps<TData> {
   tableId: string;
   table: Table<TData>;
@@ -82,8 +81,9 @@ export interface DataTableComponentProps
  *
  * @component
  * @extends IOptionalDataTableProps<TData> - The data table properties.
+ * @template TData - The type of data being displayed in the table.
  *
- * @param {DataTableComponentProps} props - The properties object.
+ * @param {DataTableComponentProps<TData>} props - The properties object.
  * @param {string} props.tableId - The unique identifier for the table.
  * @param {Table<TData>} props.table - The table instance.
  * @param {Array<TData>} props.data - The data to be displayed in the table.
@@ -95,17 +95,17 @@ export interface DataTableComponentProps
  * @param {RefObject<HTMLDivElement>} [props.tableContainerRef] - Optional reference to the table container element.
  * @param {IScrollProps} [props.scrollProps] - Optional scroll properties for the table.
  *
- * @returns {JSX.Element | null} The rendered DataTableComponent or null if the table instance is not provided.
+ * @returns {JSX.Element} The rendered DataTableComponent or null if the table instance is not provided.
  */
 
-function DataTableComponent({
+function DataTableComponent<TData>({
   tableId,
   table,
   data,
   initialConfig,
-  isLoading = false,
-  isError = false,
-  isFetching = false,
+  isLoading,
+  isError,
+  isFetching,
   renderSubComponent,
   renderSubDataTable,
   showFooter,
@@ -128,7 +128,7 @@ function DataTableComponent({
   tableContainerRef,
   rowSelection,
   showHeader = true,
-}: DataTableComponentProps): JSX.Element | null {
+}: DataTableComponentProps<TData>): JSX.Element {
   // hooks
   const { colors } = useTableColors();
 
@@ -149,11 +149,7 @@ function DataTableComponent({
 
   const columnsWidth: number = table.getAllColumns().reduce((acc, current) => {
     if ([OffsetColumn.id].includes(current.id)) return acc;
-    if (
-      // @ts-ignore
-      current?.columnDef?.enableVisible === false ||
-      !current.getIsVisible()
-    ) {
+    if (current.columnDef?.enableVisible === false || !current.getIsVisible()) {
       return acc;
     }
     return acc + current.getSize();
@@ -192,7 +188,7 @@ function DataTableComponent({
       }));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isRowActions, isSubComponent, isRowSelection, table]
+    [isRowActions, isSubComponent, isRowSelection, table],
   );
 
   // filters
@@ -217,11 +213,11 @@ function DataTableComponent({
     if (isManualPagination) {
       setManualPagination({
         enabled: true,
-        rowCount: pagination?.manualPagination?.rowCount || 0,
+        rowCount: pagination.manualPagination.rowCount,
       });
     }
     if (!isManualPagination) {
-      setManualPagination({ enabled: false, rowCount: 0 });
+      setManualPagination({ enabled: false, rowCount: undefined });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [table, pagination, isManualPagination]);
@@ -283,8 +279,8 @@ function DataTableComponent({
                 isError={isError}
                 isEmpty={isEmpty}
                 containerWith={containerWidth}
-                isScrollable={scrollProps?.isScrollable || false}
-                scrollX={scrollProps?.scrollX || 0}
+                isScrollable={scrollProps?.isScrollable}
+                scrollX={scrollProps?.scrollX}
                 stateMessage={stateMessage}
               />
             )}
@@ -362,7 +358,6 @@ function DataTableComponent({
                                     renderSubDataTable={renderSubDataTable}
                                   />
                                 ) : (
-                                  renderSubComponent &&
                                   renderSubComponent({
                                     row,
                                     columns: table.getAllColumns(),
@@ -380,9 +375,7 @@ function DataTableComponent({
             )}
             {!checkState && showFooter && (
               <Footer
-                className={`${styles.footer} ${
-                  smallAnatomy && styles.smallFooter
-                }`}
+                className={`${styles.footer} ${smallAnatomy && styles.smallFooter}`}
                 sx={{
                   backgroundColor: colors.headerBg,
                   color: colors.secondaryText,

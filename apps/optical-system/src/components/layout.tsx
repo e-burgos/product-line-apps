@@ -30,18 +30,24 @@ const Layout: FC<LayoutProps> = ({
     >
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-2">
         <div className="flex items-center gap-2">
-          {header?.linkToBack && (
+          {
             <Button
               className="w-4"
               size="mini"
               variant="transparent"
-              onClick={() => navigate(header.linkToBack as string)}
+              onClick={() =>
+                header?.linkToBack
+                  ? navigate(header.linkToBack as string)
+                  : navigate(-1)
+              }
             >
-              <ChevronLeftIcon className="h-6 w-6 " />
+              <ChevronLeftIcon className="h-6 w-6 text-brand" />
             </Button>
-          )}
-          {header?.titleIcon || <MonitorCog className="h-6 w-6" />}
-          <h1 className="text-3xl font-bold">{header.title}</h1>
+          }
+          {header?.titleIcon || <MonitorCog className="h-6 w-6 text-brand" />}
+          <h1 className="text-3xl font-bold dark:text-white text-current">
+            {header.title}
+          </h1>
         </div>
         {header?.headerContent && (
           <div className="flex gap-2">{header.headerContent}</div>

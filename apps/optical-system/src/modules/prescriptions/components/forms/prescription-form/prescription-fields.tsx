@@ -68,7 +68,6 @@ const PrescriptionFields: React.FC<PrescriptionFieldsProps> = ({
           placeholder="Ingrese el número de comprobante"
           id="receiptNumber"
           type="number"
-          mask="999999"
           error={errors?.receiptNumber?.message}
           {...register('receiptNumber', {
             required: 'El numero de comprobante es obligatorio',
@@ -86,7 +85,7 @@ const PrescriptionFields: React.FC<PrescriptionFieldsProps> = ({
           {...register('date', {
             required: 'La fecha es obligatoria',
             max: {
-              value: new Date().toISOString().split('T')[0],
+              value: new Date()?.toISOString()?.split('T')[0],
               message: 'La fecha no puede ser mayor a la actual',
             },
             min: {

@@ -39,7 +39,7 @@ const EditPrescriptionModal: FC<EditPrescriptionModalProps> = ({
   const prescription = getPrescriptionById(id as string);
   const customer = currentCustomer?.id
     ? currentCustomer
-    : getCustomerById(prescription?.customerId as string);
+    : getCustomerById(prescription?.customer?.id as string);
 
   const getPrescription = useCallback(() => {
     if (currentPrescription?.id) return currentPrescription;
