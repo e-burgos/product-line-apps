@@ -186,6 +186,7 @@ export const AddBudgetDetailsForm: FC<{ budget: Budget }> = ({ budget }) => {
                 })}
               />
               <Input
+                required
                 className="w-full mb-4"
                 label="Descripción Detalle"
                 id="description"
@@ -195,6 +196,7 @@ export const AddBudgetDetailsForm: FC<{ budget: Budget }> = ({ budget }) => {
                 })}
               />
               <Input
+                required
                 id="amount"
                 label="Monto Total"
                 type="number"

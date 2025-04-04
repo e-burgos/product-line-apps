@@ -5,6 +5,7 @@ import { LogoutButton } from '@product-line/dexie';
 import { useMenuItems } from './router/menu-items';
 import { useState } from 'react';
 import { QueryClient } from '@tanstack/react-query';
+import AppRoutes from './router/app-routes';
 
 export function App() {
   const menuItems = useMenuItems();
@@ -23,6 +24,7 @@ export function App() {
       settingActions={{
         disabledDirection: true,
       }}
+      customRoutes={<AppRoutes menuItems={menuItems} />}
     />
   );
 }

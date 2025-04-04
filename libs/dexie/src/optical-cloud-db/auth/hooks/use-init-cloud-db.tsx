@@ -12,11 +12,16 @@ export interface IDbStatus extends SyncState {
 
 export const useInitCloudDB = () => {
   const { addToast } = useToastStore();
-  const { setOpenLoginModal } = useAuthStore();
+  const { isLoggedIn, loading, setLoading, setIsLoggedIn, setOpenLoginModal } =
+    useAuthStore();
 
   const login = useCallback(async () => {
+    setLoading(true);
     try {
       await db.cloud.login();
+      await db.cloud.sync({ purpose: 'pull', wait: false });
+      setIsLoggedIn(true);
+      setLoading(false);
       addToast({
         id: 'authenticated',
         title: 'Autenticado',
@@ -26,6 +31,8 @@ export const useInitCloudDB = () => {
       return { isSuccess: true, isError: false };
     } catch (error) {
       console.error('login:', error);
+      setIsLoggedIn(false);
+      setLoading(false);
       addToast({
         id: 'authentication-error',
         title: 'Contactar al Administrador',
@@ -36,13 +43,19 @@ export const useInitCloudDB = () => {
       });
       setOpenLoginModal(false);
       return { isSuccess: false, isError: true };
+    } finally {
+      setLoading(false);
     }
-  }, [addToast, setOpenLoginModal]);
+  }, [addToast, setIsLoggedIn, setLoading, setOpenLoginModal]);
 
   const logout = useCallback(async () => {
+    setIsLoggedIn(true);
+    setLoading(true);
     try {
       await db.cloud.logout();
       console.log('Sessión cerrada.');
+      setLoading(false);
+      setIsLoggedIn(false);
       addToast({
         id: 'logged-out',
         title: 'Sesión cerrada',
@@ -52,6 +65,8 @@ export const useInitCloudDB = () => {
       return { isSuccess: true, isError: false };
     } catch (error) {
       console.error(error);
+      setIsLoggedIn(true);
+      setLoading(false);
       addToast({
         id: 'logout-error',
         title: 'Error',
@@ -59,17 +74,46 @@ export const useInitCloudDB = () => {
         variant: 'destructive',
       });
       return { isSuccess: false, isError: true };
+    } finally {
+      setLoading(false);
+    }
+  }, [addToast, setIsLoggedIn, setLoading]);
+
+  const syncDb = useCallback(async () => {
+    try {
+      await db.cloud.sync({ purpose: 'pull', wait: false });
+      console.info('Sync realizado correctamente.');
+      return { isSuccess: true, isError: false };
+    } catch (error) {
+      console.error(error);
+      addToast({
+        id: 'sync-error',
+        title: 'Error',
+        message: 'No se pudo sincronizar la base de datos.',
+        variant: 'destructive',
+      });
+      return { isSuccess: false, isError: true };
     }
   }, [addToast]);
 
   const ui = useObservable(db.cloud.userInteraction);
+
   const dbStatus = useObservable(db.cloud.syncState) as IDbStatus;
 
-  const currentUser = useObservable(db.cloud.currentUser);
+  const currentUser = useObservable(db.cloud.currentUser) || null;
 
-  const isUserAuthorized = currentUser?.userId !== 'unauthorized';
+  const handleUserAuthorized = useCallback(() => {
+    if (!currentUser?.email) return null;
+    if (currentUser?.email && currentUser?.userId !== 'unauthorized')
+      return true;
+    if (currentUser?.email && currentUser?.userId === 'unauthorized')
+      return false;
+    return null;
+  }, [currentUser]);
 
-  const isUserDeactivated = dbStatus?.license === 'deactivated';
+  const isUserAuthorized = handleUserAuthorized();
+
+  const isUserDeactivated = dbStatus?.license === 'deactivated' || null;
 
   const isAdmin = currentUser?.email === adminEmail;
 
@@ -87,12 +131,15 @@ export const useInitCloudDB = () => {
     login,
     logout,
     getUserLogged,
+    syncDb,
     ui,
     dbStatus,
     isAdmin,
     currentUser,
     isUserAuthorized,
     isUserDeactivated,
+    isLoggedIn,
+    loading,
   };
 };
 

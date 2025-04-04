@@ -230,6 +230,7 @@ export const EditProductForm: FC<EditProductFormProps> = ({ productId }) => {
         <Button
           size="medium"
           shape="rounded"
+          variant="ghost"
           onClick={() => setOpenEditModal(false)}
         >
           Cancelar

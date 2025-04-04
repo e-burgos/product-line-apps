@@ -101,6 +101,7 @@ export const AddSubCategoryForm: FC = () => {
         <Button
           size="medium"
           shape="rounded"
+          variant="ghost"
           onClick={() => setOpenCreateSubCategoryModal(false)}
         >
           Cancelar

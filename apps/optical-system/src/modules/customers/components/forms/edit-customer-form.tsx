@@ -111,8 +111,6 @@ export const EditCustomerForm: FC<EditCustomerFormProps> = ({ customerId }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProvince]);
 
-  console.log(prescriptions);
-
   const onSubmit: SubmitHandler<CustomerFormData> = async (data) => {
     const update = await updateCustomer({
       id: customer?.id,

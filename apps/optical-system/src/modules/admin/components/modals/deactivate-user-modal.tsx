@@ -4,7 +4,7 @@ import Button from 'libs/ui/src/components/button';
 import { UserRoundXIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../hooks/use-user-store';
-import { useAdminQueries } from '@product-line/dexie';
+import { useAuthQueries } from '@product-line/dexie';
 
 interface DeactivateUserModalProps {
   showButton?: boolean;
@@ -20,7 +20,7 @@ const DeactivateUserModal: React.FC<DeactivateUserModalProps> = ({
   const navigate = useNavigate();
   const { openDeactivateUserModal, setOpenDeactivateUserModal, currentUser } =
     useUserStore();
-  const { usePostDeactivateUserMutation } = useAdminQueries();
+  const { usePostDeactivateUserMutation } = useAuthQueries();
 
   const { mutate } = usePostDeactivateUserMutation({
     userId: userId || currentUser?.userId,

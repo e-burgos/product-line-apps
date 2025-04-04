@@ -6,7 +6,7 @@ export const commonRoutePaths = {
   resetPin: '/auth/reset-pin',
   signIn: '/auth/sign-in',
   signUp: '/auth/sign-up',
-  noAuthorized: '/no-authorized',
+  noAuthorized: '/auth/no-authorized',
   notFound: '*',
 };
 

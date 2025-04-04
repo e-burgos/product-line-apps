@@ -197,6 +197,7 @@ export const AddProductForm: FC = () => {
         <Button
           size="medium"
           shape="rounded"
+          variant="ghost"
           onClick={() => setOpenCreateModal(false)}
         >
           Cancelar

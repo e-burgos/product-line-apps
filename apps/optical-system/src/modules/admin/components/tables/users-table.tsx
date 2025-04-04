@@ -1,5 +1,5 @@
 import { DataTable } from '@product-line/datatable';
-import { DBUserJsonModel, useAdminQueries } from '@product-line/dexie';
+import { DBUserJsonModel, useAuthQueries } from '@product-line/dexie';
 import CardContainer from 'libs/ui/src/components/forms/card-container';
 import CardTitle from 'libs/ui/src/components/forms/card-title';
 import InputSearcher from 'libs/ui/src/components/forms/input-searcher';
@@ -10,7 +10,7 @@ import DeactivateUserModal from '../modals/deactivate-user-modal';
 
 const UsersTable: FC = () => {
   const { columns } = useUsersColumns();
-  const { getAllUsers } = useAdminQueries();
+  const { getAllUsers } = useAuthQueries();
   const { setCurrentUser, setOpenDeactivateUserModal } = useUserStore();
 
   const [search, setSearch] = useState<string>('');

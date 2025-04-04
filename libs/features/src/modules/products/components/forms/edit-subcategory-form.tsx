@@ -143,6 +143,7 @@ export const EditSubCategoryForm: FC<EditSubCategoryFormProps> = ({
         <Button
           size="medium"
           shape="rounded"
+          variant="ghost"
           onClick={() => setOpenEditSubCategoryModal(false)}
         >
           Cancelar

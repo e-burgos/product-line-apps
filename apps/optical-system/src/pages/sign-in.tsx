@@ -1,9 +1,18 @@
+import { useEffect } from 'react';
 import AnchorLink from 'libs/ui/src/components/links/anchor-link';
 import { appName } from '@optical-system-app/utils/const';
-import { LoginButton } from '@product-line/dexie';
+import { LoginButton, useAuthStore } from '@product-line/dexie';
 import { Glasses } from 'lucide-react';
 
 export function SignInPage() {
+  const { setLoading, setIsLoggedIn } = useAuthStore();
+
+  useEffect(() => {
+    setLoading(false);
+    setIsLoggedIn(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="grid flex-grow grid-cols-0 gap-0 lg:grid-cols-[1fr_0%] 3xl:grid-cols-1">
       <div className="flex flex-col items-center justify-center py-14">

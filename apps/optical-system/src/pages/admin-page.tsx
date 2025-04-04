@@ -1,10 +1,17 @@
 import Layout from '@optical-system-app/components/layout';
 import { Settings } from 'lucide-react';
-import { useAdminQueries } from 'libs/dexie/src/optical-cloud-db';
+import { useAuthQueries, useTokenStore } from 'libs/dexie/src/optical-cloud-db';
 import UsersTable from '@optical-system-app/modules/admin/components/tables/users-table';
+import { useEffect } from 'react';
 
 function AdminPage() {
-  const { tokenData } = useAdminQueries();
+  const { getAdminToken } = useAuthQueries();
+  const { tokenData } = useTokenStore();
+
+  useEffect(() => {
+    getAdminToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Layout

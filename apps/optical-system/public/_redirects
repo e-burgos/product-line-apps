@@ -1,1 +1,8 @@
 /*    /index.html   200
+/customers/*    /index.html   200
+/prescriptions/*    /index.html   200
+/products/*    /index.html   200
+/budgets/*    /index.html   200
+/admin/*    /index.html   200
+/auth/*    /index.html   200
+/no-authorized/*    /index.html   200

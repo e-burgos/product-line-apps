@@ -1,18 +1,18 @@
 import { storage } from 'libs/integrations/src/local-storage';
 import { create } from 'zustand';
-import { TokenFinalResponse } from '../../api/types/apiTypes';
+import { TokenFinalResponse } from '../types/apiTypes';
 
-export interface AdminStore {
+export interface TokenStore {
   tokenData: TokenFinalResponse | null;
   setTokenData: (tokenData: TokenFinalResponse | null) => void;
 }
 
-export const useAdminStore = create<AdminStore>((set) => {
-  const adminData = storage.get('admin-data');
+export const useTokenStore = create<TokenStore>((set) => {
+  const tokenData = storage.get('token-data');
   return {
-    tokenData: adminData?.tokenData || null,
+    tokenData: tokenData?.tokenData || null,
     setTokenData: (tokenData) => {
-      storage.set('admin-data', { tokenData });
+      storage.set('token-data', { tokenData });
       set({ tokenData });
     },
   };

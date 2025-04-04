@@ -1,21 +1,20 @@
+import { useState } from 'react';
 import { useCustomerStore } from '@optical-system-app/modules/customers/hooks/use-customer-store';
 import { useCustomerColumns } from '@optical-system-app/modules/customers/hooks/use-customer-columns';
-import useCustomerData from '@optical-system-app/modules/customers/hooks/use-customer-data';
 import { DataTable } from '@product-line/datatable';
 import DeleteCustomerModal from '@optical-system-app/modules/customers/components/modals/delete-customer-modal';
 import EditCustomerModal from '@optical-system-app/modules/customers/components/modals/edit-customer-modal';
 import CardContainer from 'libs/ui/src/components/forms/card-container';
 import InputSearcher from 'libs/ui/src/components/forms/input-searcher';
-import { useState } from 'react';
 import CardTitle from 'libs/ui/src/components/forms/card-title';
 import AddPrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/add-prescription-modal';
-import { Customer } from '@product-line/dexie';
+import { Customer, useCustomerMethods } from '@product-line/dexie';
 import useCustomerTableActions from '../hooks/use-customer-table-actions';
 
 function CustomersTable() {
   const { setCurrentCustomer } = useCustomerStore();
   const { columns } = useCustomerColumns();
-  const { customers } = useCustomerData();
+  const { customers } = useCustomerMethods();
   const { rowActions } = useCustomerTableActions();
 
   const [search, setSearch] = useState<string>('');
@@ -43,6 +42,8 @@ function CustomersTable() {
             tableId={'customers'}
             data={filterData() || []}
             columns={columns}
+            isLoading={customers === null}
+            // isError={isError}
             border
             pagination={{
               showPagination: true,

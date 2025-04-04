@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Customer } from '../../types/customer-db-types';
+import { Prescription } from '../../types/prescription-db-types';
 import { ErrorResponse } from './errorTypes';
 
 type ISODateTimeString = string;
@@ -60,7 +62,10 @@ type ApiResponses = {
   'get-token-validate': TokenValidateResponse;
   'get-users': DBUserListResponse;
   'post-users': DBUserJsonModel;
-  'get-user-prescriptions': any;
+  'get-prescriptions': Prescription[];
+  'get-user-prescriptions': Prescription[];
+  'get-customers': Customer[];
+  'get-user-customers': Customer[];
 };
 export type { ApiResponses };
 
@@ -69,6 +74,9 @@ type ApiErrorResponses = {
   'get-token-validate': ErrorResponse;
   'get-users': ErrorResponse;
   'post-users': ErrorResponse;
+  'get-prescriptions': ErrorResponse;
   'get-user-prescriptions': ErrorResponse;
+  'get-customers': ErrorResponse;
+  'get-user-customers': ErrorResponse;
 };
 export type { ApiErrorResponses };

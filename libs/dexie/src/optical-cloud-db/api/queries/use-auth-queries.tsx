@@ -1,14 +1,36 @@
-import { useToastStore } from 'libs/ui/src/hooks';
-import { useAdminStore } from './use-admin-store';
-import { useApiMutation, useApiQuery } from '../../api';
+import { useCallback } from 'react';
+import { useTokenStore } from '../store/use-token-store';
+import { useApiMutation, useApiQuery } from '..';
 import { dexieClientId, dexieClientSecret } from '../../const';
-import { useCallback, useEffect } from 'react';
+import { TokenFinalResponse } from '../types/apiTypes';
 
-export const useAdminQueries = () => {
-  const { addToast } = useToastStore();
-  const { setTokenData, tokenData } = useAdminStore();
+export const useAuthQueries = () => {
+  const { setTokenData, tokenData } = useTokenStore();
 
-  const postToken = useApiMutation({
+  const postTokenMutation = useApiMutation({
+    id: 'post-token',
+    auth: 'none',
+    axiosOptions: {
+      method: 'post',
+      data: {
+        grant_type: 'client_credentials',
+        scopes: ['ACCESS_DB'],
+        client_id: dexieClientId,
+        client_secret: dexieClientSecret,
+      },
+    },
+    mutationOptions: {
+      onSuccess: (data) => {
+        setTokenData(data?.data as TokenFinalResponse);
+        console.info('Token creado correctamente.');
+      },
+      onError: (error) => {
+        console.error('Error al crear token:', error?.response?.data?.message);
+      },
+    },
+  });
+
+  const postAdminTokenMutation = useApiMutation({
     id: 'post-token',
     auth: 'none',
     axiosOptions: {
@@ -29,27 +51,31 @@ export const useAdminQueries = () => {
     },
     mutationOptions: {
       onSuccess: (data) => {
-        setTokenData(data?.data);
-        addToast({
-          id: 'api-success',
-          variant: 'success',
-          title: 'Token Creado',
-          message: 'El token ha sido creado con éxito',
-        });
+        setTokenData(data?.data as TokenFinalResponse);
+        console.info('Token de administrador creado correctamente.');
       },
       onError: (error) => {
-        addToast({
-          id: 'api-error',
-          variant: 'destructive',
-          title: 'Error Crear Token',
-          message: error?.response?.data?.message || 'Error al crear token',
-        });
+        console.error(
+          'Error al crear token de administrador:',
+          error?.response?.data?.message
+        );
       },
     },
   });
 
+  const postToken = useCallback(
+    (params: { isAdmin: boolean }) => {
+      return params.isAdmin ? postAdminTokenMutation : postTokenMutation;
+    },
+    [postAdminTokenMutation, postTokenMutation]
+  );
+
   const getToken = useCallback(() => {
-    postToken.mutate({});
+    postToken({ isAdmin: false }).mutate({});
+  }, [postToken]);
+
+  const getAdminToken = useCallback(() => {
+    postToken({ isAdmin: true }).mutate({});
   }, [postToken]);
 
   const getValidatedToken = useApiMutation({
@@ -59,20 +85,13 @@ export const useAdminQueries = () => {
     },
     mutationOptions: {
       onSuccess: () => {
-        addToast({
-          id: 'api-success',
-          variant: 'success',
-          title: 'Token Validado',
-          message: 'Token validado con éxito',
-        });
+        console.info('Token validado correctamente.');
       },
       onError: (error) => {
-        addToast({
-          id: 'api-error',
-          variant: 'destructive',
-          title: 'Error Validar Token',
-          message: error?.response?.data?.message || 'Error al validar token',
-        });
+        console.error(
+          'Error al validar token:',
+          error?.response?.data?.message
+        );
         getToken();
       },
     },
@@ -92,10 +111,10 @@ export const useAdminQueries = () => {
       getToken();
   }, [getToken, getValidatedTokenMutation, tokenData]);
 
-  useEffect(() => {
-    verifiedTokenMutation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   verifiedTokenMutation();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   const getAllUsersMutation = useApiMutation({
     id: 'get-users',
@@ -141,14 +160,15 @@ export const useAdminQueries = () => {
   };
 
   return {
-    tokenData,
     getValidatedToken,
-    verifiedTokenMutation,
     getAllUsersMutation,
     getAllUsers,
-    usePostDeactivateUserMutation,
     getAllUserPrescriptions,
+    verifiedTokenMutation,
+    usePostDeactivateUserMutation,
+    getToken,
+    getAdminToken,
   };
 };
 
-export default useAdminQueries;
+export default useAuthQueries;

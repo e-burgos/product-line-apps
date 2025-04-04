@@ -24,13 +24,33 @@ import { useMemo } from 'react';
 import { useInitCloudDB } from '@product-line/dexie';
 import ProtectedAdmin from './protected-admin';
 import AdminPage from '@optical-system-app/pages/admin-page';
+import NotFoundPage from 'libs/shell/src/components/pages/not-found';
+import NotAuthorizedPage from 'libs/shell/src/components/pages/not-authorized';
+
+export enum AppRoutes {
+  CUSTOMERS = '/customers',
+  CUSTOMERS_DETAIL = '/customers/:id',
+  PRESCRIPTIONS = '/prescriptions',
+  PRESCRIPTIONS_DETAIL = '/prescriptions/:id',
+  PRODUCTS = '/products',
+  BUDGETS = '/budgets',
+  ADMIN = '/admin',
+  SIGN_IN = '/auth/sign-in',
+  NOT_FOUND = '/not-found',
+  NO_AUTHORIZED = '/no-authorized',
+}
 
 export const appRoutes = {
-  customers: '/customers',
-  prescriptions: '/prescriptions',
-  products: '/products',
-  budgets: '/budgets',
-  admin: '/admin',
+  customers: AppRoutes.CUSTOMERS,
+  customersDetail: AppRoutes.CUSTOMERS_DETAIL,
+  prescriptions: AppRoutes.PRESCRIPTIONS,
+  prescriptionsDetail: AppRoutes.PRESCRIPTIONS_DETAIL,
+  products: AppRoutes.PRODUCTS,
+  budgets: AppRoutes.BUDGETS,
+  admin: AppRoutes.ADMIN,
+  signIn: AppRoutes.SIGN_IN,
+  noAuthorized: AppRoutes.NO_AUTHORIZED,
+  notFound: AppRoutes.NOT_FOUND,
 };
 
 export const useMenuItems = (): IMenuItem[] => {
@@ -41,62 +61,49 @@ export const useMenuItems = (): IMenuItem[] => {
         name: 'Clientes',
         icon: <Users className="h-18 w-18 -ml-1" />,
         href: appRoutes.customers,
-        component: (
-          <ProtectedRoute>
-            <CustomersPage />
-          </ProtectedRoute>
-        ),
+        component: <CustomersPage />,
       },
       {
         name: 'Detalles del Cliente',
         icon: <User className="h-18 w-18 -ml-1" />,
-        href: `${appRoutes.customers}/:id`,
+        href: appRoutes.customersDetail,
         hide: true,
-        component: (
-          <ProtectedRoute>
-            <CustomerDetailPage />
-          </ProtectedRoute>
-        ),
+        component: <CustomerDetailPage />,
       },
       {
         name: 'Fichas',
         icon: <ReceiptIcon className="h-18 w-18 -ml-1" />,
         href: appRoutes.prescriptions,
-        component: (
-          <ProtectedRoute>
-            <PrescriptionsPage />
-          </ProtectedRoute>
-        ),
+        component: <PrescriptionsPage />,
       },
       {
         name: 'Detalles de la Ficha',
         icon: <ReceiptIcon className="h-18 w-18 -ml-1" />,
-        href: `${appRoutes.prescriptions}/:id`,
+        href: appRoutes.prescriptionsDetail,
         hide: true,
-        component: (
-          <ProtectedRoute>
-            <PrescriptionDetailPage />
-          </ProtectedRoute>
-        ),
+        component: <PrescriptionDetailPage />,
       },
       {
         name: 'Presupuestos',
         icon: <FileBoxIcon className="h-18 w-18 -ml-1" />,
         href: appRoutes.budgets,
-        component: (
-          <ProtectedRoute>
-            <BudgetsPage />
-          </ProtectedRoute>
-        ),
+        component: <BudgetsPage />,
       },
       {
         name: 'Productos',
         icon: <Package className="h-18 w-18 -ml-1" />,
         href: appRoutes.products,
+        component: <ProductsPage />,
+      },
+      {
+        name: 'Administración',
+        icon: <Settings className="h-18 w-18 -ml-1" />,
+        href: appRoutes.admin,
+        hide: !isAdmin,
         component: (
-          <ProtectedRoute>
-            <ProductsPage />
-          </ProtectedRoute>
+          <ProtectedAdmin redirectTo={appRoutes.admin}>
+            <AdminPage />
+          </ProtectedAdmin>
         ),
       },
       {
@@ -105,17 +112,18 @@ export const useMenuItems = (): IMenuItem[] => {
         hide: true,
         component: <SignInPage />,
       },
-      {
-        name: 'Administración',
-        icon: <Settings className="h-18 w-18 -ml-1" />,
-        href: appRoutes.admin,
-        hide: !isAdmin,
-        component: (
-          <ProtectedAdmin>
-            <AdminPage />
-          </ProtectedAdmin>
-        ),
-      },
+      // {
+      //   name: commonRouteLabels.notFound,
+      //   href: '*',
+      //   hide: true,
+      //   component: <NotFoundPage />,
+      // },
+      // {
+      //   name: commonRouteLabels.noAuthorized,
+      //   href: commonRoutePaths.noAuthorized,
+      //   hide: true,
+      //   component: <NotAuthorizedPage />,
+      // },
     ],
     [isAdmin]
   );

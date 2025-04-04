@@ -67,6 +67,7 @@ export const AddCategoryForm: FC = () => {
         <Button
           size="medium"
           shape="rounded"
+          variant="ghost"
           onClick={() => setOpenCreateCategoryModal(false)}
         >
           Cancelar

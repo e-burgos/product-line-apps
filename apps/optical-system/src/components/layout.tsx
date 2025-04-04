@@ -22,6 +22,7 @@ const Layout: FC<LayoutProps> = ({
   variant = 'classic',
 }) => {
   const navigate = useNavigate();
+
   return (
     <div
       className={`flex flex-col align-middle w-full rounded-lg p-4 sm:p-6 h-full 2xl:px-8 ${

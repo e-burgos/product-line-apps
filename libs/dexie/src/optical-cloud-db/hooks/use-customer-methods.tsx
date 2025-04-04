@@ -1,13 +1,15 @@
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useCallback } from 'react';
 import { db } from '../db';
 import { Customer } from '../types/db-types';
 import { useToastStore } from 'libs/ui/src/hooks';
 import { v4 as uuidv4 } from 'uuid';
-import { useCallback } from 'react';
 import usePrescriptionMethods from './use-prescription-methods';
+import useInitCloudDB from '../auth/hooks/use-init-cloud-db';
+import { useLiveQuery } from 'dexie-react-hooks';
 
 export const useCustomerMethods = () => {
   const { addToast } = useToastStore();
+  const { isLoggedIn } = useInitCloudDB();
   const { prescriptions } = usePrescriptionMethods();
 
   const addCustomer = async (customer: Customer) => {
@@ -82,7 +84,22 @@ export const useCustomerMethods = () => {
     }
   };
 
-  const customers = useLiveQuery(() => db.customers.orderBy('name').toArray());
+  const getCustomers = useCallback(async () => {
+    try {
+      const response = await db.customers.orderBy('name').toArray();
+      return response;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }, []);
+
+  const getLiveCustomers = useLiveQuery(
+    () => db.customers.orderBy('name').toArray(),
+    [isLoggedIn]
+  );
+
+  const customers = getLiveCustomers;
 
   const getCustomerById = useCallback(
     (customerId: string) =>
@@ -91,7 +108,7 @@ export const useCustomerMethods = () => {
   );
 
   const getPrescriptionsByCustomerId = (customerId: string) =>
-    prescriptions?.filter((p) => p.customerId === customerId) || [];
+    prescriptions?.filter((p) => p?.customer?.id === customerId) || [];
 
   const checkIsCustomer = (customerId: string | undefined) =>
     customers?.find((c) => c.id === customerId) ? true : false;
@@ -100,6 +117,7 @@ export const useCustomerMethods = () => {
     addCustomer,
     updateCustomer,
     deleteCustomer,
+    getCustomers,
     getCustomerById,
     getPrescriptionsByCustomerId,
     checkIsCustomer,

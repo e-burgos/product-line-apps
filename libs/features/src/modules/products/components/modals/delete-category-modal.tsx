@@ -39,6 +39,7 @@ export const DeleteCategoryModal: FC = () => {
         <Button
           size="medium"
           shape="rounded"
+          variant="ghost"
           onClick={() => setOpenDeleteCategoryModal(false)}
         >
           Cancelar

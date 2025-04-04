@@ -96,6 +96,7 @@ export const EditCategoryForm: FC<EditCategoryFormProps> = ({ categoryId }) => {
         <Button
           size="medium"
           shape="rounded"
+          variant="ghost"
           onClick={() => setOpenEditCategoryModal(false)}
         >
           Cancelar

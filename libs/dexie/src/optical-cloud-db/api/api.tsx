@@ -17,7 +17,7 @@ import { apiUrls } from './apiUrls';
 import { ApiErrorResponses, ApiResponses } from './types/apiTypes';
 import { useToastStore } from '@product-line/ui';
 import { dexieDbUrl } from '../const';
-import { useAdminStore } from '../auth/hooks/use-admin-store';
+import { useTokenStore } from './store/use-token-store';
 
 const axiosInit = () => {
   const axiosInstance = axios.create({
@@ -78,7 +78,7 @@ export function useApiQuery<Type extends ApiType>(
     errorMessage,
     successMessage,
   } = params;
-  const { tokenData } = useAdminStore();
+  const { tokenData } = useTokenStore();
   const token = tokenData?.accessToken;
   const { addToast } = useToastStore();
   const navigate = useNavigate();
@@ -174,7 +174,7 @@ export function useApiMutation<Type extends ApiType>(
     invalidateQueriesByIds,
     invalidateQueriesDelay = 0,
   } = params;
-  const { tokenData } = useAdminStore();
+  const { tokenData } = useTokenStore();
   const token = tokenData?.accessToken;
   const { addToast } = useToastStore();
   const queryClient = useQueryClient();

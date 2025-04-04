@@ -1,19 +1,35 @@
 import Button from 'libs/ui/src/components/button';
-import { WifiOff, Wifi, LogOut } from 'lucide-react';
+import {
+  WifiOff,
+  Wifi,
+  LogOut,
+  UserRoundX,
+  UserRoundCheck,
+} from 'lucide-react';
 import useWindowSize from 'react-use/lib/useWindowSize';
 import useInitCloudDB from '../hooks/use-init-cloud-db';
+import { commonRoutePaths } from 'libs/shell/src/router/routes';
+import { AppRoutes } from '@optical-system-app/router/menu-items';
+import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../hooks/use-auth-store';
 
 export const LogoutButton = () => {
+  const navigate = useNavigate();
   const { width } = useWindowSize();
-  const { logout, isUserAuthorized, dbStatus } = useInitCloudDB();
+  const { setLastRouteVisited } = useAuthStore();
+  const { logout, dbStatus, isLoggedIn } = useInitCloudDB();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    const response = await logout();
+    if (response.isSuccess) {
+      setLastRouteVisited(commonRoutePaths.signIn as AppRoutes);
+      navigate(commonRoutePaths.signIn as AppRoutes);
+    }
   };
 
   return (
     <div className="flex items-center gap-3">
-      {isUserAuthorized && (
+      {isLoggedIn && (
         <Button
           variant="ghost"
           shape={'circle'}
@@ -25,24 +41,46 @@ export const LogoutButton = () => {
           </div>
         </Button>
       )}
-      {
-        <Button
-          variant="ghost"
-          shape="circle"
-          size="small"
-          color={dbStatus?.phase === 'offline' ? 'danger' : 'success'}
-        >
-          {dbStatus?.phase === 'offline' ? (
-            <div className="flex items-center">
-              <WifiOff className={width > 700 ? 'h-5 w-5' : 'h-4 w-4'} />
-            </div>
+      <Button
+        variant="ghost"
+        shape={'circle'}
+        size="small"
+        color={!isLoggedIn ? 'danger' : 'success'}
+      >
+        <div className="flex items-center">
+          {!isLoggedIn ? (
+            <UserRoundX
+              className={
+                width > 700 ? 'h-5 w-5 text-red-500' : 'h-4 w-4 text-red-500'
+              }
+            />
           ) : (
-            <div className="flex items-center">
-              <Wifi className={width > 700 ? 'h-5 w-5' : 'h-4 w-4'} />
-            </div>
+            <UserRoundCheck
+              className={
+                width > 700
+                  ? 'h-5 w-5 text-green-500'
+                  : 'h-4 w-4 text-green-500'
+              }
+            />
           )}
-        </Button>
-      }
+        </div>
+      </Button>
+      <Button
+        variant="ghost"
+        shape="circle"
+        size="small"
+        color={dbStatus?.phase === 'offline' ? 'danger' : 'success'}
+      >
+        {dbStatus?.phase === 'offline' ? (
+          <div className="flex items-center">
+            <WifiOff className={width > 700 ? 'h-5 w-5' : 'h-4 w-4'} />
+          </div>
+        ) : (
+          <div className="flex items-center">
+            <Wifi className={width > 700 ? 'h-5 w-5' : 'h-4 w-4'} />
+          </div>
+        )}
+      </Button>
     </div>
   );
 };

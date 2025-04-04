@@ -43,6 +43,7 @@ interface MainLayoutProps {
   showSettings?: boolean;
   showSearch?: boolean;
   settingActions?: ISettingAction;
+  customRoutes?: React.ReactNode;
 }
 
 export function MainLayout({
@@ -56,6 +57,7 @@ export function MainLayout({
   showSettings,
   showSearch,
   settingActions = defaultSettingActions,
+  customRoutes,
 }: MainLayoutProps) {
   const {
     mode,
@@ -148,7 +150,7 @@ export function MainLayout({
           isNotificationButton={isNotificationButton}
           rightButton={rightButton}
         >
-          <AppRoutes menuItems={menuItems} />
+          {customRoutes ? customRoutes : <AppRoutes menuItems={menuItems} />}
         </LayoutType>
       </QueryClientProvider>
     </BrowserRouter>
