@@ -6,10 +6,12 @@ export interface AuthStore {
   isLoggedIn: boolean;
   loading: boolean;
   lastRouteVisited: string;
+  openUserDataModal: boolean;
   setOpenLoginModal: (open: boolean) => void;
   setIsLoggedIn: (logged: boolean) => void;
   setLoading: (loading: boolean) => void;
   setLastRouteVisited: (lastRouteVisited: string) => void;
+  setOpenUserDataModal: (open: boolean) => void;
 }
 
 export const useAuthStore = create<AuthStore>((set) => {
@@ -19,6 +21,7 @@ export const useAuthStore = create<AuthStore>((set) => {
     isLoggedIn: authStore?.isLoggedIn || false,
     loading: authStore?.loading || false,
     lastRouteVisited: authStore?.lastRouteVisited || '',
+    openUserDataModal: false,
     setOpenLoginModal: (open) => set({ openLoginModal: open }),
     setIsLoggedIn: (logged) => {
       const authStore = storage.get('auth-store');
@@ -35,5 +38,6 @@ export const useAuthStore = create<AuthStore>((set) => {
       set({ lastRouteVisited });
       storage.set('auth-store', { ...authStore, lastRouteVisited });
     },
+    setOpenUserDataModal: (open) => set({ openUserDataModal: open }),
   };
 });

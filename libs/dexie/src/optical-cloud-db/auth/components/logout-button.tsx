@@ -12,11 +12,12 @@ import { commonRoutePaths } from 'libs/shell/src/router/routes';
 import { AppRoutes } from '@optical-system-app/router/menu-items';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../hooks/use-auth-store';
+import UserDataModal from './user-data-modal';
 
 export const LogoutButton = () => {
   const navigate = useNavigate();
   const { width } = useWindowSize();
-  const { setLastRouteVisited } = useAuthStore();
+  const { setLastRouteVisited, setOpenUserDataModal } = useAuthStore();
   const { logout, dbStatus, isLoggedIn } = useInitCloudDB();
 
   const handleLogout = async () => {
@@ -29,23 +30,22 @@ export const LogoutButton = () => {
 
   return (
     <div className="flex items-center gap-3">
-      {isLoggedIn && (
-        <Button
-          variant="ghost"
-          shape={'circle'}
-          size="small"
-          onClick={handleLogout}
-        >
-          <div className="flex items-center">
-            <LogOut className={width > 700 ? 'h-5 w-5' : 'h-4 w-4'} />
-          </div>
-        </Button>
-      )}
+      <Button
+        variant="ghost"
+        shape={'circle'}
+        size="small"
+        onClick={handleLogout}
+      >
+        <div className="flex items-center">
+          <LogOut className={width > 700 ? 'h-5 w-5' : 'h-4 w-4'} />
+        </div>
+      </Button>
       <Button
         variant="ghost"
         shape={'circle'}
         size="small"
         color={!isLoggedIn ? 'danger' : 'success'}
+        onClick={() => setOpenUserDataModal(true)}
       >
         <div className="flex items-center">
           {!isLoggedIn ? (
@@ -81,6 +81,7 @@ export const LogoutButton = () => {
           </div>
         )}
       </Button>
+      <UserDataModal />
     </div>
   );
 };

@@ -149,10 +149,13 @@ export const PrescriptionForm: FC<PrescriptionFormProps> = ({
       }
     }
     if (type === 'update' && prescriptionData?.id) {
-      const update = await updatePrescription({
-        ...prescription,
-        id: prescriptionData.id,
-      });
+      const update = await updatePrescription(
+        {
+          ...prescription,
+          id: prescriptionData.id,
+        },
+        prescriptionData?.customer as Customer
+      );
       if (update.isSuccess) {
         reset();
         setCurrentCustomer(null);

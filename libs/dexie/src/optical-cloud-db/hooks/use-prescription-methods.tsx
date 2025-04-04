@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db';
-import { Prescription } from '../types/db-types';
+import { Customer, Prescription } from '../types/db-types';
 import { useToastStore } from 'libs/ui/src/hooks';
 import { v4 as uuidv4 } from 'uuid';
 import { useCallback } from 'react';
@@ -24,6 +24,16 @@ export const usePrescriptionMethods = () => {
         id: uuidv4(),
       });
 
+      if (prescription.customer) {
+        await db.customers.update(prescription.customer.id, {
+          ...prescription.customer,
+          prescriptions: [
+            ...(prescription?.customer?.prescriptions || []),
+            prescription,
+          ],
+        });
+      }
+
       addToast({
         id: 'prescription-created',
         title: 'Ficha creada',
@@ -43,7 +53,10 @@ export const usePrescriptionMethods = () => {
     }
   };
 
-  const updatePrescription = async (prescription: Prescription) => {
+  const updatePrescription = async (
+    prescription: Prescription,
+    lastCustomer: Customer
+  ) => {
     try {
       if (
         !prescription.customer ||
@@ -58,6 +71,31 @@ export const usePrescriptionMethods = () => {
       await db.prescriptions.update(prescription.id, {
         ...prescription,
       });
+
+      if (lastCustomer.id !== prescription.customer?.id) {
+        if (lastCustomer) {
+          await db.customers.update(lastCustomer.id, {
+            ...lastCustomer,
+            prescriptions: [
+              ...(lastCustomer?.prescriptions || []).filter(
+                (p) => p.id !== prescription.id
+              ),
+            ],
+          });
+        }
+      }
+
+      if (prescription.customer) {
+        await db.customers.update(prescription.customer.id, {
+          ...prescription.customer,
+          prescriptions: [
+            ...(prescription?.customer?.prescriptions || []).filter(
+              (p) => p.id !== prescription.id
+            ),
+            prescription,
+          ],
+        });
+      }
 
       addToast({
         id: 'prescription-updated',

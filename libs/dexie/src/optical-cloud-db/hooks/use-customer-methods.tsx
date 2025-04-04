@@ -16,6 +16,7 @@ export const useCustomerMethods = () => {
     try {
       await db.customers.add({
         ...customer,
+        prescriptions: [],
         id: uuidv4(),
       });
       addToast({
