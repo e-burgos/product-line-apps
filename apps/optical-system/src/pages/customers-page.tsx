@@ -18,7 +18,7 @@ function CustomersPage() {
         headerContent: (
           <>
             {/* TODO: Add share buttons */}
-            <ShareButtons />
+            <ShareButtons entity="customers" />
             <AddCustomerModal />
           </>
         ),

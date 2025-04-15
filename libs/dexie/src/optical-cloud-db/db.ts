@@ -33,7 +33,7 @@ export class OpticalCloudDB extends Dexie {
       budgets: 'id, title',
       budgetDetails: 'id, budgetId, title, productId',
       customers: 'id, name, lastName',
-      prescriptions: 'id, receiptNumber, customerId',
+      prescriptions: 'id, receiptNumber',
       realms: '@realmId',
       members: '@id,[realmId+email]',
       roles: '[realmId+name]',

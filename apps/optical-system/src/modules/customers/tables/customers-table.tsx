@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useCustomerStore } from '@optical-system-app/modules/customers/hooks/use-customer-store';
 import { useCustomerColumns } from '@optical-system-app/modules/customers/hooks/use-customer-columns';
 import { DataTable } from '@product-line/datatable';
@@ -10,29 +10,38 @@ import CardTitle from 'libs/ui/src/components/forms/card-title';
 import AddPrescriptionModal from '@optical-system-app/modules/prescriptions/components/modals/add-prescription-modal';
 import { Customer, useCustomerMethods } from '@product-line/dexie';
 import useCustomerTableActions from '../hooks/use-customer-table-actions';
+import useCustomerFullColumns from '../hooks/use-customer-full-columns';
+import InputSwitch from 'libs/ui/src/components/forms/input-switch';
 
 function CustomersTable() {
   const { setCurrentCustomer } = useCustomerStore();
   const { columns } = useCustomerColumns();
+  const { columns: fullColumns } = useCustomerFullColumns();
   const { customers } = useCustomerMethods();
   const { rowActions } = useCustomerTableActions();
 
   const [search, setSearch] = useState<string>('');
+  const [showFullColumns, setShowFullColumns] = useState<boolean>(false);
 
-  const filterData = () => {
-    if (!search) return customers;
-    if (customers)
-      return customers?.filter((customer) => {
-        return (
-          customer?.name.toLowerCase().includes(search.toLowerCase()) ||
-          customer?.lastName.toLowerCase().includes(search.toLowerCase()) ||
-          customer?.email.toLowerCase().includes(search.toLowerCase()) ||
-          (customer?.phone &&
-            customer?.phone.toLowerCase().includes(search.toLowerCase()))
-        );
-      });
-    return [];
-  };
+  const filterData = useCallback(
+    (data: Customer[]) => {
+      if (!search) return data;
+      if (data)
+        return data?.filter((customer) => {
+          return (
+            customer?.name.toLowerCase().includes(search.toLowerCase()) ||
+            customer?.lastName.toLowerCase().includes(search.toLowerCase()) ||
+            customer?.email.toLowerCase().includes(search.toLowerCase()) ||
+            (customer?.phone &&
+              customer?.phone.toLowerCase().includes(search.toLowerCase()))
+          );
+        });
+      return [];
+    },
+    [search]
+  );
+
+  const data = filterData(customers || []);
 
   return (
     <>
@@ -40,8 +49,8 @@ function CustomersTable() {
         <CardTitle title="Buscador" className="mt-6">
           <DataTable
             tableId={'customers'}
-            data={filterData() || []}
-            columns={columns}
+            data={data}
+            columns={showFullColumns ? fullColumns : columns}
             isLoading={customers === null}
             // isError={isError}
             border
@@ -63,16 +72,21 @@ function CustomersTable() {
                     value={search}
                     onChange={(value) => setSearch(value as string)}
                   />
+                  <InputSwitch
+                    label="Mostrar todas las columnas"
+                    checked={showFullColumns}
+                    onChange={() => setShowFullColumns(!showFullColumns)}
+                  />
                 </div>
               ),
             }}
             stateMessage={{
               noData:
-                search && filterData()
+                search && data.length === 0
                   ? 'No se encontraron resultados'.toLocaleUpperCase()
                   : 'No hay clientes registrados'.toLocaleUpperCase(),
               noDataDescription:
-                search && filterData()
+                search && data.length === 0
                   ? 'Intenta con otra búsqueda.'
                   : 'Registra un cliente para comenzar a agregar fichas. Para agregar un cliente, haz clic en el botón "Agregar". Tips: Puedes exportar los clientes a Excel o compartirlos con otras personas.',
             }}

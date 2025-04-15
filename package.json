@@ -5,7 +5,8 @@
   "scripts": {
     "agro-swap": "npx nx run agro-swap-frontend:serve",
     "product-manager": "npx nx run product-manager:serve",
-    "optical": "npx nx run optical-system:serve"
+    "optical": "npx nx run optical-system:serve",
+    "optical-web": "npx nx run optical-web:serve"
   },
   "private": true,
   "dependencies": {

@@ -53,6 +53,7 @@ export const useInitCloudDB = () => {
     setLoading(true);
     try {
       await db.cloud.logout();
+      await db.cloud.sync({ purpose: 'pull', wait: false });
       console.log('Sessión cerrada.');
       setLoading(false);
       setIsLoggedIn(false);

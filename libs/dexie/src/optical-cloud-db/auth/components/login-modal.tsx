@@ -104,7 +104,7 @@ export function LoginModal() {
                   />
                 )}
                 {type === 'otp' && (
-                  <>
+                  <div className="flex flex-col w-full text-center">
                     <InputLabel
                       title={`Ingrese el código que recibió en su email ${email}`}
                     />
@@ -126,7 +126,7 @@ export function LoginModal() {
                         setParams(updatedParams);
                       }}
                     />
-                  </>
+                  </div>
                 )}
               </Fragment>
             )

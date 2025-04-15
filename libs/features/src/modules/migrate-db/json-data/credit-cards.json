@@ -1,0 +1,38 @@
+[
+  {
+    "idTarjeta": 1,
+    "Descripcion": "Visa"
+  },
+  {
+    "idTarjeta": 2,
+    "Descripcion": "Amex"
+  },
+  {
+    "idTarjeta": 3,
+    "Descripcion": "Visa Debito"
+  },
+  {
+    "idTarjeta": 4,
+    "Descripcion": "Cabal"
+  },
+  {
+    "idTarjeta": 5,
+    "Descripcion": "Cabal Debito"
+  },
+  {
+    "idTarjeta": 6,
+    "Descripcion": "Mastercard"
+  },
+  {
+    "idTarjeta": 7,
+    "Descripcion": "Maestro"
+  },
+  {
+    "idTarjeta": 8,
+    "Descripcion": "Tarjeta Naranja"
+  },
+  {
+    "idTarjeta": 9,
+    "Descripcion": "Tarjeta Shopping"
+  }
+]

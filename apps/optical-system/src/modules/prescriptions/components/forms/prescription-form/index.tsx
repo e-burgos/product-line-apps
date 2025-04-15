@@ -13,18 +13,13 @@ import {
   Prescription,
   usePrescriptionMethods,
 } from '@product-line/dexie';
+import { convertToNumber } from 'libs/features/src/utils/utils';
 
 interface PrescriptionFormProps {
   type?: 'create' | 'update';
   prescriptionData?: Prescription;
   customerData?: Customer;
 }
-
-const convertToNumber = (value: string | number | undefined): number => {
-  if (typeof value === 'number') return value;
-  if (typeof value === 'string') return Number(value) || 0;
-  return 0;
-};
 
 export const PrescriptionForm: FC<PrescriptionFormProps> = ({
   type = 'create',

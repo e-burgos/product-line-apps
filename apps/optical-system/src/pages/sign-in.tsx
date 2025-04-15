@@ -3,13 +3,14 @@ import AnchorLink from 'libs/ui/src/components/links/anchor-link';
 import { appName } from '@optical-system-app/utils/const';
 import { LoginButton, useAuthStore } from '@product-line/dexie';
 import { Glasses } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
 export function SignInPage() {
-  const { setLoading, setIsLoggedIn } = useAuthStore();
+  const navigate = useNavigate();
+  const { setLoading, isLoggedIn, lastRouteVisited } = useAuthStore();
 
   useEffect(() => {
     setLoading(false);
-    setIsLoggedIn(false);
+    if (isLoggedIn) navigate(lastRouteVisited);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

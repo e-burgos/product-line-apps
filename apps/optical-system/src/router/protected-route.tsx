@@ -16,7 +16,7 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, syncDb } = useInitCloudDB();
+  const { login } = useInitCloudDB();
   const { customers } = useCustomerMethods();
   const { setLastRouteVisited, setLoading, loading, isLoggedIn } =
     useAuthStore();
@@ -31,12 +31,13 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     if (!isSignInPage) {
       setLastRouteVisited(location?.pathname);
       login();
+
       setTimeout(() => {
-        if (!isLoggedIn) navigate(commonRoutePaths.signIn);
         if (isLoggedIn) {
           setLoading(false);
-          syncDb();
           setStatusPage('ready');
+        } else {
+          navigate(commonRoutePaths.signIn);
         }
       }, 2000);
     }
@@ -48,7 +49,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     navigate,
     setLastRouteVisited,
     setLoading,
-    syncDb,
   ]);
 
   useEffect(() => {

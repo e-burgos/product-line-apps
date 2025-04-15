@@ -4,14 +4,22 @@ import usePrescriptionColumns from '@optical-system-app/modules/prescriptions/ho
 import { usePrescriptionStore } from '@optical-system-app/modules/prescriptions/hooks/use-prescription-store';
 import { DataTable } from '@product-line/datatable';
 import { Prescription, usePrescriptionMethods } from '@product-line/dexie';
-import { CardContainer, CardTitle, InputSearcher } from '@product-line/ui';
-import { useState, useMemo } from 'react';
+import {
+  CardContainer,
+  CardTitle,
+  InputSearcher,
+  InputSwitch,
+} from '@product-line/ui';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import usePrescriptionFullColumns from '../../hooks/use-prescription-full-columns';
 
 function PrescriptionsTable() {
   const navigate = useNavigate();
   const { columns } = usePrescriptionColumns();
+  const { columns: fullColumns } = usePrescriptionFullColumns();
   const { prescriptions } = usePrescriptionMethods();
+
   const {
     currentPrescription,
     setCurrentPrescription,
@@ -20,31 +28,47 @@ function PrescriptionsTable() {
   } = usePrescriptionStore();
 
   const [search, setSearch] = useState<string>('');
+  const [showFullColumns, setShowFullColumns] = useState<boolean>(false);
 
-  const filteredData = useMemo(() => {
-    if (!search) return prescriptions || [];
-    return (prescriptions || []).filter((prescription) =>
-      prescription?.receiptNumber
-        ?.toString()
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    );
-  }, [prescriptions, search]);
+  const filteredData = useCallback(
+    (data: Prescription[]) => {
+      if (!search) return data;
+      return data?.filter(
+        (prescription) =>
+          prescription?.receiptNumber
+            ?.toString()
+            .toLowerCase()
+            .includes(search.toLowerCase()) ||
+          prescription?.customer?.name
+            ?.toString()
+            .toLowerCase()
+            .includes(search.toLowerCase()) ||
+          prescription?.customer?.lastName
+            ?.toString()
+            .toLowerCase()
+            .includes(search.toLowerCase())
+      );
+    },
+    [search]
+  );
+
+  const data = filteredData(prescriptions || []);
 
   return (
     <>
       <CardContainer>
         <CardTitle title="Buscador" className="mt-6">
           <DataTable
+            data={data}
             tableId={'prescriptions'}
-            data={filteredData}
-            columns={columns}
+            columns={showFullColumns ? fullColumns : columns}
             border
             pagination={{
               showPagination: true,
               pageSize: 10,
               pageIndex: 0,
               takeDefaultPagination: true,
+              rowsInfo: true,
             }}
             headerOptions={{
               enableDragColumns: false,
@@ -56,16 +80,21 @@ function PrescriptionsTable() {
                     value={search}
                     onChange={(value) => setSearch(value as string)}
                   />
+                  <InputSwitch
+                    label="Mostrar todas las columnas"
+                    checked={showFullColumns}
+                    onChange={() => setShowFullColumns(!showFullColumns)}
+                  />
                 </div>
               ),
             }}
             stateMessage={{
               noData:
-                search && filteredData.length === 0
+                search && data.length === 0
                   ? 'No se encontraron resultados'.toLocaleUpperCase()
                   : 'No hay fichas registradas'.toLocaleUpperCase(),
               noDataDescription:
-                search && filteredData.length === 0
+                search && data.length === 0
                   ? 'Intenta con otra búsqueda.'
                   : 'Registra una ficha para comenzar. Para agregar una ficha, haz clic en el botón "Agregar". Tips: Puedes exportar tus fichas a Excel o compartirlas con otras personas.',
             }}

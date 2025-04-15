@@ -146,8 +146,10 @@ export const usePrescriptionMethods = () => {
 
   const getPrescriptionsByCustomerId = useCallback(
     (customerId: string) => {
-      return prescriptions?.filter(
-        (prescription) => prescription.customer?.id === customerId
+      return (
+        prescriptions?.filter(
+          (prescription) => prescription.customer?.id === customerId
+        ) || []
       );
     },
     [prescriptions]
@@ -165,6 +167,94 @@ export const usePrescriptionMethods = () => {
   const checkIsPrescription = (prescriptionId: string) =>
     prescriptions?.find((p) => p.id === prescriptionId) ? true : false;
 
+  const addBulkPrescriptions = async (prescriptions: Prescription[]) => {
+    try {
+      await db.prescriptions.bulkAdd(prescriptions);
+      addToast({
+        id: 'prescription-created',
+        title: 'Fichas Masivas',
+        message: 'Las fichas se han agregado correctamente.',
+        variant: 'success',
+      });
+      return { isSuccess: true, isError: false };
+    } catch (e) {
+      console.error(e);
+      addToast({
+        id: 'prescription-error',
+        title: 'Error',
+        message: 'No se pudo agregar fichas masivas.',
+        variant: 'destructive',
+      });
+      return { isSuccess: false, isError: true };
+    }
+  };
+
+  const addTransactionBulkPrescriptions = async (
+    prescriptions: Prescription[]
+  ) => {
+    try {
+      await db.transaction('rw', db.prescriptions, async () => {
+        await db.prescriptions.bulkAdd(prescriptions);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const addSimplePrescription = async (prescription: Prescription) => {
+    try {
+      const response = await db.prescriptions.add(prescription);
+      console.log('response', response);
+      return response;
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const updateBulkPrescriptions = async (prescriptions: Prescription[]) => {
+    try {
+      await db.prescriptions.bulkPut(prescriptions);
+      addToast({
+        id: 'prescription-updated',
+        title: 'Fichas Masivas',
+        message: 'Las fichas se han actualizado correctamente.',
+        variant: 'success',
+      });
+      return { isSuccess: true, isError: false };
+    } catch (e) {
+      console.error(e);
+      addToast({
+        id: 'prescription-error',
+        title: 'Error',
+        message: 'No se pudo actualizar fichas masivas.',
+        variant: 'destructive',
+      });
+      return { isSuccess: false, isError: true };
+    }
+  };
+
+  const deleteBulkPrescriptions = async (prescriptions: Prescription[]) => {
+    try {
+      await db.prescriptions.bulkDelete(prescriptions.map((p) => p.id));
+      addToast({
+        id: 'prescription-deleted',
+        title: 'Fichas Masivas',
+        message: 'Las fichas se han eliminado correctamente.',
+        variant: 'success',
+      });
+      return { isSuccess: true, isError: false };
+    } catch (e) {
+      console.error(e);
+      addToast({
+        id: 'prescription-error',
+        title: 'Error',
+        message: 'No se pudo eliminar fichas masivas.',
+        variant: 'destructive',
+      });
+      return { isSuccess: false, isError: true };
+    }
+  };
+
   return {
     addPrescription,
     updatePrescription,
@@ -172,6 +262,11 @@ export const usePrescriptionMethods = () => {
     getPrescriptionsByCustomerId,
     getPrescriptionById,
     checkIsPrescription,
+    addBulkPrescriptions,
+    addSimplePrescription,
+    updateBulkPrescriptions,
+    deleteBulkPrescriptions,
+    addTransactionBulkPrescriptions,
     prescriptions,
   };
 };

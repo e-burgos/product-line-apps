@@ -1,10 +1,11 @@
-import { Customer } from '@product-line/dexie';
+import { Customer, usePrescriptionMethods } from '@product-line/dexie';
 import { ColumnDef } from '@tanstack/react-table';
 import Badge from 'libs/ui/src/components/badge';
 import { User } from 'lucide-react';
 import { useMemo } from 'react';
 
 export const useCustomerColumns = () => {
+  const { getPrescriptionsByCustomerId } = usePrescriptionMethods();
   const columns: ColumnDef<Customer, Customer>[] = useMemo(
     () => [
       {
@@ -86,16 +87,20 @@ export const useCustomerColumns = () => {
           return (
             <Badge
               status={
-                info?.getValue()?.prescriptions?.length ? 'active' : 'inactive'
+                getPrescriptionsByCustomerId(info?.getValue()?.id || '')
+                  ?.length > 0
+                  ? 'active'
+                  : 'inactive'
               }
             >
-              {info?.getValue()?.prescriptions?.length || '0'}
+              {getPrescriptionsByCustomerId(info?.getValue()?.id || '')
+                ?.length || '0'}
             </Badge>
           );
         },
       },
     ],
-    []
+    [getPrescriptionsByCustomerId]
   );
   return { columns: columns || [] };
 };

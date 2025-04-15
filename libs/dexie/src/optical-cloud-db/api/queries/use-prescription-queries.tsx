@@ -6,11 +6,14 @@ export const usePrescriptionQueries = () => {
   const { tokenData } = useTokenStore();
   const { currentUser } = useInitCloudDB();
 
-  const useGetUserPrescriptions = () => {
+  const useGetUserPrescriptions = (owner: string) => {
     const query = useApiQuery({
-      id: 'get-user-prescriptions',
+      id: 'get-prescriptions',
       axiosOptions: {
         method: 'get',
+        params: {
+          owner: owner,
+        },
       },
       queryOptions: {
         enabled: tokenData?.accessToken ? true : false,
@@ -19,14 +22,11 @@ export const usePrescriptionQueries = () => {
     return query;
   };
 
-  const useGetAllUserPrescriptions = (owner?: string) => {
+  const useGetAllUserPrescriptions = () => {
     const query = useApiQuery({
       id: 'get-prescriptions',
       axiosOptions: {
         method: 'get',
-        params: {
-          owner: owner || tokenData?.claims?.email || currentUser?.email,
-        },
       },
       queryOptions: {
         enabled: tokenData?.accessToken ? true : false,
@@ -42,12 +42,7 @@ export const usePrescriptionQueries = () => {
     },
   });
 
-  const userPrescriptions = useGetUserPrescriptions();
-  const allUserPrescriptions = useGetAllUserPrescriptions();
-
   return {
-    userPrescriptions,
-    allUserPrescriptions,
     getAllUserPrescriptionsMutation,
     useGetUserPrescriptions,
     useGetAllUserPrescriptions,

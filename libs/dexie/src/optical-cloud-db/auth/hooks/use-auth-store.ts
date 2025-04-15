@@ -20,7 +20,7 @@ export const useAuthStore = create<AuthStore>((set) => {
     openLoginModal: false,
     isLoggedIn: authStore?.isLoggedIn || false,
     loading: authStore?.loading || false,
-    lastRouteVisited: authStore?.lastRouteVisited || '',
+    lastRouteVisited: authStore?.lastRouteVisited || '/',
     openUserDataModal: false,
     setOpenLoginModal: (open) => set({ openLoginModal: open }),
     setIsLoggedIn: (logged) => {

@@ -31,6 +31,7 @@ export * from './forms/field-error-text';
 export * from './forms/field-helper-text';
 export * from './forms/form';
 export * from './forms/input-searcher';
+export * from './forms/input-switch';
 export * from './forms/input';
 export * from './forms/password';
 export * from './forms/pin-code';

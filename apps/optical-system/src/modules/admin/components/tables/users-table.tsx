@@ -1,5 +1,10 @@
 import { DataTable } from '@product-line/datatable';
-import { DBUserJsonModel, useAuthQueries } from '@product-line/dexie';
+import {
+  DBUserJsonModel,
+  useAuthQueries,
+  //usePrescriptionQueries,
+  //useTokenStore,
+} from '@product-line/dexie';
 import CardContainer from 'libs/ui/src/components/forms/card-container';
 import CardTitle from 'libs/ui/src/components/forms/card-title';
 import InputSearcher from 'libs/ui/src/components/forms/input-searcher';
@@ -12,6 +17,17 @@ const UsersTable: FC = () => {
   const { columns } = useUsersColumns();
   const { getAllUsers } = useAuthQueries();
   const { setCurrentUser, setOpenDeactivateUserModal } = useUserStore();
+
+  // const { useGetUserPrescriptions, useGetAllUserPrescriptions } =
+  //   usePrescriptionQueries();
+
+  // const { data: userPrescriptions } = useGetUserPrescriptions(
+  //   'siochanavision@hotmail.com'
+  // );
+  // console.log('userPrescriptions', userPrescriptions?.data);
+
+  // const { data: allUserPrescriptions } = useGetAllUserPrescriptions();
+  // console.log('allUserPrescriptions', allUserPrescriptions?.data);
 
   const [search, setSearch] = useState<string>('');
 

@@ -22,6 +22,7 @@ export const LogoutButton = () => {
 
   const handleLogout = async () => {
     const response = await logout();
+    console.log('response', response);
     if (response.isSuccess) {
       setLastRouteVisited(commonRoutePaths.signIn as AppRoutes);
       navigate(commonRoutePaths.signIn as AppRoutes);

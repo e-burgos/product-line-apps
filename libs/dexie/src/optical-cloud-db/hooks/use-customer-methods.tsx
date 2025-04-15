@@ -114,6 +114,72 @@ export const useCustomerMethods = () => {
   const checkIsCustomer = (customerId: string | undefined) =>
     customers?.find((c) => c.id === customerId) ? true : false;
 
+  const addBulkCustomers = async (customers: Customer[]) => {
+    try {
+      await db.customers.bulkAdd(customers);
+      addToast({
+        id: 'customer-created',
+        title: 'Clientes Masivos',
+        message: 'Los clientes se han agregado correctamente.',
+        variant: 'success',
+      });
+      return { isSuccess: true, isError: false };
+    } catch (e) {
+      console.error(e);
+      addToast({
+        id: 'customer-error',
+        title: 'Error',
+        message: 'No se pudo agregar clientes masivos.',
+        variant: 'destructive',
+      });
+      return { isSuccess: false, isError: true };
+    }
+  };
+
+  const updateBulkCustomers = async (customers: Customer[]) => {
+    try {
+      await db.customers.bulkPut(customers);
+      addToast({
+        id: 'customer-updated',
+        title: 'Clientes Masivos',
+        message: 'Los clientes se han actualizado correctamente.',
+        variant: 'success',
+      });
+      return { isSuccess: true, isError: false };
+    } catch (e) {
+      console.error(e);
+      addToast({
+        id: 'customer-error',
+        title: 'Error',
+        message: 'No se pudo actualizar clientes masivos.',
+        variant: 'destructive',
+      });
+      return { isSuccess: false, isError: true };
+    }
+  };
+
+  const deleteBulkCustomers = async (customers: Customer[]) => {
+    try {
+      await db.customers.bulkDelete(customers.map((c) => c.id));
+      addToast({
+        id: 'customer-deleted',
+        title: 'Clientes Masivos',
+        message: 'Los clientes se han eliminado correctamente.',
+        variant: 'success',
+      });
+      return { isSuccess: true, isError: false };
+    } catch (e) {
+      console.error(e);
+      addToast({
+        id: 'customer-error',
+        title: 'Error',
+        message: 'No se pudo eliminar clientes masivos.',
+        variant: 'destructive',
+      });
+      return { isSuccess: false, isError: true };
+    }
+  };
+
   return {
     addCustomer,
     updateCustomer,
@@ -122,6 +188,9 @@ export const useCustomerMethods = () => {
     getCustomerById,
     getPrescriptionsByCustomerId,
     checkIsCustomer,
+    addBulkCustomers,
+    updateBulkCustomers,
+    deleteBulkCustomers,
     customers,
   };
 };
