@@ -13,12 +13,12 @@ const App = () => {
     <Layout>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/productos" element={<ProductsPage />} />
-        <Route path="/productos/:category" element={<ProductsPage />} />
-        <Route path="/producto/:id" element={<ProductDetailPage />} />
-        <Route path="/carrito" element={<CartPage />} />
+        <Route path="/products" element={<ProductsPage />} />
+        <Route path="/products/:category" element={<ProductsPage />} />
+        <Route path="/product/:id" element={<ProductDetailPage />} />
+        <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/pedido-exitoso" element={<OrderSuccessPage />} />
+        <Route path="/order-success" element={<OrderSuccessPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Layout>

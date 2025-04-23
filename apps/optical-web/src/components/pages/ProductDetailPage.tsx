@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { getProductById } from '../../data/products';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { getProductById, notAvailableImage } from '../../data/products';
 import { useCartStore } from '../../lib/store/cartStore';
 import { Product, ProductVariant } from '../../types/product';
 import Button from 'libs/ui/src/components/button/button';
-
+import CounterButton from '../ui/CounterButton';
+import { ShoppingBagIcon, OctagonX } from 'lucide-react';
 export const ProductDetailPage = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { addToCart } = useCartStore();
 
@@ -22,8 +24,7 @@ export const ProductDetailPage = () => {
   });
 
   // Valor por defecto para imágenes no disponibles
-  const defaultImage =
-    'https://via.placeholder.com/400x400?text=Imagen+no+disponible';
+  const defaultImage = notAvailableImage;
 
   // Determinar qué imágenes mostrar (producto o variante)
   const getDisplayImages = () => {
@@ -52,12 +53,10 @@ export const ProductDetailPage = () => {
 
       if (loadedProduct) {
         setProduct(loadedProduct);
-
         // Seleccionar la primera variante por defecto
         if (loadedProduct.variants.length > 0) {
           setSelectedVariant(loadedProduct.variants[0]);
         }
-
         // Inicializar el estado de las imágenes
         const imagesLength = loadedProduct.images?.length || 0;
         setImagesStatus({
@@ -70,7 +69,7 @@ export const ProductDetailPage = () => {
 
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center text-current dark:text-white">
         <div className="text-center">
           <div className="inline-flex items-center justify-center h-24 w-24 rounded-full bg-gray-100">
             <svg
@@ -88,28 +87,28 @@ export const ProductDetailPage = () => {
               />
             </svg>
           </div>
-          <h2 className="mt-4 text-lg font-medium text-gray-900">
+          <h2 className="mt-4 text-lg font-medium text-current dark:text-white">
             Producto no encontrado
           </h2>
-          <p className="mt-2 text-gray-500">
+          <p className="mt-2 text-gray-500 dark:text-gray-400">
             Lo sentimos, el producto que estás buscando no existe o ha sido
             removido.
           </p>
-          <div className="mt-6">
-            <Link
-              to="/productos"
-              className="text-optical-blue-600 hover:text-optical-blue-500"
-            >
-              Volver a la tienda
-            </Link>
-          </div>
+          <Button
+            variant="solid"
+            shape="rounded"
+            className="mt-6"
+            onClick={() => navigate('/products')}
+          >
+            Volver a la tienda
+          </Button>
         </div>
       </div>
     );
   }
 
   const handleVariantChange = (variantId: string) => {
-    const variant = product.variants.find((v) => v.id === variantId);
+    const variant = product?.variants?.find((v) => v.id === variantId);
     if (variant) {
       setSelectedVariant(variant);
       // Si la variante tiene imágenes propias, mostrar la primera
@@ -126,15 +125,9 @@ export const ProductDetailPage = () => {
   const handleAddToCart = () => {
     if (product && selectedVariant) {
       setIsAdding(true);
-
-      // Añadir al carrito
       addToCart(product, selectedVariant, quantity);
-
-      // Mostrar efecto de éxito por un breve periodo
       setTimeout(() => {
         setIsAdding(false);
-        // Opcional: redireccionar al carrito
-        // navigate('/carrito');
       }, 1000);
     }
   };
@@ -160,7 +153,7 @@ export const ProductDetailPage = () => {
 
   return (
     <div className="bg-transparent">
-      <div className="container-custom mx-auto py-16 px-4 sm:py-24 sm:px-6">
+      <div className="flex flex-col mx-auto py-16 sm:py-24 sm:px-6 w-[90%]">
         <div className="lg:grid lg:grid-cols-2 lg:gap-x-8">
           {/* Galería de imágenes */}
           <div className="lg:max-w-lg lg:self-end">
@@ -179,7 +172,7 @@ export const ProductDetailPage = () => {
                     /
                   </span>
                   <Link
-                    to="/productos"
+                    to="/products"
                     className="font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                   >
                     Productos
@@ -190,7 +183,7 @@ export const ProductDetailPage = () => {
                     /
                   </span>
                   <Link
-                    to={`/productos/${product.category}`}
+                    to={`/products/${product.category}`}
                     className="font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                   >
                     {product.category === 'sun'
@@ -238,7 +231,6 @@ export const ProductDetailPage = () => {
               </div>
             )}
           </div>
-
           {/* Información del producto */}
           <div className="mt-10 lg:mt-0 lg:col-start-2 lg:row-span-2 lg:self-start">
             <div className="mb-4">
@@ -309,32 +301,34 @@ export const ProductDetailPage = () => {
 
             <div className="mt-8">
               {/* Selector de variante */}
-              <div>
-                <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-                  Color
-                </h3>
-                <div className="mt-2">
-                  <div className="flex items-center space-x-3">
-                    {product.variants.map((variant) => (
-                      <button
-                        key={variant.id}
-                        type="button"
-                        className={`relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none ${
-                          selectedVariant?.id === variant.id
-                            ? 'ring-2 ring-optical-blue-500'
-                            : ''
-                        }`}
-                        onClick={() => handleVariantChange(variant.id)}
-                      >
-                        <span
-                          className="h-8 w-8 rounded-full border border-black border-opacity-10 dark:border-white dark:border-opacity-10"
-                          style={{ backgroundColor: variant.colorCode }}
-                        />
-                      </button>
-                    ))}
+              {product?.variants?.length >= 1 && (
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                    Color
+                  </h3>
+                  <div className="mt-2">
+                    <div className="flex items-center space-x-3">
+                      {product.variants.map((variant) => (
+                        <button
+                          key={variant.id}
+                          type="button"
+                          className={`relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none ${
+                            selectedVariant?.id === variant.id
+                              ? 'ring-2 ring-optical-blue-500'
+                              : ''
+                          }`}
+                          onClick={() => handleVariantChange(variant.id)}
+                        >
+                          <span
+                            className="h-8 w-8 rounded-full border border-black border-opacity-10 dark:border-white dark:border-opacity-10"
+                            style={{ backgroundColor: variant.colorCode }}
+                          />
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* Información de la variante seleccionada */}
               {selectedVariant && (
@@ -366,61 +360,17 @@ export const ProductDetailPage = () => {
                   <h3 className="text-sm font-medium text-gray-900 dark:text-white">
                     Cantidad
                   </h3>
-                  <div className="flex items-center border border-gray-200 dark:border-gray-700 rounded-md">
-                    <Button
-                      variant="transparent"
-                      color="gray"
-                      size="tiny"
-                      onClick={() => handleQuantityChange(quantity - 1)}
-                      disabled={quantity <= 1}
-                      className="border-r border-gray-200 dark:border-gray-700"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M20 12H4"
-                        />
-                      </svg>
-                    </Button>
-                    <div className="w-12 text-center text-gray-900 dark:text-white py-2">
-                      {quantity}
-                    </div>
-                    <Button
-                      variant="transparent"
-                      color="gray"
-                      size="tiny"
-                      onClick={() => handleQuantityChange(quantity + 1)}
-                      disabled={
-                        selectedVariant
-                          ? quantity >= selectedVariant.stock
-                          : false
-                      }
-                      className="border-l border-gray-200 dark:border-gray-700"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 4v16m8-8H4"
-                        />
-                      </svg>
-                    </Button>
-                  </div>
+                  <CounterButton
+                    quantity={quantity}
+                    onDecrement={() => handleQuantityChange(quantity - 1)}
+                    onIncrement={() => handleQuantityChange(quantity + 1)}
+                    disabledDecrement={quantity <= 1}
+                    disabledIncrement={
+                      selectedVariant
+                        ? quantity >= selectedVariant.stock
+                        : quantity >= product.stock
+                    }
+                  />
                 </div>
               </div>
 
@@ -431,66 +381,26 @@ export const ProductDetailPage = () => {
                     isAdding
                       ? 'success'
                       : selectedVariant?.stock === 0
-                      ? 'gray'
+                      ? 'danger'
                       : 'primary'
                   }
-                  disabled={isAdding || selectedVariant?.stock === 0}
+                  isLoading={isAdding}
+                  disabled={selectedVariant?.stock === 0}
                   onClick={handleAddToCart}
+                  shape="rounded"
                   fullWidth
                   className="flex items-center justify-center"
                 >
-                  {isAdding ? (
-                    <>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 mr-2 -ml-1"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      Agregado
-                    </>
-                  ) : selectedVariant?.stock === 0 ? (
-                    <>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 mr-2"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
+                  {selectedVariant?.stock === 0 ? (
+                    <div className="flex items-center">
+                      <OctagonX className="h-5 w-5 mr-2" />
                       Agotado
-                    </>
+                    </div>
                   ) : (
-                    <>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 mr-2"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                        />
-                      </svg>
+                    <div className="flex items-center">
+                      <ShoppingBagIcon className="h-5 w-5 mr-2" />
                       Agregar al carrito
-                    </>
+                    </div>
                   )}
                 </Button>
               </div>

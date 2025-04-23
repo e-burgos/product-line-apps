@@ -28,7 +28,7 @@ export const CartPage = () => {
             <p className="mt-4 text-gray-500">Tu carrito está vacío.</p>
             <div className="mt-6">
               <Link
-                to="/productos"
+                to="/products"
                 className="inline-flex items-center bg-optical-blue-600 py-3 px-8 rounded-md font-medium text-white hover:bg-optical-blue-700"
               >
                 <svg
@@ -77,7 +77,7 @@ export const CartPage = () => {
                       <div>
                         <h3 className="text-sm">
                           <Link
-                            to={`/producto/${item.product.id}`}
+                            to={`/product/${item.product.id}`}
                             className="font-medium text-current dark:text-white hover:text-brand dark:hover:text-brand"
                           >
                             {item.product.name}
@@ -250,7 +250,7 @@ export const CartPage = () => {
 
               <div className="mt-4 text-center">
                 <Link
-                  to="/productos"
+                  to="/products"
                   className="inline-flex items-center text-sm font-mediumtext-brand hover:text-optical-blue-500"
                 >
                   <svg

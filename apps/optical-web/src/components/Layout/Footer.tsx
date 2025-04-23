@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 export const Footer = () => {
   const navigation = {
     shop: [
-      { name: 'Anteojos de Sol', href: '/productos/sun' },
-      { name: 'Anteojos de Receta', href: '/productos/prescription' },
-      { name: 'Deportivos', href: '/productos/sports' },
-      { name: 'Niños', href: '/productos/kids' },
+      { name: 'Anteojos de Sol', href: '/products/sun' },
+      { name: 'Anteojos de Receta', href: '/products/prescription' },
+      { name: 'Deportivos', href: '/products/sports' },
+      { name: 'Niños', href: '/products/kids' },
     ],
     company: [
       { name: 'Sobre Nosotros', href: '#' },
@@ -43,17 +43,17 @@ export const Footer = () => {
 
   return (
     <footer
-      className="bg-gray-100 dark:bg-gray-800"
+      className="shadow-inner pattern-diagonal-lines pattern-gray-50 dark:pattern-gray-950 pattern-bg-white dark:pattern-bg-black pattern-size-2 pattern-opacity-100"
       aria-labelledby="footer-heading"
     >
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="container-custom mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
+      <div className="mx-auto pt-8 pb-6 px-4 sm:px-6 lg:pt-8 lg:pb-6 lg:px-8">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-8 xl:col-span-1">
             <Link to="/" className="text-2xl font-bold">
-              OpticalName
+              <span className="text-brand">Optica</span>Gestión
             </Link>
             <p className="text-gray-500 text-base">
               Especialistas en anteojos de sol y receta con más de 20 años de
@@ -61,13 +61,12 @@ export const Footer = () => {
             </p>
             <div className="flex space-x-6">
               {navigation.social.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-gray-400 hover:text-gray-500"
-                >
+                <a key={item.name} href={item.href}>
                   <span className="sr-only">{item.name}</span>
-                  <item.icon className="h-6 w-6" aria-hidden="true" />
+                  <item.icon
+                    className="h-6 w-6 text-gray-400 hover:text-current hover:dark:text-white"
+                    aria-hidden="true"
+                  />
                 </a>
               ))}
             </div>
@@ -83,7 +82,7 @@ export const Footer = () => {
                     <li key={item.name}>
                       <Link
                         to={item.href}
-                        className="text-base text-gray-500 hover:text-gray-900"
+                        className="text-base text-gray-500 hover:text-current hover:dark:text-white"
                       >
                         {item.name}
                       </Link>
@@ -100,7 +99,7 @@ export const Footer = () => {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-base text-gray-500 hover:text-gray-900"
+                        className="text-base text-gray-500 hover:text-current hover:dark:text-white"
                       >
                         {item.name}
                       </a>
@@ -119,7 +118,7 @@ export const Footer = () => {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-base text-gray-500 hover:text-gray-900"
+                        className="text-base text-gray-500 hover:text-current hover:dark:text-white"
                       >
                         {item.name}
                       </a>
@@ -130,10 +129,21 @@ export const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="mt-12 border-t border-gray-200 pt-8">
-          <p className="text-base text-gray-400 xl:text-center">
-            &copy; {new Date().getFullYear()} OpticaWeb. Todos los derechos
+        <div className="flex flex-col items-center h-full border-t border-gray-400 mt-4 pt-4">
+          <p className="text-current dark:text-white text-center text-sm lg:text-lg">
+            &copy; {new Date().getFullYear()} OpticaGestión. Todos los derechos
             reservados.
+          </p>
+          <p className="text-current dark:text-white text-center text-sm">
+            Desarrollado por{' '}
+            <a
+              href="https://www.estebanburgos.com.ar/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-brand"
+            >
+              Esteban Burgos
+            </a>
           </p>
         </div>
       </div>

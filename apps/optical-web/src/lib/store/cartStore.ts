@@ -4,6 +4,8 @@ import { Cart, CartItem } from '../../types/cart';
 import { Product, ProductVariant } from '../../types/product';
 
 interface CartStore {
+  isCartOpen: boolean;
+  setIsCartOpen: (isCartOpen: boolean) => void;
   cart: Cart;
   addToCart: (
     product: Product,
@@ -48,7 +50,8 @@ export const useCartStore = create<CartStore>()(
         tax: 0,
         total: 0,
       },
-
+      isCartOpen: false,
+      setIsCartOpen: (isCartOpen: boolean) => set({ isCartOpen }),
       addToCart: (product, variant, quantity) => {
         const currentCart = get().cart;
         const existingItemIndex = currentCart.items.findIndex(

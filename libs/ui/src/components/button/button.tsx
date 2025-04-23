@@ -125,7 +125,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     return (
-      <div className="relative">
+      <div className={cn('relative', fullWidth && 'w-full')}>
         {tooltip && hover && (
           <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-max px-2 py-1 text-xs dark:bg-light-dark bg-white rounded">
             {tooltip}

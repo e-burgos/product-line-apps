@@ -22,8 +22,8 @@ export interface CustomerInfo {
   phone: string;
   address: {
     street: string;
-    city: string;
-    state: string;
+    locality: string;
+    province: string;
     postalCode: string;
     country: string;
   };

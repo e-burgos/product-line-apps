@@ -1,5 +1,7 @@
 import { Product } from '../types/product';
 
+export const notAvailableImage = '/images/not-available.png';
+
 export const products: Product[] = [
   {
     id: '1',
@@ -9,11 +11,7 @@ export const products: Product[] = [
       'Los anteojos de sol Ray-Ban Aviator Classic son el modelo original diseñado para los aviadores estadounidenses. Con un marco de metal dorado y lentes de cristal disponibles en diferentes colores, es un ícono que trasciende el tiempo y la cultura.',
     price: 179.99,
     discountPrice: 159.99,
-    images: [
-      'https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
-      'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
-      'https://images.unsplash.com/photo-1577803645773-f96470509666?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
-    ],
+    images: ['/images/sol.jpg'],
     category: 'sun',
     brand: 'Ray-Ban',
     tags: ['aviator', 'classic', 'metal'],
@@ -109,7 +107,7 @@ export const products: Product[] = [
         color: 'Negro Mate',
         colorCode: '#000000',
         frameSize: 'Estándar',
-        stock: 12,
+        stock: 2,
         images: [
           'https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
         ],
@@ -120,7 +118,7 @@ export const products: Product[] = [
         color: 'Tortuga',
         colorCode: '#8B4513',
         frameSize: 'Estándar',
-        stock: 8,
+        stock: 0,
         images: [
           'https://images.unsplash.com/photo-1511499767150-a48a237f0083?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
         ],
@@ -137,7 +135,7 @@ export const products: Product[] = [
       },
     ],
     rating: 4.8,
-    stock: 20,
+    stock: 2,
     isNew: true,
     createdAt: '2023-01-15',
     updatedAt: '2023-04-20',
@@ -154,6 +152,7 @@ export const products: Product[] = [
       'https://images.unsplash.com/photo-1511499767150-a48a237f0083?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
       'https://images.unsplash.com/photo-1522125670776-3c7abb882bc2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
       'https://images.unsplash.com/photo-1508296695146-257a814070b4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
+      'https://images.unsplash.com/photo-1511499767150-a48a237f0083?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
     ],
     category: 'sun',
     brand: 'Vogue',
@@ -170,30 +169,7 @@ export const products: Product[] = [
       Forma: 'Cat-Eye',
       Dimensiones: '53-17-135mm',
     },
-    variants: [
-      {
-        id: '3-1',
-        name: 'Negro - Gris Degradado',
-        color: 'Negro',
-        colorCode: '#000000',
-        frameSize: 'Estándar',
-        stock: 10,
-        images: [
-          'https://images.unsplash.com/photo-1511499767150-a48a237f0083?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
-        ],
-      },
-      {
-        id: '3-2',
-        name: 'Habana - Marrón Degradado',
-        color: 'Habana',
-        colorCode: '#8B4513',
-        frameSize: 'Estándar',
-        stock: 6,
-        images: [
-          'https://images.unsplash.com/photo-1522125670776-3c7abb882bc2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
-        ],
-      },
-    ],
+    variants: [],
     reviews: [
       {
         id: 'r4',
@@ -204,7 +180,7 @@ export const products: Product[] = [
       },
     ],
     rating: 4.2,
-    stock: 16,
+    stock: 3,
     createdAt: '2023-02-01',
     updatedAt: '2023-05-05',
   },
@@ -648,8 +624,10 @@ export const products: Product[] = [
     price: 210.0,
     discountPrice: 175.0,
     images: [
-      'https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
       'https://images.unsplash.com/photo-1512099053734-e6767b535838?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
+      'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      'https://images.unsplash.com/photo-1512099053734-e6767b535838?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
+      'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     ],
     category: 'prescription',
     brand: 'Coach',
@@ -676,7 +654,10 @@ export const products: Product[] = [
         frameSize: 'Estándar',
         stock: 14,
         images: [
-          'https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
+          'https://images.unsplash.com/photo-1512099053734-e6767b535838?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
+          'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+          'https://images.unsplash.com/photo-1512099053734-e6767b535838?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
+          'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         ],
       },
       {
@@ -688,6 +669,9 @@ export const products: Product[] = [
         stock: 11,
         images: [
           'https://images.unsplash.com/photo-1512099053734-e6767b535838?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
+          'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+          'https://images.unsplash.com/photo-1512099053734-e6767b535838?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80',
+          'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         ],
       },
     ],

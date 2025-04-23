@@ -95,18 +95,16 @@ export const ProductsPage = () => {
     : 'Todos los Productos';
 
   return (
-    <div className="bg-white">
+    <div className="bg-transparent text-current dark:text-white">
       <div className="container-custom mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
-          {pageTitle}
-        </h1>
+        <h1 className="text-3xl font-extrabold tracking-tight">{pageTitle}</h1>
 
         <div className="pt-12 lg:grid lg:grid-cols-4 lg:gap-x-8">
           <aside className="hidden lg:block">
-            <h2 className="text-lg font-medium text-gray-900">Filtros</h2>
+            <h2 className="text-lg font-medium">Filtros</h2>
 
             <div className="mt-6 border-t border-gray-200 pt-6">
-              <h3 className="text-sm font-medium text-gray-900">Marcas</h3>
+              <h3 className="text-sm font-medium">Marcas</h3>
               <div className="mt-4 space-y-2">
                 {brands.map((brand) => (
                   <div key={brand} className="flex items-center">
@@ -116,11 +114,11 @@ export const ProductsPage = () => {
                       type="checkbox"
                       checked={selectedBrands.includes(brand)}
                       onChange={() => handleBrandChange(brand)}
-                      className="h-4 w-4 rounded border-gray-300text-brand focus:ring-optical-blue-500"
+                      className="h-4 w-4 rounded border-gray-300 text-brand focus:ring-optical-blue-500"
                     />
                     <label
                       htmlFor={`brand-${brand}`}
-                      className="ml-3 text-sm text-gray-600"
+                      className="ml-3 text-sm text-gray-600 dark:text-gray-400"
                     >
                       {brand}
                     </label>
@@ -132,7 +130,7 @@ export const ProductsPage = () => {
 
           <div className="mt-6 lg:col-span-3 lg:mt-0">
             <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 {filteredProducts.length} productos
               </p>
 
@@ -176,10 +174,10 @@ export const ProductsPage = () => {
                     />
                   </svg>
                 </div>
-                <h3 className="mt-2 text-sm font-medium text-gray-900">
+                <h3 className="mt-2 text-sm font-medium text-current dark:text-white">
                   No se encontraron productos
                 </h3>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                   Prueba con otros filtros o busca en otra categoría.
                 </p>
               </div>
