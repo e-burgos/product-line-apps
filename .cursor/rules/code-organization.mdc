@@ -1,0 +1,68 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Code Organization and Dependencies
+
+## Library Organization
+
+1. UI Components (`libs/ui/`)
+   - Pure presentational components
+   - No business logic
+   - Minimal external dependencies
+   - Should be highly reusable
+
+2. Features (`libs/features/`)
+   - Business logic and feature-specific components
+   - Can depend on UI components
+   - Should be modular and focused
+
+3. Shell (`libs/shell/`)
+   - Application shell components
+   - Layout and navigation
+   - Core application structure
+
+4. Integrations (`libs/integrations/`)
+   - External service integrations
+   - API clients and utilities
+   - Third-party service adapters
+
+5. Data Management (`libs/dexie/`)
+   - Database operations
+   - Data models and schemas
+   - Query utilities
+
+## Dependency Rules
+
+1. Dependency Direction:
+   - Apps can depend on any library
+   - Libraries should minimize dependencies on other libraries
+   - Avoid circular dependencies
+
+2. Import Guidelines:
+   - Use absolute imports with path aliases
+   - Keep import statements organized and grouped
+   - Avoid deep imports from other libraries
+
+3. Version Management:
+   - Keep shared dependencies in root package.json
+   - Maintain consistent versions across all apps
+   - Document breaking changes in library updates
+
+## Best Practices
+
+1. Component Structure:
+   - One component per file
+   - Clear separation of concerns
+   - Consistent naming conventions
+
+2. Code Sharing:
+   - Prefer composition over inheritance
+   - Extract common functionality to shared libraries
+   - Document shared components and utilities
+
+3. Testing:
+   - Unit tests for shared components
+   - Integration tests for features
+   - E2E tests for critical flows

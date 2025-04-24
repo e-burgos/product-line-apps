@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@agro-swap/*": ["apps/agro-swap/src/*"],
       "@product-manager-app/*": ["apps/product-manager/src/*"],
       "@optical-system-app/*": ["apps/optical-system/src/*"],
       "@product-line/features": ["libs/features/src/index.ts"],

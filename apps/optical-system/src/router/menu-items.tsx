@@ -5,12 +5,11 @@ import PrescriptionDetailPage from '@optical-system-app/pages/prescription-detai
 import PrescriptionsPage from '@optical-system-app/pages/prescriptions-page';
 import ProductsPage from '@optical-system-app/pages/products-page';
 import SignInPage from '@optical-system-app/pages/sign-in';
-import {
-  commonRouteLabels,
-  commonRoutePaths,
-} from 'libs/shell/src/router/routes';
 import { IMenuItem } from 'libs/ui/src/types';
-
+import { useMemo } from 'react';
+import { useInitCloudDB } from '@product-line/dexie';
+import ProtectedAdmin from './protected-admin';
+import AdminPage from '@optical-system-app/pages/admin-page';
 import {
   Users,
   User,
@@ -19,15 +18,9 @@ import {
   FileBoxIcon,
   Settings,
 } from 'lucide-react';
-import ProtectedRoute from './protected-route';
-import { useMemo } from 'react';
-import { useInitCloudDB } from '@product-line/dexie';
-import ProtectedAdmin from './protected-admin';
-import AdminPage from '@optical-system-app/pages/admin-page';
-import NotFoundPage from 'libs/shell/src/components/pages/not-found';
-import NotAuthorizedPage from 'libs/shell/src/components/pages/not-authorized';
 
 export enum AppRoutes {
+  HOME = '/',
   CUSTOMERS = '/customers',
   CUSTOMERS_DETAIL = '/customers/:id',
   PRESCRIPTIONS = '/prescriptions',
@@ -36,11 +29,12 @@ export enum AppRoutes {
   BUDGETS = '/budgets',
   ADMIN = '/admin',
   SIGN_IN = '/auth/sign-in',
-  NOT_FOUND = '/not-found',
   NO_AUTHORIZED = '/no-authorized',
+  NOT_FOUND = '*',
 }
 
 export const appRoutes = {
+  home: AppRoutes.HOME,
   customers: AppRoutes.CUSTOMERS,
   customersDetail: AppRoutes.CUSTOMERS_DETAIL,
   prescriptions: AppRoutes.PRESCRIPTIONS,
@@ -107,23 +101,11 @@ export const useMenuItems = (): IMenuItem[] => {
         ),
       },
       {
-        name: commonRouteLabels.signIn,
-        href: commonRoutePaths.signIn,
+        name: appRoutes.signIn,
+        href: appRoutes.signIn,
         hide: true,
         component: <SignInPage />,
       },
-      // {
-      //   name: commonRouteLabels.notFound,
-      //   href: '*',
-      //   hide: true,
-      //   component: <NotFoundPage />,
-      // },
-      // {
-      //   name: commonRouteLabels.noAuthorized,
-      //   href: commonRoutePaths.noAuthorized,
-      //   hide: true,
-      //   component: <NotAuthorizedPage />,
-      // },
     ],
     [isAdmin]
   );

@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
   const port = parseInt(env.VITE_APP_OPTICAL_PORT || '4203');
   return generateViteConfigBase(
     'optical-system',
-    env.VITE_APP_OPTICAL_APP_NAME || 'Siochana Visión',
+    env.VITE_APP_OPTICAL_APP_NAME || 'Optica Gestión',
     port,
     env
   );

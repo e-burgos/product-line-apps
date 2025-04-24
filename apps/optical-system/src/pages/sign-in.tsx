@@ -4,6 +4,7 @@ import { appName } from '@optical-system-app/utils/const';
 import { LoginButton, useAuthStore } from '@product-line/dexie';
 import { Glasses } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { appRoutes } from '@optical-system-app/router/menu-items';
 export function SignInPage() {
   const navigate = useNavigate();
   const { setLoading, isLoggedIn, lastRouteVisited } = useAuthStore();
@@ -30,7 +31,7 @@ export function SignInPage() {
               Inicia sesión para continuar
             </p>
           </div>
-          <LoginButton />
+          <LoginButton redirectTo={appRoutes.home} />
           <p className="flex items-center justify-center gap-3 text-sm text-[#4B5563] before:h-[1px] before:w-full before:border-t before:border-dashed after:h-[1px] after:w-full after:border-t after:border-dashed dark:text-gray-300 dark:before:border-gray-500 dark:after:border-gray-500 ">
             o
           </p>

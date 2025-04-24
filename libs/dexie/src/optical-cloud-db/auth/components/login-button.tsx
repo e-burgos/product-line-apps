@@ -4,7 +4,11 @@ import { LoginModal } from './login-modal';
 import { useAuthStore } from '../hooks/use-auth-store';
 import { useInitCloudDB } from '../hooks/use-init-cloud-db';
 
-export const LoginButton = () => {
+interface LoginButtonProps {
+  redirectTo: string;
+}
+
+export const LoginButton = ({ redirectTo }: LoginButtonProps) => {
   const { setOpenLoginModal } = useAuthStore();
   const { login } = useInitCloudDB();
 
@@ -27,7 +31,7 @@ export const LoginButton = () => {
           {'Ingresar'}
         </div>
       </Button>
-      <LoginModal />
+      <LoginModal redirectTo={redirectTo} />
     </>
   );
 };

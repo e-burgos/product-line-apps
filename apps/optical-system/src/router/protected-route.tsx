@@ -3,11 +3,10 @@ import {
   useCustomerMethods,
   useInitCloudDB,
 } from '@product-line/dexie';
-import { commonRoutePaths } from 'libs/shell/src/router/routes';
 import Spinner from 'libs/ui/src/components/spinner';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { AppRoutes } from './menu-items';
+import { appRoutes, AppRoutes } from './menu-items';
 interface ProtectedRouteProps {
   children: React.ReactNode;
   redirectTo?: AppRoutes;
@@ -21,7 +20,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { setLastRouteVisited, setLoading, loading, isLoggedIn } =
     useAuthStore();
 
-  const isSignInPage = location?.pathname === commonRoutePaths.signIn;
+  const isSignInPage = location?.pathname === appRoutes.signIn;
   const [statusPage, setStatusPage] = useState<'loading' | 'syncing' | 'ready'>(
     'loading'
   );
@@ -37,7 +36,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
           setLoading(false);
           setStatusPage('ready');
         } else {
-          navigate(commonRoutePaths.signIn);
+          navigate(appRoutes.signIn);
         }
       }, 2000);
     }

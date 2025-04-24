@@ -16,7 +16,7 @@ function AdminPage() {
   return (
     <Layout
       header={{
-        title: 'Adminstrador',
+        title: 'Administrador',
         titleIcon: <Settings className="h-6 w-6 text-brand" />,
       }}
     >

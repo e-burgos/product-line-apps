@@ -12,7 +12,7 @@ import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 
 export default defineConfig({
   root: __dirname,
-  cacheDir: './node_modules/.vite/apps/frontend',
+  cacheDir: './node_modules/.vite/apps/agro-swap',
 
   server: {
     port: 4200,
@@ -54,7 +54,7 @@ export default defineConfig({
   },
 
   build: {
-    outDir: '../../dist/apps/frontend',
+    outDir: '../../dist/apps/agro-swap',
     emptyOutDir: true,
     reportCompressedSize: true,
     chunkSizeWarningLimit: 10000,

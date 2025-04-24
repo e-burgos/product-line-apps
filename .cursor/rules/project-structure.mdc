@@ -1,0 +1,38 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Project Structure Overview
+
+This is a monorepo managed with Nx that contains multiple applications and shared libraries. The project follows a modular architecture with clear separation of concerns.
+
+## Main Directories
+
+- `apps/`: Contains all the main applications
+  - `optical-web/`: Web application for optical services
+  - `optical-system/`: System management for optical services
+  - `product-manager/`: Product management application
+  - `frontend/`: Agro swap frontend application
+
+- `libs/`: Shared libraries and components
+  - `datatable/`: Reusable datatable components
+  - `integrations/`: Integration services and utilities
+  - `dexie/`: Database related functionality using Dexie.js
+  - `features/`: Shared feature modules
+  - `shell/`: Core shell components and layouts
+  - `ui/`: Reusable UI components
+
+## Key Configuration Files
+
+- [package.json](mdc:package.json): Main project configuration and dependencies
+- [nx.json](mdc:nx.json): Nx workspace configuration
+- [tsconfig.base.json](mdc:tsconfig.base.json): Base TypeScript configuration
+- [.eslintrc.json](mdc:.eslintrc.json): ESLint rules and configuration
+
+## Development Guidelines
+
+1. All new applications should be created in the `apps/` directory using Nx generators
+2. Shared code should be placed in appropriate libraries under `libs/`
+3. Follow the established module boundaries defined in `nx.json`
+4. Maintain consistent code style using the provided ESLint and Prettier configurations

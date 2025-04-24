@@ -8,13 +8,15 @@ import {
 } from 'lucide-react';
 import useWindowSize from 'react-use/lib/useWindowSize';
 import useInitCloudDB from '../hooks/use-init-cloud-db';
-import { commonRoutePaths } from 'libs/shell/src/router/routes';
-import { AppRoutes } from '@optical-system-app/router/menu-items';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../hooks/use-auth-store';
 import UserDataModal from './user-data-modal';
 
-export const LogoutButton = () => {
+interface LogoutButtonProps {
+  redirectTo: string;
+}
+
+export const LogoutButton = ({ redirectTo }: LogoutButtonProps) => {
   const navigate = useNavigate();
   const { width } = useWindowSize();
   const { setLastRouteVisited, setOpenUserDataModal } = useAuthStore();
@@ -22,10 +24,9 @@ export const LogoutButton = () => {
 
   const handleLogout = async () => {
     const response = await logout();
-    console.log('response', response);
     if (response.isSuccess) {
-      setLastRouteVisited(commonRoutePaths.signIn as AppRoutes);
-      navigate(commonRoutePaths.signIn as AppRoutes);
+      setLastRouteVisited(redirectTo);
+      navigate(redirectTo);
     }
   };
 

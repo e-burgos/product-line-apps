@@ -9,8 +9,11 @@ import { useNavigate } from 'react-router-dom';
 import Button from 'libs/ui/src/components/button';
 import { SendIcon } from 'lucide-react';
 import useInitCloudDB from '../hooks/use-init-cloud-db';
+interface LoginModalProps {
+  redirectTo: string;
+}
 
-export function LoginModal() {
+export function LoginModal({ redirectTo }: LoginModalProps) {
   const { addToast } = useToastStore();
   const navigate = useNavigate();
   const { ui, isUserAuthorized, getUserLogged } = useInitCloudDB();
@@ -54,9 +57,15 @@ export function LoginModal() {
   useEffect(() => {
     if (isUserAuthorized) {
       setOpenLoginModal(false);
-      navigate('/customers');
+      navigate(redirectTo);
     }
-  }, [getUserLogged, isUserAuthorized, navigate, setOpenLoginModal]);
+  }, [
+    getUserLogged,
+    isUserAuthorized,
+    navigate,
+    setOpenLoginModal,
+    redirectTo,
+  ]);
 
   return (
     <Modal
@@ -180,7 +189,7 @@ export function LoginModal() {
               size="medium"
               onClick={() => {
                 setOpenLoginModal(false);
-                navigate('/customers');
+                navigate(redirectTo);
               }}
             >
               Usuario autorizado, haga clic para ingresar
