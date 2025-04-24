@@ -7,13 +7,15 @@ import react from '@vitejs/plugin-react';
 import { UserConfig } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
-export function generateViteConfigBase(
+export function generateViteConfigBaseComplete(
   name: string,
   siteName: string,
   port: number,
-  _env: Record<string, string> = {}
+  env: Record<string, string> = {}
 ): UserConfig {
   const modulePath = process.cwd();
+  const isProduction = env.NODE_ENV === 'production';
+  const rootPath = modulePath.split('/apps')[0];
 
   return {
     root: modulePath,
@@ -48,7 +50,7 @@ export function generateViteConfigBase(
         'libs/shell/src': path.resolve(modulePath, '../../libs/shell/src'),
         'libs/integrations/src': path.resolve(
           modulePath,
-          '../../libs/integrations/src'
+          '../../libs/integrations/src/'
         ),
         'libs/datatable/src': path.resolve(
           modulePath,
@@ -76,7 +78,19 @@ export function generateViteConfigBase(
       ],
     },
 
+    // build: {
+    //   outDir: `../../dist/apps/${name}`,
+    //   emptyOutDir: true,
+    //   reportCompressedSize: true,
+    //   chunkSizeWarningLimit: 10000,
+    //   commonjsOptions: {
+    //     transformMixedEsModules: true,
+    //   },
+    //   //minify: isProduction,
+    // },
+
     build: {
+      sourcemap: true,
       outDir: `../../dist/apps/${name}`,
       emptyOutDir: true,
       reportCompressedSize: true,
@@ -84,7 +98,26 @@ export function generateViteConfigBase(
       commonjsOptions: {
         transformMixedEsModules: true,
       },
-      //minify: isProduction,
+      minify: isProduction,
+      rollupOptions: {
+        input: {
+          main: path.resolve(modulePath, 'index.html'),
+        },
+        output: {
+          compact: true,
+          manualChunks(filepath: string) {
+            //if (filepath.includes('lodash')) return 'lodash';
+            if (
+              filepath.includes(`${rootPath}/ui/`) ||
+              filepath.includes(`${rootPath}/libs/`) ||
+              filepath.includes(`${rootPath}/apps/`)
+            )
+              return 'main';
+            if (filepath.includes('node_modules')) return 'vendor';
+            return 'polyfill';
+          },
+        },
+      },
     },
 
     test: {
