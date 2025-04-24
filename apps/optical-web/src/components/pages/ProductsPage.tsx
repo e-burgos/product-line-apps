@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { getProducts, getProductsByCategory } from '../../data/products';
 import { ProductCard } from '../../components/ui/ProductCard';
 import { Product } from '../../types/product';
+import Input from 'libs/ui/src/components/forms/input';
 
 export const ProductsPage = () => {
   const { category } = useParams<{ category?: string }>();
@@ -12,6 +13,7 @@ export const ProductsPage = () => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const [sortBy, setSortBy] = useState<string>('featured');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
     // Cargar productos por categoría o todos los productos
@@ -41,12 +43,30 @@ export const ProductsPage = () => {
     // Aplicar filtros y ordenación
     let result = [...products];
 
+    // Filtrar por búsqueda
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (product) =>
+          product.name.toLowerCase().includes(query) ||
+          product.brand.toLowerCase().includes(query) ||
+          product.description.toLowerCase().includes(query)
+      );
+    }
+
     // Filtrar por marcas seleccionadas
     if (selectedBrands.length > 0) {
       result = result.filter((product) =>
         selectedBrands.includes(product.brand)
       );
     }
+
+    // Filtrar por rango de precios
+    result = result.filter(
+      (product) =>
+        (product.discountPrice || product.price) >= priceRange[0] &&
+        (product.discountPrice || product.price) <= priceRange[1]
+    );
 
     // Ordenar productos
     switch (sortBy) {
@@ -71,7 +91,7 @@ export const ProductsPage = () => {
     }
 
     setFilteredProducts(result);
-  }, [products, selectedBrands, sortBy]);
+  }, [products, selectedBrands, sortBy, searchQuery, priceRange]);
 
   const handleBrandChange = (brand: string) => {
     setSelectedBrands((prev) =>
@@ -81,6 +101,32 @@ export const ProductsPage = () => {
 
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSortBy(event.target.value);
+  };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('es-AR', {
+      style: 'currency',
+      currency: 'ARS',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(price);
+  };
+
+  const handlePriceRangeChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = parseInt(event.target.value);
+    const [min, max] = priceRange;
+
+    if (event.target.name === 'minPrice') {
+      setPriceRange([Math.min(value, max), max]);
+    } else {
+      setPriceRange([min, Math.max(value, min)]);
+    }
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
   };
 
   const categoryTitles: Record<string, string> = {
@@ -95,7 +141,7 @@ export const ProductsPage = () => {
     : 'Todos los Productos';
 
   return (
-    <div className="bg-transparent text-current dark:text-white">
+    <div className="bg-transparent text-current dark:text-white min-h-[calc(100vh-60px)]">
       <div className="container-custom mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 className="text-3xl font-extrabold tracking-tight">{pageTitle}</h1>
 
@@ -103,8 +149,62 @@ export const ProductsPage = () => {
           <aside className="hidden lg:block">
             <h2 className="text-lg font-medium">Filtros</h2>
 
-            <div className="mt-6 border-t border-gray-200 pt-6">
-              <h3 className="text-sm font-medium">Marcas</h3>
+            {/* Barra de búsqueda */}
+            <div className="mt-6">
+              <label htmlFor="search" className="sr-only">
+                Buscar productos
+              </label>
+              <Input
+                type="text"
+                id="search"
+                name="search"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Buscar productos..."
+                className="w-full rounded-md border-gray-300 shadow-sm focus:border-optical-blue-500 focus:ring-optical-blue-500"
+              />
+            </div>
+
+            {/* Filtro de rango de precios */}
+            <div className="mt-6 border-t border-gray-200 dark:border-gray-700 pt-6">
+              <div className="mt-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-medium">Precio</h3>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    {formatPrice(priceRange[0])} - {formatPrice(priceRange[1])}
+                  </span>
+                </div>
+                <div className="mt-4 space-y-5">
+                  <div className="relative">
+                    <input
+                      type="range"
+                      id="minPrice"
+                      name="minPrice"
+                      min={0}
+                      max={priceRange[1]}
+                      value={priceRange[0]}
+                      onChange={handlePriceRangeChange}
+                      className="price-range-slider"
+                    />
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="range"
+                      id="maxPrice"
+                      name="maxPrice"
+                      min={priceRange[0]}
+                      max={Math.max(...products.map((p) => p.price))}
+                      value={priceRange[1]}
+                      onChange={handlePriceRangeChange}
+                      className="price-range-slider"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 border-t border-gray-200 dark:border-gray-700 pt-6">
+              <h3 className="font-medium">Marcas</h3>
               <div className="mt-4 space-y-2">
                 {brands.map((brand) => (
                   <div key={brand} className="flex items-center">

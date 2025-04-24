@@ -7,7 +7,8 @@
     "product-manager": "npx nx run product-manager:serve",
     "optical": "npx nx run optical-system:serve",
     "optical:build": "npx nx run optical-system:build",
-    "optical-web": "npx nx run optical-web:serve"
+    "optical-web": "npx nx run optical-web:serve",
+    "optical-web:build": "npx nx run optical-web:build"
   },
   "private": true,
   "dependencies": {

@@ -185,7 +185,7 @@ export const CheckoutPage = () => {
   };
 
   return (
-    <div className="bg-transparent">
+    <div className="bg-transparent text-current dark:text-white min-h-[calc(100vh-60px)]">
       <div className="mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-extrabold tracking-tight text-center mb-12">
           Finalizar Compra
@@ -497,8 +497,8 @@ export const CheckoutPage = () => {
 
               <div className="mt-4">
                 <Link
-                  to="/carrito"
-                  className="text-sm font-mediumtext-brand hover:text-optical-blue-500 inline-flex items-center"
+                  to="/cart"
+                  className="text-sm font-medium hover:text-optical-blue-500 inline-flex items-center"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

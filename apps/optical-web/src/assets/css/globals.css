@@ -67,6 +67,27 @@ input.spin-button-hidden::-webkit-inner-spin-button {
   margin: 0;
 }
 
+.price-range-slider {
+  @apply w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700;
+}
+
+.price-range-slider::-webkit-slider-thumb {
+  @apply w-4 h-4 bg-brand -mt-1.5 border-2 border-brand rounded-full appearance-none cursor-pointer;
+  -webkit-appearance: none;
+}
+
+.price-range-slider::-moz-range-thumb {
+  @apply w-4 h-4 bg-brand -mt-1.5 border-2 border-brand rounded-full appearance-none cursor-pointer;
+}
+
+.price-range-slider::-webkit-slider-runnable-track {
+  @apply w-full h-1 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700;
+}
+
+.price-range-slider::-moz-range-track {
+  @apply w-full h-1 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700;
+}
+
 /*================================================================
 Styles for Swiper slider
 ================================================================*/
@@ -261,7 +282,7 @@ input.reset-password-pin-code::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-input.reset-password-pin-code[type="number"] {
+input.reset-password-pin-code[type='number'] {
   -moz-appearance: textfield;
 }
 

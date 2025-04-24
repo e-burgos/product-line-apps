@@ -1,9 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Button from 'libs/ui/src/components/button/button';
+import { useNavigate } from 'react-router-dom';
 
 export const OrderSuccessPage = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="bg-white">
+    <div className="bg-transparent text-current dark:text-white min-h-[calc(100vh-60px)]">
       <div className="container-custom mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto text-center">
           <div className="flex items-center justify-center">
@@ -23,44 +26,48 @@ export const OrderSuccessPage = () => {
               </svg>
             </div>
           </div>
-          <h1 className="mt-6 text-3xl font-extrabold tracking-tight text-gray-900">
+          <h1 className="mt-6 text-3xl font-extrabold tracking-tight">
             ¡Gracias por tu compra!
           </h1>
-          <p className="mt-4 text-lg text-gray-500">
+          <p className="mt-4 text-lg text-gray-500 dark:text-gray-300">
             Tu pedido ha sido recibido y está siendo procesado.
           </p>
-          <div className="mt-8 bg-gray-50 rounded-lg p-6">
-            <h2 className="text-lg font-medium text-gray-900">
+          <div className="mt-8 bg-gray-100 dark:bg-light-dark rounded-lg p-6">
+            <h2 className="text-lg font-medium text-gray-900 dark:text-white">
               Información del pedido
             </h2>
             <dl className="mt-4 space-y-4">
               <div className="flex justify-between">
-                <dt className="text-sm font-medium text-gray-500">
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-300">
                   Número de Orden
                 </dt>
-                <dd className="text-sm font-medium text-gray-900">
+                <dd className="text-sm font-medium text-gray-900 dark:text-white">
                   #{Math.floor(100000 + Math.random() * 900000)}
                 </dd>
               </div>
               <div className="flex justify-between border-t border-gray-200 pt-4">
-                <dt className="text-sm font-medium text-gray-500">Estado</dt>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-300">
+                  Estado
+                </dt>
                 <dd className="text-sm font-medium text-green-600">Recibido</dd>
               </div>
               <div className="flex justify-between border-t border-gray-200 pt-4">
-                <dt className="text-sm font-medium text-gray-500">Fecha</dt>
-                <dd className="text-sm font-medium text-gray-900">
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-300">
+                  Fecha
+                </dt>
+                <dd className="text-sm font-medium text-gray-900 dark:text-white">
                   {new Date().toLocaleDateString()}
                 </dd>
               </div>
             </dl>
           </div>
           <div className="mt-8">
-            <h3 className="text-lg font-medium text-gray-900">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">
               ¿Qué sucede a continuación?
             </h3>
             <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div className="bg-white rounded-lg p-4 shadow-sm">
-                <div className="flex h-12 w-12 items-center justify-center rounded-md bg-optical-blue-100text-brand">
+              <div className="flex flex-col items-center bg-gray-100 dark:bg-light-dark rounded-lg p-4 shadow-sm">
+                <div className="flex h-12 w-12 border border-gray-200 dark:border-gray-700 items-center justify-center rounded-md text-current dark:text-white">
                   <svg
                     className="h-6 w-6"
                     fill="none"
@@ -75,12 +82,12 @@ export const OrderSuccessPage = () => {
                     />
                   </svg>
                 </div>
-                <p className="mt-4 text-sm text-gray-500">
+                <p className="mt-4 text-sm text-gray-500 dark:text-gray-300">
                   Recibirás un email con la confirmación de tu pedido
                 </p>
               </div>
-              <div className="bg-white rounded-lg p-4 shadow-sm">
-                <div className="flex h-12 w-12 items-center justify-center rounded-md bg-optical-blue-100text-brand">
+              <div className="flex flex-col items-center bg-gray-100 dark:bg-light-dark rounded-lg p-4 shadow-sm">
+                <div className="flex h-12 w-12 border border-gray-200 dark:border-gray-700 items-center justify-center rounded-md text-current dark:text-white">
                   <svg
                     className="h-6 w-6"
                     fill="none"
@@ -95,13 +102,13 @@ export const OrderSuccessPage = () => {
                     />
                   </svg>
                 </div>
-                <p className="mt-4 text-sm text-gray-500">
+                <p className="mt-4 text-sm text-gray-500 dark:text-gray-300">
                   Te contactaremos si necesitamos más información sobre tu
                   pedido
                 </p>
               </div>
-              <div className="bg-white rounded-lg p-4 shadow-sm">
-                <div className="flex h-12 w-12 items-center justify-center rounded-md bg-optical-blue-100text-brand">
+              <div className="flex flex-col items-center bg-gray-100 dark:bg-light-dark rounded-lg p-4 shadow-sm">
+                <div className="flex h-12 w-12 border border-gray-200 dark:border-gray-700 items-center justify-center rounded-md text-current dark:text-white">
                   <svg
                     className="h-6 w-6"
                     fill="none"
@@ -116,7 +123,7 @@ export const OrderSuccessPage = () => {
                     />
                   </svg>
                 </div>
-                <p className="mt-4 text-sm text-gray-500">
+                <p className="mt-4 text-sm text-gray-500 dark:text-gray-300">
                   Prepararemos tu pedido y te notificaremos cuando esté listo
                   para envío
                 </p>
@@ -124,12 +131,10 @@ export const OrderSuccessPage = () => {
             </div>
           </div>
           <div className="mt-8 flex justify-center space-x-4">
-            <Link
-              to="/"
-              className="inline-block rounded-md border border-transparent bg-optical-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-optical-blue-700"
-            >
+            <Button shape="rounded" onClick={() => navigate('/')}>
+              {' '}
               Volver a la Tienda
-            </Link>
+            </Button>
           </div>
         </div>
       </div>

@@ -152,7 +152,7 @@ export const ProductDetailPage = () => {
   };
 
   return (
-    <div className="bg-transparent">
+    <div className="bg-transparent text-current dark:text-white min-h-[calc(100vh-60px)]">
       <div className="flex flex-col mx-auto py-16 sm:py-24 sm:px-6 w-[90%]">
         <div className="lg:grid lg:grid-cols-2 lg:gap-x-8">
           {/* Galería de imágenes */}
