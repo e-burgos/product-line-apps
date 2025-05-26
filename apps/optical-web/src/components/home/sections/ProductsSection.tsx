@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ProductCard } from '../../ui/ProductCard';
 import { Star } from 'lucide-react';
 import { Product } from '../../../types/product';
+import { ProductCard } from '../../products/gallery/ProductCard';
 
 interface ProductsSectionProps {
   title: string;

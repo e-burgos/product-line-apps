@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useCartStore } from '../../lib/store/cartStore';
+import { useCartStore } from '../../store/useCartStore';
 import Button from 'libs/ui/src/components/button/button';
 import { ShoppingBag, Menu, XIcon } from 'lucide-react';
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useCartStore } from '../../lib/store/cartStore';
+import { useCartStore } from '../../store/useCartStore';
 import { CustomerInfo, PaymentMethod } from '../../types/cart';
 import Button from 'libs/ui/src/components/button/button';
 import { CircleDollarSign, ShoppingBag } from 'lucide-react';

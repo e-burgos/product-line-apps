@@ -1,4 +1,11 @@
 {
   "nxConsole.nxWorkspacePath": "",
-  "cSpell.words": ["agro", "datatable", "Presupuestos", "Siochana"]
+  "cSpell.words": [
+    "agro",
+    "datatable",
+    "headlessui",
+    "Presupuestos",
+    "Siochana"
+  ],
+  "nxConsole.generateAiAgentRules": true
 }

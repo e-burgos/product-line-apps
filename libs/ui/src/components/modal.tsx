@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Button from './button';
-import { Dialog, DialogPanel, DialogTitle } from './dialog';
+import { Dialog, DialogPanel, DialogTitle, TransitionChild } from './dialog';
 import CardContainer from './forms/card-container';
 import { Close } from './icons/close';
 import cn from 'classnames';
+import { X } from 'lucide-react';
 
 interface ModalProps {
   isOpen: boolean;
@@ -54,67 +55,85 @@ const Modal: React.FC<ModalProps> = ({
       onClose={closeableClose}
     >
       <div
-        className={`fixed inset-0 z-10 w-screen overflow-y-auto bg-gray-700/90`}
+        className={`fixed inset-0 z-10 w-screen bg-gray-700/90 backdrop-blur overflow-x-hidden overflow-y-hidden`}
       >
-        <div className="flex min-h-full items-center justify-center p-4">
-          <CardContainer
-            className={cn(
-              'w-full sm:max-w-[800px]  rounded-xl shadow-card duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0',
-              className
-            )}
-          >
+        <TransitionChild
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0 scale-105"
+          enterTo="opacity-100 scale-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-105"
+        >
+          <div className="flex min-h-full items-center justify-center p-4">
             <DialogPanel
               transition
-              className="w-full overflow-y backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+              className="flex h-full w-full items-center justify-center overflow-y duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
             >
-              {text?.title && (
+              <CardContainer
+                className={cn(
+                  'w-full sm:max-w-[800px] rounded-xl shadow-card',
+                  className
+                )}
+              >
                 <DialogTitle
                   as="h3"
-                  className="flex w-full justify-between items-center font-bold uppercase tracking-wider text-lg h-14 dark:text-white text-current"
+                  className={cn(
+                    'flex w-full justify-between items-center font-bold uppercase tracking-wider text-lg h-14 dark:text-white text-current',
+                    !text?.title ? 'text-transparent dark:text-transparent' : ''
+                  )}
                 >
-                  {text.title}
-                  <Close
-                    className="h-4 w-4 cursor-pointer"
-                    onClick={closeableClose}
-                  />
-                </DialogTitle>
-              )}
-              {text?.content && (
-                <p className="mt-4 text-sm/6 dark:text-white text-current">
-                  {text.content}
-                </p>
-              )}
-              <div className="flex flex-col w-full overflow-x-hidden overflow-y-auto max-h-[60vh] p-2 dark:text-white text-current mt-4">
-                {children}
-              </div>
-              {buttonContainer && <div className="mt-6">{buttonContainer}</div>}
-              {!hideButtons && (
-                <div className="flex justify-end gap-2 mt-6">
+                  {text?.title || '.'}
                   <Button
-                    size="medium"
-                    shape="rounded"
                     variant="ghost"
-                    onClick={() => {
-                      close();
-                      onBack && onBack();
-                    }}
+                    size="mini"
+                    shape="circle"
+                    onClick={closeableClose}
                   >
-                    {text?.backButton || 'Cerrar'}
+                    <X className="h-4 w-4 cursor-pointer" />
                   </Button>
-                  <Button
-                    size="medium"
-                    shape="rounded"
-                    onClick={() => {
-                      onSubmit && onSubmit();
-                    }}
-                  >
-                    {text?.button || 'Aceptar'}
-                  </Button>
+                </DialogTitle>
+
+                {text?.content && (
+                  <p className="mt-4 text-sm/6 dark:text-white text-current">
+                    {text.content}
+                  </p>
+                )}
+                <div className="flex flex-col w-full overflow-x-hidden overflow-y-auto max-h-[60vh] p-2 dark:text-white text-current mt-4">
+                  {children}
                 </div>
-              )}
+                {buttonContainer && (
+                  <div className="mt-6">{buttonContainer}</div>
+                )}
+                {!hideButtons && (
+                  <div className="flex w-full justify-end gap-2 mt-6">
+                    <Button
+                      size="medium"
+                      shape="rounded"
+                      variant="ghost"
+                      onClick={() => {
+                        close();
+                        onBack && onBack();
+                      }}
+                    >
+                      {text?.backButton || 'Cerrar'}
+                    </Button>
+                    <Button
+                      size="medium"
+                      shape="rounded"
+                      onClick={() => {
+                        onSubmit && onSubmit();
+                      }}
+                    >
+                      {text?.button || 'Aceptar'}
+                    </Button>
+                  </div>
+                )}
+              </CardContainer>
             </DialogPanel>
-          </CardContainer>
-        </div>
+          </div>
+        </TransitionChild>
       </div>
     </Dialog>
   );

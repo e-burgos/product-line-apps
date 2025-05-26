@@ -11,7 +11,7 @@ interface ScrollbarProps extends OverlayScrollbarsComponentProps {
   autoHide?: 'never' | 'scroll' | 'leave' | 'move';
 }
 
-export default function Scrollbar({
+export function Scrollbar({
   options,
   style,
   className,
@@ -33,3 +33,5 @@ export default function Scrollbar({
     />
   );
 }
+
+export default Scrollbar;

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Cart, CartItem } from '../../types/cart';
-import { Product, ProductVariant } from '../../types/product';
+import { Cart, CartItem } from '../types/cart';
+import { Product, ProductVariant } from '../types/product';
 
 interface CartStore {
   isCartOpen: boolean;

@@ -214,7 +214,7 @@ export function SettingsDrawer() {
     <Transition appear show={isSettingsOpen} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 z-40 overflow-hidden"
+        className="fixed inset-0 z-50 overflow-hidden"
         onClose={() => setIsSettingsOpen(false)}
       >
         <TransitionChild

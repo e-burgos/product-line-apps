@@ -1,28 +1,28 @@
-import { Suspense, useEffect } from "react";
-import { QueryClientProvider } from "@/app/config/query-client-provider";
-import { BrowserRouter, useLocation } from "react-router-dom";
-import WagmiConfig from "@/app/config/wagmi/wagmi-config";
-import ModalsContainer from "@/components/modal-views/container";
-import DrawersContainer from "@/components/drawer-views/container";
-import SettingsButton from "@/components/settings/settings-button";
-import SettingsDrawer from "@/components/settings/settings-drawer";
-import { LAYOUT_OPTIONS } from "@/themes/config";
-import { useTheme } from "@/themes/use-theme";
-import MinimalLayout from "@/app/layouts/minimal/layout";
-import ClassicLayout from "@/app/layouts/classic/layout";
-import RetroLayout from "@/app/layouts/retro/layout";
-import ModernLayout from "@/app/layouts/modern/layout";
+import { Suspense, useEffect } from 'react';
+import { QueryClientProvider } from '@/app/config/query-client-provider';
+import { BrowserRouter, useLocation } from 'react-router-dom';
+import WagmiConfig from '@/app/config/wagmi/wagmi-config';
+import ModalsContainer from '@/components/modal-views/container';
+import DrawersContainer from '@/components/drawer-views/container';
+import SettingsButton from '@/components/settings/settings-button';
+import SettingsDrawer from '@/components/settings/settings-drawer';
+import { LAYOUT_OPTIONS } from '@/themes/config';
+import { useTheme } from '@/themes/use-theme';
+import MinimalLayout from '@/app/layouts/minimal/layout';
+import ClassicLayout from '@/app/layouts/classic/layout';
+import RetroLayout from '@/app/layouts/retro/layout';
+import ModernLayout from '@/app/layouts/modern/layout';
 
 // base css file
-import "overlayscrollbars/overlayscrollbars.css";
-import "swiper/css";
-import "swiper/css/pagination";
-import "@/assets/css/scrollbar.css";
-import "@/assets/css/globals.css";
-import "@/assets/css/range-slider.css";
-import "@/assets/css/fonts.css";
-import { routePaths } from "@/app/router/routes";
-import AuthLayout from "./authentication/layout";
+import 'overlayscrollbars/overlayscrollbars.css';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import '@/assets/css/scrollbar.css';
+import '@/assets/css/globals.css';
+import '@/assets/css/range-slider.css';
+import '@/assets/css/fonts.css';
+import { routePaths } from '@/app/router/routes';
+import AuthLayout from './authentication/layout';
 
 const LayoutType = ({ children }: React.PropsWithChildren) => {
   const { layout } = useTheme();
@@ -57,12 +57,12 @@ export default function RootLayout({
 
   useEffect(() => {
     if (htmlTag) {
-      if (mode === "dark") {
-        htmlTag.classList.remove("light");
-        htmlTag.classList.add("dark");
+      if (mode === 'dark') {
+        htmlTag.classList.remove('light');
+        htmlTag.classList.add('dark');
       } else {
-        htmlTag.classList.remove("dark");
-        htmlTag.classList.add("light");
+        htmlTag.classList.remove('dark');
+        htmlTag.classList.add('light');
       }
     }
   }, [htmlTag, mode]);

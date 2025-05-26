@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getProductById, notAvailableImage } from '../../data/products';
-import { useCartStore } from '../../lib/store/cartStore';
+import { useCartStore } from '../../store/useCartStore';
 import { Product, ProductVariant } from '../../types/product';
 import Button from 'libs/ui/src/components/button/button';
 import CounterButton from '../ui/CounterButton';

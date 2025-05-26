@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { CartItem } from '../../types/cart';
 import Button from 'libs/ui/src/components/button/button';
 import { TrashIcon } from 'lucide-react';
-import { useCartStore } from '../../lib/store/cartStore';
+import { useCartStore } from '../../store/useCartStore';
 import { Link } from 'react-router-dom';
 import CounterButton from '../ui/CounterButton';
 import { notAvailableImage } from '../../data/products';

@@ -12,7 +12,7 @@ import { useTheme } from 'libs/ui/src/themes/use-theme';
 import SettingsButton from 'libs/ui/src/themes/components/settings-button';
 import SettingsDrawer from 'libs/ui/src/themes/components/settings-drawer';
 import { CartDrawer } from '../cart/CartDrawer';
-import { useCartStore } from '../../lib/store/cartStore';
+import { useCartStore } from '../../store/useCartStore';
 interface LayoutProps {
   children: React.ReactNode;
 }

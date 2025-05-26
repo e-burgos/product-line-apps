@@ -235,7 +235,7 @@ export function Filters() {
 export default function DrawerFilters() {
   const { closeDrawer } = useDrawerViewStore();
   return (
-    <div className="relative w-full max-w-full bg-white dark:bg-dark xs:w-80">
+    <div className="relative z-50 w-full max-w-full bg-white dark:bg-dark xs:w-80">
       <div className="flex h-20 items-center justify-between overflow-hidden px-6 py-4">
         <h2 className="text-xl font-medium uppercase tracking-wider text-gray-900 dark:text-white">
           Filters

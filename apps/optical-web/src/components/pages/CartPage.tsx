@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCartStore } from '../../lib/store/cartStore';
+import { useCartStore } from '../../store/useCartStore';
 import Button from 'libs/ui/src/components/button/button';
 import CounterButton from '../ui/CounterButton';
 

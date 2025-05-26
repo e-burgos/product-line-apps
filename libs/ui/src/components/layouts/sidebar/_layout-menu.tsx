@@ -138,7 +138,7 @@ export default function DrawerMenu({ menuItems }: DrawerMenuProps) {
     }),
   }));
   return (
-    <div className="relative w-full max-w-full bg-white dark:bg-dark xs:w-80 pb-4">
+    <div className="z-50 relative w-full max-w-full bg-white dark:bg-dark xs:w-80 pb-4">
       <div className="flex h-24 items-center justify-between overflow-hidden px-6 py-4">
         <Logo />
         <div className="2xl:hidden">

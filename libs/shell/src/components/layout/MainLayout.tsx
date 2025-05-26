@@ -9,6 +9,7 @@ import { useTheme } from 'libs/ui/src/themes/use-theme';
 import { IMenuItem } from 'libs/ui/src/types';
 import LayoutType from './LayoutType';
 import AppRoutes from './AppRoutes';
+import { ScrollToTop } from 'libs/ui/src/components/scroll-to-top';
 //import { commonMenuItems } from '../../router/menu-items';
 import {
   ColorPreset,
@@ -138,6 +139,7 @@ export function MainLayout({
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
+        <ScrollToTop />
         <SettingsButton />
         <SettingsDrawer />
         <Suspense fallback={null}>

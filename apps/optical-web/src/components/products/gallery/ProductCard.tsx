@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Product } from '../../types/product';
-import { notAvailableImage } from '../../data/products';
+import { Product } from '../../../types/product';
+import { notAvailableImage } from '../../../data/products';
 
 interface ProductCardProps {
   product: Product;
