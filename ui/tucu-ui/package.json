@@ -12,7 +12,8 @@
   "scripts": {
     "storybook": "storybook dev --initial-path=/docs/overview-introduction--documentation -p 6006",
     "build-storybook": "storybook build --output-dir ../../dist/ui/storybook-tucu-ui",
-    "publish-storybook": "chromatic --project-token --force-rebuild",
-    "serve-storybook": "serve ../../dist/ui/storybook-tucu-ui -p 8080"
+    "publish-storybook": "npx chromatic --project-token --force-rebuild",
+    "serve-storybook": "serve ../../dist/ui/storybook-tucu-ui -p 8080",
+    "chromatic": "npx chromatic --project-token --force-rebuild"
   }
 }
