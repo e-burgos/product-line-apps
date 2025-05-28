@@ -244,7 +244,7 @@ export const useTableColors = () => {
     dividerColumns: handleColors(themeMode)?.dividerColumns,
   };
 
-  const membraneTableTheme =
+  const tableTheme =
     themeMode === 'light'
       ? lightTableTheme.palette.table
       : darkTableTheme.palette.table;
@@ -273,7 +273,7 @@ export const useTableColors = () => {
     paletteDarkColors,
     darkColors,
     lightColors,
-    membraneTableTheme,
+    tableTheme,
     darkTableTheme,
     lightTableTheme,
   };

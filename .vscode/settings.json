@@ -5,7 +5,8 @@
     "datatable",
     "headlessui",
     "Presupuestos",
-    "Siochana"
+    "Siochana",
+    "Tucu"
   ],
   "nxConsole.generateAiAgentRules": true
 }

@@ -37,8 +37,7 @@ const StateTableHandler: React.FC<StateTableHandlerProps> = ({
       'Please try again refreshing the page or the selected content. If the problem continues or you need help, contact our Support Team.',
     contactSupport: stateMessage?.contactSupport || 'Contact Support',
     contactSupportLink:
-      stateMessage?.contactSupportLink ||
-      'https://membranelabssupport.zendesk.com/hc/en-us',
+      stateMessage?.contactSupportLink || 'https://www.estebanburgos.com.ar',
   };
 
   return (

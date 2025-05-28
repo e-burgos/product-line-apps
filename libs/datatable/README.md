@@ -77,5 +77,3 @@ This summary provides an overview and links to the detailed documentation for ea
 Run `nx test datatable` to execute the unit tests via [Vitest](https://vitest.dev/).
 
 ## Other implemented features
-
-If the table needs draggable rows, check these [changes](https://github.com/Lattice-Trade/membrane-mfe-app/pull/518).

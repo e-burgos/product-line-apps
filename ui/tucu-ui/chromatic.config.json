@@ -1,0 +1,7 @@
+{
+  "$schema": "https://www.chromatic.com/config-file.schema.json",
+  "onlyChanged": true,
+  "projectId": "Project:683712ba90eaad206f988c65",
+  "storybookBaseDir": "dist/ui/tucu-ui",
+  "zip": true
+}
