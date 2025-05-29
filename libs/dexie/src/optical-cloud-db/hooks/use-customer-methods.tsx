@@ -10,7 +10,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 export const useCustomerMethods = () => {
   const { addToast } = useToastStore();
   const { isLoggedIn } = useInitCloudDB();
-  const { prescriptions } = usePrescriptionMethods();
+  const { prescriptions, deleteBulkPrescriptions } = usePrescriptionMethods();
 
   const addCustomer = async (customer: Customer) => {
     try {
@@ -64,7 +64,12 @@ export const useCustomerMethods = () => {
 
   const deleteCustomer = async (customerId: string) => {
     try {
-      await db.prescriptions.where('customerId').equals(customerId).delete();
+      const prescriptions = getPrescriptionsByCustomerId(customerId);
+
+      if (prescriptions.length > 0) {
+        await deleteBulkPrescriptions(prescriptions);
+      }
+
       await db.customers.delete(customerId);
       addToast({
         id: 'customer-deleted',
