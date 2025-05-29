@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import AnchorLink from '../links/anchor-link';
 import Checkbox from '../forms/checkbox';
-import Button from '../button/button';
+import Button from '../buttons/button';
 import Input from '../forms/input';
 
 // import icons

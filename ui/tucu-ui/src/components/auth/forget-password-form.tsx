@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Input from '../forms/input';
-import Button from '../button/button';
+import Button from '../buttons/button';
 import { useNavigate } from 'react-router-dom';
 
 export function ForgetPasswordForm({ resetPinPath }: { resetPinPath: string }) {

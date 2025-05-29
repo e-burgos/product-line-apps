@@ -2,9 +2,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import Button from '../button';
+import Button from '../buttons';
 
-function Uploader() {
+export function Uploader() {
   const [files, setFiles] = useState([]);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {

@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import cn from 'classnames';
 
-type TextareaProps = React.DetailedHTMLProps<
+export type TextareaProps = React.DetailedHTMLProps<
   React.TextareaHTMLAttributes<HTMLTextAreaElement>,
   HTMLTextAreaElement
 > & {
@@ -11,7 +11,7 @@ type TextareaProps = React.DetailedHTMLProps<
   inputClassName?: string;
 };
 
-const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ required, label, error, className, inputClassName, ...props }, ref) => (
     <div className={cn('text-xs sm:text-sm', className)}>
       <label>
@@ -43,5 +43,4 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   )
 );
 
-Textarea.displayName = 'Textarea';
 export default Textarea;

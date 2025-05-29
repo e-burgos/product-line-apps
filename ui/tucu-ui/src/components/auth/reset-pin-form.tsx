@@ -1,4 +1,4 @@
-import Button from '../button/button';
+import Button from '../buttons/button';
 import PinCode from '../forms/pin-code';
 import AnchorLink from '../links/anchor-link';
 

@@ -129,7 +129,7 @@ export interface RadioProps
  * You can use props like `value`, `disabled`, `onChange`, `onFocus`, `onBlur` etc.
  */
 
-const Radio = forwardRef<HTMLInputElement, RadioProps>(
+export const Radio = forwardRef<HTMLInputElement, RadioProps>(
   (
     {
       variant = 'outline',
@@ -149,14 +149,14 @@ const Radio = forwardRef<HTMLInputElement, RadioProps>(
       helperClassName,
       ...radioProps
     },
-    ref,
+    ref
   ) => (
     <div className={cn('flex flex-col', className, activeClassName)}>
       <label
         className={cn(
           'flex flex-row items-center',
           disabled && 'cursor-not-allowed',
-          containerClassName,
+          containerClassName
         )}
       >
         <input
@@ -168,7 +168,7 @@ const Radio = forwardRef<HTMLInputElement, RadioProps>(
             inputClasses.size[size],
             inputClasses.variant[variant].base,
             inputClasses.variant[variant].color[color],
-            inputClassName,
+            inputClassName
           )}
           {...radioProps}
         />
@@ -179,7 +179,7 @@ const Radio = forwardRef<HTMLInputElement, RadioProps>(
               labelClasses.size.text[size],
               labelClasses.size.margin[labelPlacement][size],
               labelPlacement === 'start' && 'order-first',
-              labelClassName,
+              labelClassName
             )}
           >
             {label}
@@ -196,8 +196,7 @@ const Radio = forwardRef<HTMLInputElement, RadioProps>(
         <FieldError size={size} error={error} className={errorClassName} />
       )}
     </div>
-  ),
+  )
 );
 
-Radio.displayName = 'Radio';
 export default Radio;

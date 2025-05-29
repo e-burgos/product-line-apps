@@ -1,21 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import type {
   SubmitHandler,
   UseFormReturn,
   UseFormProps,
   FieldValues,
+  Resolver,
 } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-// @ts-ignore
-import type { SchemaOf } from 'yup';
 
 type FormProps<TFormValues extends FieldValues> = {
   onSubmit: SubmitHandler<TFormValues>;
   children: (methods: UseFormReturn<TFormValues>) => React.ReactNode;
   useFormProps?: UseFormProps<TFormValues>;
-  validationSchema?: SchemaOf<TFormValues>;
+  validationSchema?: Resolver<TFormValues, any>;
 } & Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'>;
 
 export const Form = <
@@ -29,7 +26,7 @@ export const Form = <
 }: FormProps<TFormValues>) => {
   const methods = useForm<TFormValues>({
     ...useFormProps,
-    ...(validationSchema && { resolver: yupResolver(validationSchema) }),
+    ...(validationSchema && { resolver: validationSchema }),
   });
   return (
     <form
@@ -42,3 +39,5 @@ export const Form = <
     </form>
   );
 };
+
+export default Form;

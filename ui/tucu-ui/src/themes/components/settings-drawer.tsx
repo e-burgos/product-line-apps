@@ -2,11 +2,15 @@ import { Fragment } from 'react';
 import { Radio } from '@headlessui/react';
 import { useTheme } from '../use-theme';
 import cn from 'classnames';
-import { Dialog, DialogPanel, TransitionChild } from '../../components/dialog';
-import { Transition } from '../../components/transition';
-import Button from '../../components/button';
-import { RadioGroup } from '../../components/radio-group';
-import Scrollbar from '../../components/scrollbar';
+import {
+  Dialog,
+  DialogPanel,
+  TransitionChild,
+} from '../../components/headlessui/dialog';
+import { Transition } from '../../components/headlessui/transition';
+import Button from '../../components/buttons';
+import { RadioGroup } from '../../components/headlessui/radio-group';
+import Scrollbar from '../../components/common/scrollbar';
 import { Close } from '../../components/icons/close';
 import { Sun } from '../../components/icons/sun';
 import { Moon } from '../../components/icons/moon';

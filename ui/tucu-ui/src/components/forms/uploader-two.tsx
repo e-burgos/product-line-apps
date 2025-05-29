@@ -1,9 +1,9 @@
 import { ForwardedRef, forwardRef } from 'react';
 import { DropzoneRootProps, DropzoneInputProps } from 'react-dropzone';
 import cn from 'classnames';
-import Button from '../button';
+import Button from '../buttons';
 
-const acceptedFileType = {
+export const acceptedFileType = {
   img: 'image/*',
   pdf: 'application/pdf',
   csv: 'text/csv',
@@ -47,9 +47,7 @@ export interface UploadProps
  * You can use props like `disabled`, `multiple`, `capture` etc.
  */
 
-// const Upload = forwardRef<HTMLInputElement, UploadProps>(
-
-function Upload(
+export function Upload(
   {
     accept,
     children,
@@ -101,7 +99,3 @@ function Upload(
 }
 
 export default forwardRef(Upload);
-Upload.displayName = 'Upload';
-
-// Upload.displayName = 'Upload';
-// export default Upload;

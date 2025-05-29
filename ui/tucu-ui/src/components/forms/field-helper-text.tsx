@@ -17,7 +17,7 @@ export interface FieldHelperTextProps
   className?: string;
 }
 
-export default function FieldHelperText({
+export function FieldHelperText({
   size,
   tag = 'div',
   children,
@@ -34,4 +34,4 @@ export default function FieldHelperText({
   );
 }
 
-FieldHelperText.displayName = 'FieldHelperText';
+export default FieldHelperText;

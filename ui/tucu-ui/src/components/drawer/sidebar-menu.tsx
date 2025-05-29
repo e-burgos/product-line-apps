@@ -1,10 +1,10 @@
 import cn from 'classnames';
-import Logo from '../logo';
-import { MenuItem } from '../collapsible-menu';
-import Button from '../button';
-import Scrollbar from '../scrollbar';
-import { IMenuItem } from '../../types';
+import Logo from '../logos/logo';
+import { MenuItem } from '../common/menu-item';
+import Button from '../buttons';
+import Scrollbar from '../common/scrollbar';
 import { X } from 'lucide-react';
+import { IMenuItem } from './drawer';
 
 export function SidebarMenu({
   className,
@@ -82,3 +82,5 @@ export function SidebarMenu({
     </aside>
   );
 }
+
+export default SidebarMenu;

@@ -2,8 +2,8 @@ import React, { forwardRef } from 'react';
 
 import cn from 'classnames';
 import { CheckmarkIcon } from '../icons/checkmark';
-// import FieldError from '../field-error-text';
-// import FieldHelperText from '../field-helper-text';
+import FieldError from './field-error-text';
+import FieldHelperText from './field-helper-text';
 
 const inputClasses = {
   base: 'peer disabled:bg-gray-50 disabled:border-gray-200',
@@ -153,7 +153,7 @@ export interface CheckboxProps
  * You can use props like `value`, `disabled`, `onChange`, `onFocus`, `onBlur` etc.
  */
 
-const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
+export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   (
     {
       variant = 'outline',
@@ -225,17 +225,16 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         )}
       </label>
 
-      {/* {!error && helperText && (
+      {!error && helperText && (
         <FieldHelperText size={size} className={helperClassName}>
           {helperText}
         </FieldHelperText>
       )}
       {error && (
         <FieldError size={size} error={error} className={errorClassName} />
-      )} */}
+      )}
     </div>
   )
 );
 
-Checkbox.displayName = 'Checkbox';
 export default Checkbox;

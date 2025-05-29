@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
-// {errors.email && <span role="alert">{errors.email.message}</span>}
-type InputProps = React.DetailedHTMLProps<
+
+export type PasswordInputProps = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
   HTMLInputElement
 > & {
@@ -8,7 +8,7 @@ type InputProps = React.DetailedHTMLProps<
   error?: string;
 };
 
-const Password = forwardRef<HTMLInputElement, InputProps>(
+export const Password = forwardRef<HTMLInputElement, PasswordInputProps>(
   ({ label, error, ...props }, ref) => (
     <div>
       <label>{label}</label>
@@ -23,5 +23,4 @@ const Password = forwardRef<HTMLInputElement, InputProps>(
   )
 );
 
-Password.displayName = 'Password';
 export default Password;

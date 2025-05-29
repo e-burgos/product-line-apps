@@ -11,7 +11,7 @@ const fieldErrorClasses = {
   },
 };
 
-interface FieldErrorProps
+export interface FieldErrorProps
   extends React.HTMLAttributes<HTMLDivElement | HTMLSpanElement> {
   tag?: 'div' | 'span';
   error: string | null | undefined;
@@ -19,7 +19,7 @@ interface FieldErrorProps
   className?: string;
 }
 
-export default function FieldError({
+export function FieldError({
   tag = 'div',
   error,
   size,
@@ -32,7 +32,7 @@ export default function FieldError({
       className={cn(
         fieldErrorClasses.base,
         size && fieldErrorClasses.size[size],
-        className,
+        className
       )}
     >
       {error}
@@ -40,4 +40,4 @@ export default function FieldError({
   );
 }
 
-FieldError.displayName = 'FieldError';
+export default FieldError;

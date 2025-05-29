@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 
-interface InputSwitchProps {
+export interface InputSwitchProps {
   label?: string;
   offLabel?: string;
   onLabel?: string;

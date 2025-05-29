@@ -121,7 +121,7 @@ export interface PinCodeProps
  * And the rest of the props of PinCode are the same as the original html input field.
  * You can use props like `disabled`, `placeholder`, `defaultValue` etc.
  */
-export default function PinCode({
+export function PinCode({
   type = 'text',
   defaultValue,
   mask = false,
@@ -252,4 +252,4 @@ export default function PinCode({
   );
 }
 
-PinCode.displayName = 'PinCode';
+export default PinCode;

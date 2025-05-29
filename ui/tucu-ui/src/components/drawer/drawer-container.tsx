@@ -1,9 +1,9 @@
 import { Fragment } from 'react';
-import { Dialog, DialogPanel, TransitionChild } from '../dialog';
-import { Transition } from '../transition';
+import { Dialog, DialogPanel, TransitionChild } from '../headlessui/dialog';
+import { Transition } from '../headlessui/transition';
 import cn from 'classnames';
 
-interface DrawerContainerProps {
+export interface DrawerContainerProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   children: React.ReactNode;

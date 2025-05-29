@@ -1,12 +1,20 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useState } from 'react';
-import Button, { ButtonProps } from '../button';
+import Button, { ButtonProps } from '../buttons';
 import { DrawerContainer } from './drawer-container';
 import { Sidebar } from './sidebar';
 import { SidebarMenu } from './sidebar-menu';
-import { IMenuItem } from '../../types';
 
-interface DrawerProps {
+export interface IMenuItem {
+  name: string;
+  icon?: JSX.Element;
+  href: string;
+  component?: JSX.Element;
+  hide?: boolean;
+  dropdownItems?: IMenuItem[];
+}
+
+export interface DrawerProps {
   onClose?: () => void;
   children?: React.ReactNode;
   type: 'sidebar' | 'sidebar-menu';

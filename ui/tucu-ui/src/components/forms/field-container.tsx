@@ -1,11 +1,11 @@
 import React from 'react';
 
-interface FieldContainerProps {
+export interface FieldContainerProps {
   className?: string;
   children?: React.ReactNode;
 }
 
-const FieldContainer: React.FC<FieldContainerProps> = ({
+export const FieldContainer: React.FC<FieldContainerProps> = ({
   className,
   children,
 }) => {

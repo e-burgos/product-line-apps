@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 import cn from 'classnames';
 import InputMask from 'react-input-mask';
 
-type InputProps = React.DetailedHTMLProps<
+export type InputProps = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
   HTMLInputElement
 > & {
@@ -123,5 +123,4 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   }
 );
 
-Input.displayName = 'Input';
 export default Input;

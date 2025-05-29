@@ -8,7 +8,6 @@ import {
   Meta,
   Primary,
 } from '@storybook/blocks';
-import { StoryContainer } from '../src/storybook/components/StoryContainer';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ReactRenderer, Preview } from '@storybook/react';
@@ -16,7 +15,7 @@ import { PartialStoryFn } from 'storybook/internal/types';
 import { BrowserRouter } from 'react-router-dom';
 
 import { useTheme } from '../src/themes/use-theme';
-import ScrollToTop from '../src/components/scroll-to-top/ScrollToTop';
+import { ScrollToTop } from '../src/components';
 import SettingsButton from '../src/themes/components/settings-button';
 import SettingsDrawer from '../src/themes/components/settings-drawer';
 

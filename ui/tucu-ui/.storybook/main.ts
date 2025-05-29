@@ -61,6 +61,13 @@ const config: StorybookConfig = {
           'vite-plugin-node-polyfills/shims/process',
           '@tanstack/react-query-devtools',
           'react-router-dom',
+          'lucide-react',
+          'react-hook-form',
+          'react-input-mask',
+          'react-dropzone',
+          'swiper/modules',
+          'swiper/react',
+          'framer-motion',
         ],
       },
       build: {

@@ -1,11 +1,11 @@
 import React from 'react';
 import cn from 'classnames';
-import Logo from '../logo';
-import Button from '../button';
+import Logo from '../logos/logo';
+import Button from '../buttons';
 import { X } from 'lucide-react';
-import Scrollbar from '../scrollbar';
+import Scrollbar from '../common/scrollbar';
 
-interface SidebarProps {
+export interface SidebarProps {
   className?: string;
   children: React.ReactNode;
   title?: string;
@@ -53,3 +53,5 @@ export function Sidebar({
     </aside>
   );
 }
+
+export default Sidebar;
