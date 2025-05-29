@@ -1,10 +1,11 @@
-import type { Meta, StoryFn } from '@storybook/react';
-import { fn } from '@storybook/test';
+import type { Meta, StoryFn } from '@storybook/react-vite';
+import { fn } from 'storybook/test';
 import Button from '../../../components/buttons';
 import { StoryContainer } from '../../components/StoryContainer';
 
 const meta: Meta<typeof Button> = {
   title: 'UI COMPONENTS/Buttons/Button',
+  tags: ['autodocs'],
   component: Button,
   parameters: {
     docs: {

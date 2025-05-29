@@ -1,15 +1,21 @@
 import type { StorybookConfig } from '@storybook/react-vite';
+import remarkGfm from 'remark-gfm';
 
 const config: StorybookConfig = {
-  stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)', '../src/**/*.@(mdx)'],
+  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   staticDirs: ['../src/assets'],
   addons: [
-    '@storybook/addon-links',
-    '@storybook/addon-actions',
-    '@storybook/addon-essentials',
-    '@storybook/addon-interactions',
-    '@storybook/addon-docs',
     '@chromatic-com/storybook',
+    {
+      name: '@storybook/addon-docs',
+      options: {
+        mdxPluginOptions: {
+          mdxCompileOptions: {
+            remarkPlugins: [remarkGfm],
+          },
+        },
+      },
+    },
   ],
   framework: {
     name: '@storybook/react-vite',
@@ -20,7 +26,6 @@ const config: StorybookConfig = {
     disableWhatsNewNotifications: true,
   },
   docs: {
-    autodocs: true,
     defaultName: 'Documentation',
   },
   typescript: {
@@ -39,9 +44,6 @@ const config: StorybookConfig = {
     },
   },
   async viteFinal(config) {
-    const modulePath = process.cwd();
-    const rootPath = modulePath.split('/ui')[0];
-
     // Merge custom configuration into the default config
     const { mergeConfig } = await import('vite');
 
@@ -56,9 +58,6 @@ const config: StorybookConfig = {
         include: [
           'lodash',
           '@tanstack/react-query',
-          'vite-plugin-node-polyfills/shims/buffer',
-          'vite-plugin-node-polyfills/shims/global',
-          'vite-plugin-node-polyfills/shims/process',
           '@tanstack/react-query-devtools',
           'react-router-dom',
           'lucide-react',
@@ -68,6 +67,16 @@ const config: StorybookConfig = {
           'swiper/modules',
           'swiper/react',
           'framer-motion',
+          'zustand',
+          '@headlessui/react',
+          'overlayscrollbars-react',
+          'simplebar-react',
+          'recharts',
+          'react-use/lib/useMeasure',
+          'react-use/lib/useClickAway',
+          'react-use/lib/factory/createBreakpoint',
+          'react-use/lib/useWindowScroll',
+          'react-use/lib/useCopyToClipboard',
         ],
       },
       build: {

@@ -7,10 +7,10 @@ import {
   Controls,
   Meta,
   Primary,
-} from '@storybook/blocks';
+} from '@storybook/addon-docs/blocks';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ReactRenderer, Preview } from '@storybook/react';
+import { ReactRenderer, Preview } from '@storybook/react-vite';
 import { PartialStoryFn } from 'storybook/internal/types';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -151,6 +151,7 @@ const preview: Preview = {
   decorators,
   globalTypes,
   parameters,
+  tags: ['autodocs'],
 };
 
 export default preview;
