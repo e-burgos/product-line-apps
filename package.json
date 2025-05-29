@@ -2,6 +2,7 @@
   "name": "@product-line/source",
   "version": "0.0.0",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "agro-swap": "npx nx run agro-swap-frontend:serve",
     "product-manager": "npx nx run product-manager:serve",
@@ -15,7 +16,6 @@
     "tucu-ui:publish": "npx nx run tucu-ui:publish-storybook",
     "tucu-ui:serve": "npx nx run tucu-ui:serve-storybook"
   },
-  "private": true,
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
     "@dnd-kit/modifiers": "^7.0.0",
@@ -125,6 +125,9 @@
     "vite-plugin-node-polyfills": "^0.22.0",
     "vite-plugin-svgr": "^4.2.0",
     "vitest": "^1.3.1"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
   "overrides": {
