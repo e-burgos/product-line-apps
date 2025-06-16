@@ -55,7 +55,12 @@ export function CollectionCard({ item, className = '' }: CollectionCardProps) {
             {name}
           </div>
           {image && (
-            <Avatar image={image} alt={name} shape="rounded" width={64} />
+            <Avatar
+              image={image}
+              alt={name}
+              shape="rounded"
+              className="w-12 h-12"
+            />
           )}
         </div>
         <div className="block">

@@ -9,7 +9,7 @@ export const StoryContainer = ({
 }) => {
   return (
     <div
-      className={`flex flex-col border border-gray-200 dark:border-gray-700 rounded-lg w-[80vw] h-[80vh] p-8 ${className}`}
+      className={`flex flex-col border border-gray-200 dark:border-gray-700 rounded-lg w-[80vw] h-[80vh] p-8 max-h-[50%] overflow-y-auto ${className}`}
     >
       {children}
     </div>

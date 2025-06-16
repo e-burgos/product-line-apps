@@ -2,12 +2,12 @@ import React from 'react';
 
 export interface ImageProps {
   src: string;
-  height?: number;
-  width?: number;
+  height?: number | string;
+  width?: number | string;
   alt?: string;
   blurDataURL?: string;
-  blurWidth?: number;
-  blurHeight?: number;
+  blurWidth?: number | string;
+  blurHeight?: number | string;
   priority?: boolean;
   className?: string;
   placeholder?: string;

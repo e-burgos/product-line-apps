@@ -2,13 +2,25 @@
 import Input from '../forms/input';
 import Button from '../buttons/button';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'storybook/internal/preview-api';
 
-export function ForgetPasswordForm({ resetPinPath }: { resetPinPath: string }) {
+export interface ForgetPasswordFormPropTypes {
+  onSubmit: (email: string) => void;
+  resetPinPath: string;
+}
+
+export function ForgetPasswordForm({
+  resetPinPath,
+  onSubmit,
+}: ForgetPasswordFormPropTypes) {
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState('');
+
   function handleSubmit(e: any) {
     e.preventDefault();
+    onSubmit(email);
     navigate(resetPinPath);
-    console.log(e);
   }
 
   return (
@@ -25,10 +37,14 @@ export function ForgetPasswordForm({ resetPinPath }: { resetPinPath: string }) {
           type="email"
           placeholder="Enter your email"
           inputClassName="focus:!ring-0 placeholder:text-[#6B7280] !mt-0"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </div>
       <Button
         type="submit"
+        disabled={!email}
+        onClick={() => handleSubmit(email)}
         className="mt-5 rounded-lg !text-sm uppercase tracking-[0.04em]"
       >
         Send Reset code

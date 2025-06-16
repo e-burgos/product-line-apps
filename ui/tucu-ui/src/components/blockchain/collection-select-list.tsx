@@ -8,15 +8,15 @@ type CollectionList = {
   value: string;
 };
 
-export interface CollectionSelectTypes {
+export interface CollectionSelectListTypes {
   collectionList: CollectionList[];
   onSelect: (value: string) => void;
 }
 
-export function CollectionSelect({
+export function CollectionSelectList({
   collectionList,
   onSelect,
-}: CollectionSelectTypes) {
+}: CollectionSelectListTypes) {
   const [searchKeyword, setSearchKeyword] = useState('');
   let coinListData = collectionList;
   if (searchKeyword.length > 0) {
@@ -40,7 +40,7 @@ export function CollectionSelect({
           autoFocus={true}
           onChange={(e) => setSearchKeyword(e.target.value)}
           placeholder="Search..."
-          className="w-full border-x-0 border-b border-dashed border-gray-200 py-3.5 pl-14 pr-6 text-sm focus:border-gray-300 focus:ring-0 dark:border-gray-600 dark:bg-light-dark dark:text-white dark:focus:border-gray-500"
+          className="w-full border-t-0 border-r-0 border-l-0 rounded-t-lg border-b border-dashed border-gray-200 py-3.5 pl-14 pr-6 text-sm focus:border-gray-300 focus:ring-0 dark:border-gray-600 dark:bg-light-dark dark:text-white dark:focus:border-gray-500"
         />
       </div>
       <ul role="listbox" className="py-3">
@@ -71,4 +71,4 @@ export function CollectionSelect({
   );
 }
 
-export default CollectionSelect;
+export default CollectionSelectList;

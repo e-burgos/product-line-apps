@@ -36,7 +36,17 @@ const tradeMenu = [
   },
 ];
 
-function ActiveNavLink({ href, title, isActive, className }: any) {
+function ActiveNavLink({
+  href,
+  title,
+  isActive,
+  className,
+}: {
+  href: string;
+  title: string;
+  isActive: boolean;
+  className?: string;
+}) {
   return (
     <ActiveLink
       href={href}
@@ -58,7 +68,7 @@ function ActiveNavLink({ href, title, isActive, className }: any) {
   );
 }
 
-export function Trade({ children }: React.PropsWithChildren) {
+export function TradeMenu({ children }: { children: React.ReactNode }) {
   const router = useNavigate();
   const { layout } = useTheme();
   const pathname =
@@ -109,6 +119,7 @@ export function Trade({ children }: React.PropsWithChildren) {
                 href={item.value}
                 title={item.name}
                 isActive={item.value === pathname}
+                className="text-gray-900 dark:text-gray-100"
               />
             ))}
             <AnchorLink
@@ -143,4 +154,4 @@ export function Trade({ children }: React.PropsWithChildren) {
   );
 }
 
-export default Trade;
+export default TradeMenu;

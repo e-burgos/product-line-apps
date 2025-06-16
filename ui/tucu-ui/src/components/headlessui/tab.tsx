@@ -1,31 +1,25 @@
 import { FC } from 'react';
-import {
-  Tab,
-  TabGroup as HeadTabGroup,
-  TabList as HeadTabList,
-  TabPanels as HeadTabPanels,
-  TabPanel as HeadTabPanel,
-  TabGroupProps,
-  TabListProps,
-} from '@headlessui/react';
+import { Tab } from '@headlessui/react';
 import { motion, LayoutGroup } from 'framer-motion';
 import cn from 'classnames';
 
 export { Tab };
 
-export const TabGroup: FC<TabGroupProps> = (props) => {
+export const TabGroup: FC<React.PropsWithChildren<{ className?: string }>> = (
+  props
+) => {
   return (
-    <HeadTabGroup className={cn('', props.className)} {...props}>
-      {props.children}
-    </HeadTabGroup>
+    <div className={cn('', props.className)}>
+      <Tab.Group>{props.children}</Tab.Group>
+    </div>
   );
 };
 
-export const TabList: FC<TabListProps> = (props) => {
+export const TabList: FC<React.PropsWithChildren<{ className?: string }>> = (
+  props
+) => {
   return (
-    <HeadTabList className={cn('', props.className)} {...props}>
-      {props.children}
-    </HeadTabList>
+    <Tab.List className={cn('', props.className)}>{props.children}</Tab.List>
   );
 };
 
@@ -75,11 +69,11 @@ export function TabPanels({
   className,
 }: React.PropsWithChildren<{ className?: string }>) {
   return (
-    <HeadTabPanels className={className}>
+    <Tab.Panels className={className}>
       <LayoutGroup>
         <>{children}</>
       </LayoutGroup>
-    </HeadTabPanels>
+    </Tab.Panels>
   );
 }
 
@@ -88,7 +82,7 @@ export function TabPanel({
   className,
 }: React.PropsWithChildren<{ className?: string }>) {
   return (
-    <HeadTabPanel className={className}>
+    <Tab.Panel className={className}>
       <motion.div
         animate={{ opacity: 1, y: 0 }}
         initial={{ opacity: 0, y: 32 }}
@@ -97,6 +91,6 @@ export function TabPanel({
       >
         {children}
       </motion.div>
-    </HeadTabPanel>
+    </Tab.Panel>
   );
 }

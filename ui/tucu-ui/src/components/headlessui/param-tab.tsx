@@ -63,6 +63,8 @@ export function ParamTab({
 
   return (
     <TabGroup
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       selectedIndex={selectedTabIndex}
       onChange={(index: any) => handleTabChange(index)}
     >

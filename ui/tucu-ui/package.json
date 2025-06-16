@@ -1,13 +1,52 @@
 {
   "name": "tucu-ui",
-  "version": "0.0.1",
+  "description": "Tucu UI Library",
+  "version": "0.0.11",
   "main": "./index.js",
+  "module": "./index.mjs",
   "types": "./index.d.ts",
+  "style": "./index.css",
+  "author": "Esteban Burgos",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/e-burgos/product-line-apps/tree/main/ui/tucu-ui"
+  },
   "exports": {
     ".": {
+      "types": "./index.d.ts",
       "import": "./index.mjs",
-      "require": "./index.js"
-    }
+      "require": "./index.js",
+      "style": "./index.css"
+    },
+    "./styles": "./index.css"
+  },
+  "files": [
+    "**/*"
+  ],
+  "sideEffects": true,
+  "dependencies": {
+    "@headlessui/react": "2.1.8",
+    "classnames": "^2.3.2",
+    "framer-motion": "11.5.5",
+    "lucide-react": "^0.460.0",
+    "overlayscrollbars": "^2.10.0",
+    "overlayscrollbars-react": "0.5.6",
+    "react-hook-form": "7.53.0",
+    "react-input-mask": "^2.0.4",
+    "react-router-dom": "6.26.2",
+    "recharts": "2.12.7",
+    "simplebar-react": "3.2.6",
+    "swiper": "11.1.14",
+    "@tailwindcss/forms": "^0.5.9",
+    "@tailwindcss/typography": "^0.5.15",
+    "@tailwindcss/container-queries": "^0.1.1",
+    "tailwindcss-bg-patterns": "^0.3.0"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0",
+    "tailwindcss": ">=3.0.0"
   },
   "scripts": {
     "storybook": "storybook dev --initial-path=/docs/overview-introduction--documentation -p 6006",
@@ -15,6 +54,8 @@
     "publish-storybook": "npx chromatic --project-token --force-rebuild",
     "serve-storybook": "serve ../../dist/ui/storybook-tucu-ui -p 8080",
     "chromatic": "npx chromatic --project-token --force-rebuild",
-    "storybook-doctor": "npx storybook doctor"
+    "storybook-doctor": "npx storybook doctor",
+    "publish:lib": "cd ../../dist/ui/tucu-ui && npm publish --access public",
+    "publish": "npm publish --access public"
   }
 }

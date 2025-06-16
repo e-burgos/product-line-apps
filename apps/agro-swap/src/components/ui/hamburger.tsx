@@ -1,5 +1,5 @@
 import Button, { ButtonProps } from '@/components/ui/button';
-interface HamburgerProps extends ButtonProps {
+export interface HamburgerProps extends ButtonProps {
   isOpen?: boolean;
 }
 

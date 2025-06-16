@@ -7,8 +7,8 @@ export interface AvatarProps {
   className?: string;
   size?: SizeNames;
   shape?: ShapeNames;
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
 }
 
 type ShapeNames = 'rounded' | 'circle';
@@ -25,7 +25,7 @@ const sizes: Record<SizeNames, string[]> = {
 };
 
 const shapes: Record<ShapeNames, string[]> = {
-  rounded: ['h-16 w-16 rounded-lg bg-white/20 p-2 backdrop-blur-[40px]'],
+  rounded: ['h-16 w-16 rounded-lg bg-white/20 backdrop-blur-[40px]'],
   circle: ['rounded-full'],
 };
 
@@ -48,8 +48,8 @@ export function Avatar({
         shape === 'circle' && sizeClassNames
       )}
     >
-      {shape === 'circle' ? (
-        size === 'xs' || size === 'sm' ? (
+      {shape === 'circle' &&
+        (size === 'xs' || size === 'sm' ? (
           <Image
             src={image}
             alt={alt}
@@ -68,9 +68,15 @@ export function Avatar({
             placeholder="blur"
             className="rounded-full"
           />
-        )
-      ) : (
-        <Image src={image} alt={alt} className="rounded-[6px]" width={width} />
+        ))}
+      {shape === 'rounded' && (
+        <Image
+          src={image}
+          alt={alt}
+          className=""
+          width={width}
+          height={height}
+        />
       )}
     </figure>
   );

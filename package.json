@@ -9,11 +9,12 @@
     "optical": "npx nx run optical-system:serve",
     "optical:build": "npx nx run optical-system:build",
     "optical-web": "npx nx run optical-web:serve",
-    "optical-web:build": "&& npx nx run optical-web:build",
+    "optical-web:build": "npx nx run optical-web:build",
     "tucu-ui": "npx nx run tucu-ui:storybook",
-    "tucu-ui:build": "npx nx run tucu-ui:build-storybook",
-    "tucu-ui:build:lib": "npx nx run tucu-ui:build",
-    "tucu-ui:publish": "npx nx run tucu-ui:publish-storybook",
+    "tucu-ui:build:storybook": "npx nx run tucu-ui:build-storybook",
+    "tucu-ui:publish:storybook": "npx nx run tucu-ui:publish-storybook",
+    "tucu-ui:build": "npx nx run tucu-ui:build",
+    "tucu-ui:publish": "npx nx run tucu-ui:publish:lib",
     "tucu-ui:serve": "npx nx run tucu-ui:serve-storybook"
   },
   "dependencies": {

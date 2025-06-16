@@ -1,15 +1,9 @@
 import { Fragment } from 'react';
-import { Radio } from '@headlessui/react';
+import { RadioGroup } from '@headlessui/react';
 import { useTheme } from '../use-theme';
 import cn from 'classnames';
-import {
-  Dialog,
-  DialogPanel,
-  TransitionChild,
-} from '../../components/headlessui/dialog';
-import { Transition } from '../../components/headlessui/transition';
+import { Dialog, Transition } from '@headlessui/react';
 import Button from '../../components/buttons';
-import { RadioGroup } from '../../components/headlessui/radio-group';
 import Scrollbar from '../../components/common/scrollbar';
 import { Close } from '../../components/icons/close';
 import { Sun } from '../../components/icons/sun';
@@ -73,7 +67,7 @@ function ThemeSwitcher() {
         onChange={setMode}
         className="grid grid-cols-2 gap-5"
       >
-        <Radio value="light">
+        <RadioGroup.Option value="light">
           {({ checked }) => (
             <SwitcherButton
               onClick={() => setMode('light')}
@@ -83,8 +77,8 @@ function ThemeSwitcher() {
               <Sun />
             </SwitcherButton>
           )}
-        </Radio>
-        <Radio value="dark">
+        </RadioGroup.Option>
+        <RadioGroup.Option value="dark">
           {({ checked }) => (
             <SwitcherButton
               onClick={() => setMode('dark')}
@@ -94,7 +88,7 @@ function ThemeSwitcher() {
               <Moon />
             </SwitcherButton>
           )}
-        </Radio>
+        </RadioGroup.Option>
       </RadioGroup>
     </div>
   );
@@ -113,7 +107,7 @@ function DirectionSwitcher() {
         onChange={setDirection}
         className="grid grid-cols-2 gap-5"
       >
-        <Radio value="ltr">
+        <RadioGroup.Option value="ltr">
           {({ checked }) => (
             <SwitcherButton
               onClick={() => setDirection('ltr')}
@@ -123,8 +117,8 @@ function DirectionSwitcher() {
               <LeftAlign />
             </SwitcherButton>
           )}
-        </Radio>
-        <Radio value="rtl">
+        </RadioGroup.Option>
+        <RadioGroup.Option value="rtl">
           {({ checked }) => (
             <SwitcherButton
               onClick={() => setDirection('rtl')}
@@ -134,7 +128,7 @@ function DirectionSwitcher() {
               <RightAlign />
             </SwitcherButton>
           )}
-        </Radio>
+        </RadioGroup.Option>
       </RadioGroup>
     </div>
   );
@@ -161,7 +155,7 @@ function LayoutSwitcher() {
         className="grid grid-cols-2 gap-5 "
       >
         {LayoutOptions.map((option) => (
-          <Radio key={option.label} value={option.value}>
+          <RadioGroup.Option key={option.label} value={option.value}>
             {({ checked }) => (
               <SwitcherButton
                 onClick={() => setLayout(option.value as LAYOUT_OPTIONS)}
@@ -171,7 +165,7 @@ function LayoutSwitcher() {
                 {LayoutIcons[option.value]}
               </SwitcherButton>
             )}
-          </Radio>
+          </RadioGroup.Option>
         ))}
       </RadioGroup>
     </div>
@@ -192,7 +186,7 @@ function ColorSwitcher() {
         className="grid grid-cols-3 gap-5 "
       >
         {ColorPreset.map((item, index) => (
-          <Radio value={item} key={index}>
+          <RadioGroup.Option value={item} key={index}>
             {({ checked }) => (
               <SwitcherButton
                 onClick={() => setPreset(item)}
@@ -205,7 +199,7 @@ function ColorSwitcher() {
                 />
               </SwitcherButton>
             )}
-          </Radio>
+          </RadioGroup.Option>
         ))}
       </RadioGroup>
     </div>
@@ -221,7 +215,7 @@ export function SettingsDrawer() {
         className="fixed inset-0 z-50 overflow-hidden"
         onClose={() => setIsSettingsOpen(false)}
       >
-        <TransitionChild
+        <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0"
@@ -230,9 +224,9 @@ export function SettingsDrawer() {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <DialogPanel className="fixed inset-0 bg-gray-700 bg-opacity-0" />
-        </TransitionChild>
-        <TransitionChild
+          <Dialog.Panel className="fixed inset-0 bg-gray-700 bg-opacity-0" />
+        </Transition.Child>
+        <Transition.Child
           as={Fragment}
           enter="transform transition ease-out duration-300"
           enterFrom="ltr:translate-x-full rtl:-translate-x-full"
@@ -248,28 +242,26 @@ export function SettingsDrawer() {
                   Personalización
                 </h3>
                 <Button
-                  title="Close"
-                  color="white"
+                  variant="ghost"
+                  size="mini"
                   shape="circle"
-                  variant="transparent"
-                  size="small"
                   onClick={() => setIsSettingsOpen(false)}
                 >
-                  <Close className="h-auto w-2.5" />
+                  <Close className="h-auto w-3" />
                 </Button>
               </div>
 
               <Scrollbar style={{ height: 'calc(100% - 64px)' }}>
                 <div className="pb-8">
-                  {!settingActions?.disabledMode && <ThemeSwitcher />}
-                  {!settingActions?.disabledLayout && <LayoutSwitcher />}
-                  {!settingActions?.disabledDirection && <DirectionSwitcher />}
-                  {!settingActions?.disabledPreset && <ColorSwitcher />}
+                  <ThemeSwitcher />
+                  <DirectionSwitcher />
+                  <LayoutSwitcher />
+                  <ColorSwitcher />
                 </div>
               </Scrollbar>
             </div>
           </div>
-        </TransitionChild>
+        </Transition.Child>
       </Dialog>
     </Transition>
   );

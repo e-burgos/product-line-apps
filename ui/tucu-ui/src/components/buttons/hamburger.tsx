@@ -1,5 +1,5 @@
 import Button, { ButtonProps } from './button';
-interface HamburgerProps extends ButtonProps {
+export interface HamburgerProps extends ButtonProps {
   isOpen?: boolean;
 }
 

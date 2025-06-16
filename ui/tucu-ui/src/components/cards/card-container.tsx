@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
-interface CardContainerProps {
+export interface CardContainerProps {
   className?: string;
   children?: React.ReactNode;
 }

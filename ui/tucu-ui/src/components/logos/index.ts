@@ -1,3 +1,2 @@
-export * from './logo-icon';
-export * from './logo-original';
+export * from './logo-theme';
 export * from './logo';

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import Button from '../buttons';
-import { Dialog, DialogPanel, DialogTitle, TransitionChild } from './dialog';
+import { Dialog, Transition } from '@headlessui/react';
 import CardContainer from '../cards/card-container';
 import cn from 'classnames';
 import { X } from 'lucide-react';
@@ -56,7 +56,7 @@ export const Modal: React.FC<ModalProps> = ({
       <div
         className={`fixed inset-0 z-10 w-screen bg-gray-700/90 backdrop-blur overflow-x-hidden overflow-y-hidden`}
       >
-        <TransitionChild
+        <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0 scale-105"
@@ -66,17 +66,14 @@ export const Modal: React.FC<ModalProps> = ({
           leaveTo="opacity-0 scale-105"
         >
           <div className="flex min-h-full items-center justify-center p-4">
-            <DialogPanel
-              transition
-              className="flex h-full w-full items-center justify-center overflow-y duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
-            >
+            <Dialog.Panel className="flex h-full w-full items-center justify-center overflow-y duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0">
               <CardContainer
                 className={cn(
                   'w-full sm:max-w-[800px] rounded-xl shadow-card',
                   className
                 )}
               >
-                <DialogTitle
+                <Dialog.Title
                   as="h3"
                   className={cn(
                     'flex w-full justify-between items-center font-bold uppercase tracking-wider text-lg h-14 dark:text-white text-current',
@@ -92,7 +89,7 @@ export const Modal: React.FC<ModalProps> = ({
                   >
                     <X className="h-4 w-4 cursor-pointer" />
                   </Button>
-                </DialogTitle>
+                </Dialog.Title>
 
                 {text?.content && (
                   <p className="mt-4 text-sm/6 dark:text-white text-current">
@@ -130,9 +127,9 @@ export const Modal: React.FC<ModalProps> = ({
                   </div>
                 )}
               </CardContainer>
-            </DialogPanel>
+            </Dialog.Panel>
           </div>
-        </TransitionChild>
+        </Transition.Child>
       </div>
     </Dialog>
   );

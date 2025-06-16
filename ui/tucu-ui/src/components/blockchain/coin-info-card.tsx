@@ -13,6 +13,7 @@ type CardProps = {
   item: ItemType;
   className?: string;
   variant?: 'small' | 'medium' | 'large';
+  imageClassName?: string;
 };
 
 const variants = {
@@ -33,10 +34,11 @@ function handleImageSize(variant: string) {
   return size;
 }
 
-export function ListCard({
+export function CoinInfoCard({
   item,
   className = 'p-3 tracking-wider rounded-lg sm:p-4',
   variant = 'small',
+  imageClassName = 'bg-primary',
 }: CardProps) {
   const { name, logo, balance, coinType } = item ?? {};
   return (
@@ -53,6 +55,7 @@ export function ListCard({
             alt={name}
             width={handleImageSize(variant)}
             height={handleImageSize(variant)}
+            className={imageClassName}
           />
         </div>
 
@@ -72,4 +75,4 @@ export function ListCard({
   );
 }
 
-export default ListCard;
+export default CoinInfoCard;

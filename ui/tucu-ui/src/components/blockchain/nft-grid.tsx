@@ -23,7 +23,7 @@ export function NFTGrid({
   profilePath,
 }: NFTGridProps) {
   return (
-    <div className="relative overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark">
+    <div className="max-h-fit w-full relative overflow-hidden rounded-lg bg-white shadow-card transition-all duration-200 hover:shadow-large dark:bg-light-dark">
       <div className="p-4">
         <AnchorLink
           to={profilePath || '/'}
@@ -42,10 +42,8 @@ export function NFTGrid({
         <Image
           src={image}
           placeholder="blur"
-          width={450}
-          height={450}
           alt=""
-          className="w-full"
+          className=" object-cover h-full w-full"
         />
       </AnchorLink>
 

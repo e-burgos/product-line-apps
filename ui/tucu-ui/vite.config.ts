@@ -4,7 +4,19 @@ import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
 import * as path from 'path';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-//import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
+import { copyFileSync } from 'fs';
+
+const copyReadmePlugin = () => {
+  return {
+    name: 'copy-readme',
+    closeBundle: () => {
+      const readmePath = path.join(__dirname, 'README.md');
+      const destPath = path.join(__dirname, '../../dist/ui/tucu-ui/README.md');
+      copyFileSync(readmePath, destPath);
+      console.log('README.md copied to distribution directory');
+    },
+  };
+};
 
 export default defineConfig({
   root: __dirname,
@@ -12,12 +24,13 @@ export default defineConfig({
   plugins: [
     react(),
     nxViteTsPaths(),
-    //nxCopyAssetsPlugin(['*.md']),
     dts({
       entryRoot: 'src',
       tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),
     }),
+    copyReadmePlugin(),
   ],
+  css: {},
   build: {
     outDir: '../../dist/ui/tucu-ui',
     emptyOutDir: true,
@@ -33,6 +46,13 @@ export default defineConfig({
     },
     rollupOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime'],
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+          'react/jsx-runtime': 'jsxRuntime',
+        },
+      },
     },
   },
 });
