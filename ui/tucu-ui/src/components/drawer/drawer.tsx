@@ -4,6 +4,7 @@ import Button, { ButtonProps } from '../buttons';
 import { DrawerContainer } from './drawer-container';
 import { Sidebar } from './sidebar';
 import { SidebarMenu } from './sidebar-menu';
+import { LogoPropTypes } from '../logos/logo';
 
 export interface IMenuItem {
   name: string;
@@ -25,6 +26,7 @@ export interface DrawerProps {
   title?: string;
   actionContent?: React.ReactNode;
   backdrop?: boolean;
+  logo?: LogoPropTypes;
 }
 
 export function Drawer({
@@ -38,6 +40,7 @@ export function Drawer({
   title,
   actionContent,
   backdrop = true,
+  logo,
 }: DrawerProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -55,6 +58,7 @@ export function Drawer({
             children={children}
             className={className}
             title={title}
+            logo={logo}
           />
         );
       case 'sidebar-menu':
@@ -66,6 +70,7 @@ export function Drawer({
             menuItems={menuItems || []}
             title={title}
             actionContent={actionContent}
+            logo={logo}
           />
         );
       default:
@@ -74,6 +79,7 @@ export function Drawer({
             onClose={closeDrawer}
             children={children}
             className={className}
+            logo={logo}
           />
         );
     }

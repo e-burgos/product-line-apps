@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import Button from '../buttons';
-import { Dialog, Transition } from '@headlessui/react';
+import { Dialog, DialogPanel, TransitionChild } from '@headlessui/react';
 import CardContainer from '../cards/card-container';
 import cn from 'classnames';
 import { X } from 'lucide-react';
@@ -56,7 +56,7 @@ export const Modal: React.FC<ModalProps> = ({
       <div
         className={`fixed inset-0 z-10 w-screen bg-gray-700/90 backdrop-blur overflow-x-hidden overflow-y-hidden`}
       >
-        <Transition.Child
+        <TransitionChild
           as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0 scale-105"
@@ -66,7 +66,7 @@ export const Modal: React.FC<ModalProps> = ({
           leaveTo="opacity-0 scale-105"
         >
           <div className="flex min-h-full items-center justify-center p-4">
-            <Dialog.Panel className="flex h-full w-full items-center justify-center overflow-y duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0">
+            <DialogPanel className="flex h-full w-full items-center justify-center overflow-y duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0">
               <CardContainer
                 className={cn(
                   'w-full sm:max-w-[800px] rounded-xl shadow-card',
@@ -127,9 +127,9 @@ export const Modal: React.FC<ModalProps> = ({
                   </div>
                 )}
               </CardContainer>
-            </Dialog.Panel>
+            </DialogPanel>
           </div>
-        </Transition.Child>
+        </TransitionChild>
       </div>
     </Dialog>
   );

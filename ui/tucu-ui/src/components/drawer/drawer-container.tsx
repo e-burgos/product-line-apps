@@ -1,5 +1,10 @@
 import { Fragment } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
+import {
+  Dialog,
+  DialogPanel,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react';
 import cn from 'classnames';
 
 export interface DrawerContainerProps {
@@ -24,7 +29,7 @@ export function DrawerContainer({
         className={cn('fixed inset-0 z-50 overflow-hidden')}
         onClose={() => null}
       >
-        <Transition.Child
+        <TransitionChild
           as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0"
@@ -33,17 +38,17 @@ export function DrawerContainer({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Dialog.Panel
+          <DialogPanel
             onClick={() => setIsOpen(false)}
             className={cn(
               'fixed inset-0',
               backdrop ? 'bg-gray-700 bg-opacity-60 backdrop-blur' : ''
             )}
           />
-        </Transition.Child>
+        </TransitionChild>
 
         {position === 'left' && (
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter="transform transition ease-out duration-300"
             enterFrom="-translate-x-full"
@@ -55,10 +60,10 @@ export function DrawerContainer({
             <div className="fixed inset-y-0 ltr:left-0 rtl:right-0 flex w-full max-w-full xs:w-auto shadow-[0_0_80px_rgba(17,24,39,0.2)]">
               {children}
             </div>
-          </Transition.Child>
+          </TransitionChild>
         )}
         {position === 'right' && (
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter="transform transition ease-out duration-300"
             enterFrom="ltr:translate-x-full rtl:-translate-x-full"
@@ -70,7 +75,7 @@ export function DrawerContainer({
             <div className="fixed inset-y-0 ltr:right-0 rtl:left-0 flex w-full max-w-full xs:w-auto shadow-[0_0_80px_rgba(17,24,39,0.2)]">
               {children}
             </div>
-          </Transition.Child>
+          </TransitionChild>
         )}
       </Dialog>
     </Transition>

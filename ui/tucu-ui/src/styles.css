@@ -1,8 +1,1 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Estilos personalizados adicionales */
-:root {
-  --color-brand: 37 99 235; /* Azul por defecto, puedes cambiarlo */
-}
+@import './assets/css/index.css';

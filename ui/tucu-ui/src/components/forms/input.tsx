@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { forwardRef } from 'react';
 import cn from 'classnames';
-import InputMask from 'react-input-mask';
 
 export type InputProps = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -16,8 +15,6 @@ export type InputProps = React.DetailedHTMLProps<
   suffix?: React.ReactNode;
   suffixClassName?: string;
   icon?: React.ReactNode;
-  mask?: string;
-  maskChar?: string;
 };
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -33,8 +30,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       suffixClassName,
       useUppercaseLabel = false,
       icon,
-      mask,
-      maskChar,
       ...props
     },
     ref
@@ -69,39 +64,20 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               )}
             </span>
           )}
-          {mask ? (
-            <InputMask
-              mask={mask}
-              maskChar={maskChar}
-              {...props}
-              className={cn(
-                'mt-1 block h-10 w-full rounded-md border border-gray-200 bg-white px-4 py-2 text-sm placeholder-gray-400  transition-shadow duration-200 dark:invalid:border-red-500 dark:invalid:text-red-600 invalid:border-red-500 invalid:text-red-600 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 focus:invalid:border-red-500 focus:invalid:ring-red-500 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 dark:border-gray-700 dark:bg-light-dark dark:text-gray-100 dark:focus:border-gray-600 dark:focus:ring-gray-600 sm:h-12 sm:rounded-lg',
-                icon && 'pl-10',
-                props.disabled
-                  ? 'bg-gray-50 dark:bg-light-dark cursor-not-allowed dark:cursor-not-allowed pointer-events-none'
-                  : '',
-                inputClassName
-              )}
-              ref={ref as React.LegacyRef<InputMask>}
-            >
-              {(inputProps: any) => <input {...inputProps} />}
-            </InputMask>
-          ) : (
-            <input
-              type={type}
-              ref={ref}
-              {...props}
-              className={cn(
-                'mt-1 block h-10 w-full rounded-md border border-gray-200 bg-white px-4 py-2 text-sm placeholder-gray-400 transition-shadow duration-200 dark:invalid:border-red-500 dark:invalid:text-red-600 invalid:border-red-500 invalid:text-red-600 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 focus:invalid:border-red-500 focus:invalid:ring-red-500 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 dark:border-gray-700 dark:bg-light-dark dark:text-gray-100 dark:focus:border-gray-600 dark:focus:ring-gray-600 sm:h-12 sm:rounded-lg',
-                icon && 'pl-10',
-                type === 'date' && 'bg-white text-black',
-                props.disabled
-                  ? 'bg-gray-50 dark:bg-light-dark cursor-not-allowed dark:cursor-not-allowed'
-                  : '',
-                inputClassName
-              )}
-            />
-          )}
+          <input
+            type={type}
+            ref={ref}
+            {...props}
+            className={cn(
+              'mt-1 block h-10 w-full rounded-md border border-gray-200 bg-white px-4 py-2 text-sm placeholder-gray-400 transition-shadow duration-200 dark:invalid:border-red-500 dark:invalid:text-red-600 invalid:border-red-500 invalid:text-red-600 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 focus:invalid:border-red-500 focus:invalid:ring-red-500 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 dark:border-gray-700 dark:bg-light-dark dark:text-gray-100 dark:focus:border-gray-600 dark:focus:ring-gray-600 sm:h-12 sm:rounded-lg',
+              icon && 'pl-10',
+              type === 'date' && 'bg-white text-black',
+              props.disabled
+                ? 'bg-gray-50 dark:bg-light-dark cursor-not-allowed dark:cursor-not-allowed'
+                : '',
+              inputClassName
+            )}
+          />
           {suffix && (
             <span
               className={cn(

@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import Logo from '../logos/logo';
+import Logo, { LogoPropTypes } from '../logos/logo';
 import { MenuItem } from '../common/menu-item';
 import Button from '../buttons';
 import Scrollbar from '../common/scrollbar';
@@ -13,6 +13,7 @@ export function SidebarMenu({
   title,
   actionContent,
   onClose,
+  logo,
 }: {
   className?: string;
   menuItems: IMenuItem[];
@@ -20,6 +21,7 @@ export function SidebarMenu({
   title?: string;
   actionContent?: React.ReactNode;
   onClose: () => void;
+  logo?: LogoPropTypes;
 }) {
   const retroMenu =
     menuItems &&
@@ -44,7 +46,7 @@ export function SidebarMenu({
       )}
     >
       <div className="relative flex h-24 items-center justify-between overflow-hidden px-6 py-4 2xl:px-8">
-        {!title && <Logo name={title as string} />}
+        {logo && <Logo name={logo.name} secondName={logo.secondName} />}
         {title && (
           <h2 className="text-lg font-medium uppercase tracking-wider text-gray-900 dark:text-white">
             {title}

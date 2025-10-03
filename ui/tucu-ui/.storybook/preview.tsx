@@ -16,12 +16,12 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { useTheme } from '../src/themes/use-theme';
 import { ScrollToTop } from '../src/components';
-import SettingsButton from '../src/themes/components/settings-button';
-import SettingsDrawer from '../src/themes/components/settings-drawer';
 
 import '../src/assets/css/globals.css';
 import '../src/assets/css/fonts.css';
 import '../src/assets/css/range-slider.css';
+import SettingsButton from '../src/themes/components/theme-provider/settings-button';
+import SettingsDrawer from '../src/themes/components/theme-provider/settings-drawer';
 
 const ThemeDecorator = (
   Story: PartialStoryFn<ReactRenderer, object>,

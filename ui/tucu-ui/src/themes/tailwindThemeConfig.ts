@@ -143,10 +143,4 @@ export const tailwindThemeConfig = {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/container-queries'),
-    require('tailwindcss-bg-patterns'),
-  ],
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
-import Logo from '../logos/logo';
+import Logo, { LogoPropTypes } from '../logos/logo';
 import Button from '../buttons';
 import { X } from 'lucide-react';
 import Scrollbar from '../common/scrollbar';
@@ -10,6 +10,7 @@ export interface SidebarProps {
   children: React.ReactNode;
   title?: string;
   actionContent?: React.ReactNode;
+  logo?: LogoPropTypes;
   onClose?: () => void;
 }
 
@@ -18,6 +19,7 @@ export function Sidebar({
   children,
   title,
   actionContent,
+  logo,
   onClose,
 }: SidebarProps) {
   return (
@@ -28,7 +30,9 @@ export function Sidebar({
       )}
     >
       <div className="relative flex h-24 items-center justify-between overflow-hidden px-6 py-4 2xl:px-8">
-        {!title && <Logo name={title as string} />}
+        {!title && (
+          <Logo name={logo?.name || ''} secondName={logo?.secondName || ''} />
+        )}
         {title && (
           <h2 className="text-lg font-medium uppercase tracking-wider text-gray-900 dark:text-white">
             {title}

@@ -1,4 +1,4 @@
-import React from 'react';
+import { LogoPropTypes } from '../components/logos/logo';
 export interface IThemeItem {
   label: string;
   value: string;
@@ -15,12 +15,7 @@ export type MODE = 'light' | 'dark';
 
 export type DIRECTION = 'ltr' | 'rtl';
 
-export type LogoType = {
-  isoType?: React.ReactNode;
-  path?: string;
-  name?: string;
-  secondName?: string;
-};
+export type LogoType = LogoPropTypes;
 
 export enum LAYOUT_OPTIONS {
   AUTH = 'auth',
@@ -113,8 +108,8 @@ export const Direction: IThemeItem[] = [
   },
 ];
 
-export const defaultLogo = {
-  isoType: null,
+export const defaultLogo: LogoType = {
+  isoType: false,
   path: '/',
   name: 'Site',
   secondName: 'Name',

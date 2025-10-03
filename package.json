@@ -4,7 +4,6 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "agro-swap": "npx nx run agro-swap-frontend:serve",
     "product-manager": "npx nx run product-manager:serve",
     "optical": "npx nx run optical-system:serve",
     "optical:build": "npx nx run optical-system:build",
@@ -15,6 +14,7 @@
     "tucu-ui:publish:storybook": "npx nx run tucu-ui:publish-storybook",
     "tucu-ui:build": "npx nx run tucu-ui:build",
     "tucu-ui:publish": "npx nx run tucu-ui:publish:lib",
+    "tucu-ui:install": "npx nx run tucu-ui:install:lib",
     "tucu-ui:serve": "npx nx run tucu-ui:serve-storybook"
   },
   "dependencies": {

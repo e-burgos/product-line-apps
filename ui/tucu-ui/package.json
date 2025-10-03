@@ -1,7 +1,7 @@
 {
   "name": "tucu-ui",
   "description": "Tucu UI Library",
-  "version": "0.0.11",
+  "version": "0.0.13",
   "main": "./index.js",
   "module": "./index.mjs",
   "types": "./index.d.ts",
@@ -15,9 +15,9 @@
   "exports": {
     ".": {
       "types": "./index.d.ts",
+      "style": "./index.css",
       "import": "./index.mjs",
-      "require": "./index.js",
-      "style": "./index.css"
+      "require": "./index.js"
     },
     "./styles": "./index.css"
   },
@@ -33,15 +33,11 @@
     "overlayscrollbars": "^2.10.0",
     "overlayscrollbars-react": "0.5.6",
     "react-hook-form": "7.53.0",
-    "react-input-mask": "^2.0.4",
     "react-router-dom": "6.26.2",
     "recharts": "2.12.7",
     "simplebar-react": "3.2.6",
     "swiper": "11.1.14",
-    "@tailwindcss/forms": "^0.5.9",
-    "@tailwindcss/typography": "^0.5.15",
-    "@tailwindcss/container-queries": "^0.1.1",
-    "tailwindcss-bg-patterns": "^0.3.0"
+    "zustand": "5.0.1"
   },
   "peerDependencies": {
     "react": ">=17.0.0",
@@ -56,6 +52,7 @@
     "chromatic": "npx chromatic --project-token --force-rebuild",
     "storybook-doctor": "npx storybook doctor",
     "publish:lib": "cd ../../dist/ui/tucu-ui && npm publish --access public",
+    "install:lib": "cd ../../dist/ui/tucu-ui && npm install",
     "publish": "npm publish --access public"
   }
 }

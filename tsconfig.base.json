@@ -15,15 +15,14 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@agro-swap/*": ["apps/agro-swap/src/*"],
       "@optical-system-app/*": ["apps/optical-system/src/*"],
+      "@product-manager-app/*": ["apps/product-manager/src/*"],
       "@product-line/datatable": ["libs/datatable/src/index.ts"],
       "@product-line/dexie": ["libs/dexie/src/index.ts"],
       "@product-line/features": ["libs/features/src/index.ts"],
       "@product-line/integrations": ["libs/integrations/src/index.ts"],
       "@product-line/shell": ["libs/shell/src/index.ts"],
       "@product-line/ui": ["libs/ui/src/index.ts"],
-      "@product-manager-app/*": ["apps/product-manager/src/*"],
       "@tucu-ui": ["ui/tucu-ui/src/index.ts"]
     }
   },

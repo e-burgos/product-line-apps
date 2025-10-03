@@ -2,6 +2,7 @@ import type { Meta, StoryFn } from '@storybook/react-vite';
 import { Input } from '../../../components/forms';
 import { StoryContainer } from '../../components/StoryContainer';
 import { Mail, User, Calendar, Search } from 'lucide-react';
+import React from 'react';
 
 const meta: Meta<typeof Input> = {
   title: 'UI COMPONENTS/Forms/Input',
@@ -48,14 +49,6 @@ const meta: Meta<typeof Input> = {
     suffix: {
       control: 'text',
       description: 'Content to display at the end of the input',
-    },
-    mask: {
-      control: 'text',
-      description: 'Input mask pattern',
-    },
-    maskChar: {
-      control: 'text',
-      description: 'Character to use for unfilled parts of the mask',
     },
     className: {
       control: 'text',
@@ -137,14 +130,6 @@ Date.args = {
   icon: <Calendar className="h-4 w-4" />,
 };
 
-export const WithMask = Template.bind({});
-WithMask.args = {
-  mask: '(999) 999-9999',
-  maskChar: '_',
-  label: 'Phone Number',
-  placeholder: '(___) ___-____',
-};
-
 export const WithUppercaseLabel = Template.bind({});
 WithUppercaseLabel.args = {
   label: 'Username',
@@ -175,12 +160,6 @@ export const FormExample = () => (
         placeholder="example@domain.com"
         icon={<Mail className="h-4 w-4" />}
         required
-      />
-      <Input
-        label="Phone"
-        mask="(999) 999-9999"
-        maskChar="_"
-        placeholder="(___) ___-____"
       />
       <button className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors">
         Submit
